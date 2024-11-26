@@ -10,6 +10,14 @@ min_y = 16 * 32
 max_y = 16 * 32 * 2
 
 
+CONTROLS = {
+    directions.UP: (None, -1),
+    directions.DOWN: (None, 1),
+    directions.RIGHT: (1, None),
+    directions.LEFT: (-1, None),
+}
+
+
 class Player(MapSprite):
     default_movement_speed = 2
 
@@ -30,14 +38,34 @@ class Player(MapSprite):
     def update(self, game_map=None):
         self.last_rect = self.rect.copy()
 
+        xvel = yvel = 0
         if is_key_pressed(self.keys[directions.UP]):
-            self.y -= self.movement_speed
+            xvel, yvel = CONTROLS[directions.UP]
+            # self.y -= self.movement_speed
         if is_key_pressed(self.keys[directions.LEFT]):
-            self.x -= self.movement_speed
+            xvel, yvel = CONTROLS[directions.LEFT]
+            # self.x -= self.movement_speed
         if is_key_pressed(self.keys[directions.DOWN]):
-            self.y += self.movement_speed
+            xvel, yvel = CONTROLS[directions.DOWN]
+            # self.y += self.movement_speed
         if is_key_pressed(self.keys[directions.RIGHT]):
-            self.x += self.movement_speed
+            xvel, yvel = CONTROLS[directions.RIGHT]
+            # self.x += self.movement_speed
+
+        # if is_key_pressed(pygame.K_ESCAPE):
+        #     raise SystemExit("QUIT")
+
+        # if is_key_pressed(pygame.K_h):
+        #     game_map.x = config.MAP_POS[0]
+        #     game_map.y = config.MAP_POS[1]
+
+        # if is_key_pressed(pygame.K_g):
+        #     show_grid = not show_grid
+
+        if xvel is not None:
+            self.x += self.movement_speed * xvel
+        if yvel is not None:
+            self.y += self.movement_speed * yvel
 
         # for sprite in pygame.sprite.spritecollide(self, tile_map, False):
         #     if sprite.is_solid:
