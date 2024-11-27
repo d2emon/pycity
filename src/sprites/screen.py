@@ -1,6 +1,4 @@
 import pygame
-# from events import Events
-
 
 
 class Screen(pygame.sprite.Sprite):
@@ -10,8 +8,6 @@ class Screen(pygame.sprite.Sprite):
         self.image = pygame.Surface(rect.size)
         self.rect = rect
         self.sprites = pygame.sprite.Group()
-
-        # self.events = Events()
 
     def update(self, *args, **kwargs):
         super().update(*args, **kwargs)

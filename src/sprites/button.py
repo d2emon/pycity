@@ -11,8 +11,13 @@ Typical usage example:
 """
 
 import pygame
-# from events import Events
-# from .text_object import TextObject
+import events.mouse
+from .label import Label
+
+
+STATE_NORMAL = "BUTTON.STATE.NORMAL"
+STATE_HOVER = "BUTTON.STATE.HOVER"
+STATE_PRESSED = "BUTTON.STATE.PRESSED"
 
 
 class Button(pygame.sprite.Sprite):
@@ -23,6 +28,7 @@ class Button(pygame.sprite.Sprite):
         on_click=lambda *args, **kwargs: None,
         padding=5,
         font=None,
+        text_color=None,
     ):
         """Initialize button.
 
@@ -38,30 +44,59 @@ class Button(pygame.sprite.Sprite):
         self.image = pygame.Surface(rect.size)
         self.rect = rect
 
-        self.__text = text
         self.on_click = on_click
 
+        self.state = STATE_NORMAL
+
         self.colors = {
-            "self.States.NORMAL": (255, 255, 255),
-            "self.States.HOVER": (0, 255, 255),
-            "self.States.PRESSED": (0, 0, 255),
+            STATE_NORMAL: (255, 255, 255),
+            STATE_HOVER: (0, 255, 255),
+            STATE_PRESSED: (0, 0, 255),
         }
 
-        self.text = None
-        # self.text = TextObject(
-        #     x=padding,
-        #     y=padding,
-        #     text=self.caption,
-        #     font=font,
-        # )
+        label_pos = self.image.get_rect().center
+        self.label = Label(
+            label_pos,
+            text,
+            font=font,
+            color=text_color,
+            center=True,
+        )
 
-        self.state = "self.States.NORMAL"
+        # Child sprite groups
 
-        # self.events = Events({
-        #     pygame.MOUSEMOTION: self.on_mouse_move,
-        #     pygame.MOUSEBUTTONDOWN: self.on_mouse_down,
-        #     pygame.MOUSEBUTTONUP: self.on_mouse_up,
-        # })
+        self.labels = pygame.sprite.GroupSingle(self.label)
+
+    @property
+    def is_hovered(self):
+        """Get if button is hovered.
+
+        Returns:
+            bool: Button is hovered.
+        """
+        pos = pygame.mouse.get_pos()
+        return self.rect.collidepoint(pos)
+
+    @property
+    def is_pressed(self):
+        """Get if button is pressed.
+
+        Returns:
+            bool: Button is pressed.
+        """
+        return events.mouse.is_pressed(1)
+
+    def __update_state(self):
+        """On mouse move."""
+        if self.state == STATE_PRESSED and not self.is_pressed:
+            self.on_click()
+            return STATE_HOVER
+        elif not self.is_hovered:
+            return STATE_NORMAL
+        elif self.is_pressed:
+            return STATE_PRESSED
+        else:
+            return STATE_HOVER
 
     def __draw_background(self):
         """Draw button background."""
@@ -71,141 +106,9 @@ class Button(pygame.sprite.Sprite):
 
     def update(self, *args, **kwargs):
         """Redraw button."""
+        self.state = self.__update_state()
+
+        self.labels.update(*args, **kwargs)
+
         self.__draw_background()
-        # self.text.draw(self.image)
-
-
-"""
-class Button(Sprite):
-    ""Game button.
-
-    Attributes:
-        events (Events): Button events.
-        state (int): Button state.
-        text (TextObject): Text sprite with button caption.
-        on_click (function): Button on_click event.
-    ""
-
-    class States:
-        ""Game button states.""
-        NORMAL = 0
-        HOVER = 1
-        PRESSED = 2
-
-    class EventTypes:
-        ""Game button events.""
-        CLICK = 'CLICK'
-        HOVER = 'HOVER'
-        LEAVE = 'LEAVE'
-        PRESS = 'PRESS'
-
-    @property
-    def is_hovered(self):
-        ""Get if button is hovered.
-
-        Returns:
-            bool: Button is hovered.
-        ""
-        return self.state == self.States.HOVER
-
-    @is_hovered.setter
-    def is_hovered(self, value):
-        ""Set button is hovered.
-
-        Args:
-            value (bool): Button is hovered.
-        ""
-        if value:
-            self.state = self.States.HOVER
-        else:
-            self.state = self.States.NORMAL
-
-    @property
-    def is_pressed(self):
-        ""Get if button is pressed.
-
-        Returns:
-            bool: Button is pressed.
-        ""
-        return self.state == self.States.PRESSED
-
-    @is_pressed.setter
-    def is_pressed(self, value):
-        ""Set button is pressed.
-
-        Args:
-            value (bool): Button is pressed.
-        ""
-        if value:
-            self.state = self.States.PRESSED
-        else:
-            self.state = self.States.HOVER
-
-    def caption(self):
-        ""Get button caption,
-
-        Returns:
-            string: Button caption.
-        ""
-        return self.__text
-
-    # Events
-
-    def click(self, *args, **kwargs):
-        ""Button click action.""
-        self.on_click(*args, **kwargs)
-        self.hover(*args, **kwargs)
-
-    def hover(self, *args, **kwargs):
-        ""Button hover action.""
-        self.is_hovered = True
-
-    def leave(self, *args, **kwargs):
-        ""Button leave action.""
-        self.is_hovered = False
-
-    def press(self, *args, **kwargs):
-        ""Button press action.""
-        self.is_pressed = True
-
-    # Handlers
-
-    def on_mouse_move(self, *args, event=None, **kwargs):
-        ""On mouse move.
-
-        Args:
-            event (pygame.Event, optional): Event data. Defaults to None.
-        ""
-        if not event:
-            return
-
-        if not self.rect.collidepoint(event.pos):
-            self.leave(*args, **kwargs)
-            return
-
-        if self.state == self.States.PRESSED:
-            return
-
-        self.hover(*args, **kwargs)
-
-    def on_mouse_down(self, *args, event=None, **kwargs):
-        ""On mouse button down.
-
-        Args:
-            event (pygame.Event, optional): Event data. Defaults to None.
-        ""
-        if not event:
-            return
-
-        if not self.rect.collidepoint(event.pos):
-            return
-
-        self.press(*args, **kwargs)
-
-    def on_mouse_up(self, *args, **kwargs):
-        ""On mouse button up.""
-        if self.state != self.States.PRESSED:
-            return
-
-        self.click(*args, **kwargs)
-"""
+        self.labels.draw(self.image)
