@@ -1,7 +1,8 @@
 import logging
 import sys
 import pygame
-import key_input
+import events.keys
+import events.mouse
 
 
 def create_screen(size, title):
@@ -83,34 +84,37 @@ class Game:
 
     def get_events(self):
         for event in pygame.event.get():
-            # self.events.process_event(event)
             if event.type == pygame.QUIT:
                 self.stop()
 
             elif event.type == pygame.KEYDOWN:
-                key_input.keys_down.add(event.key)
+                events.keys.set_pressed(event.key)
             elif event.type == pygame.KEYUP:
-                key_input.keys_down.remove(event.key)
+                events.keys.unset_pressed(event.key)
 
-            elif event.type == pygame.MOUSEMOTION:
-                logging.debug(event)
+            # elif event.type == pygame.MOUSEMOTION:
+            #     logging.debug(event)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                events.mouse.set_pressed(event.button)
+            elif event.type == pygame.MOUSEBUTTONUP:
+                events.mouse.unset_pressed(event.button)
 
-            if pygame.K_ESCAPE in key_input.keys_down:
+
+            if events.keys.is_key_pressed(pygame.K_ESCAPE):
                 self.stop()
 
     def update(self):
-        logging.debug("Event: GAME.UPDATE")
-
-        # # [self.events.process_event(event) for event in self.game_events]
+        # logging.debug("Event: GAME.UPDATE")
 
         # pygame.display.update()
+        pass
 
     def set_delay(self):
         pygame.time.delay(self.delay)
         # self.clock.tick(self.fps)
 
     def draw(self):
-        logging.debug("Event: GAME.DRAW")
+        # logging.debug("Event: GAME.DRAW")
 
         self.screen.fill(self.background_color)
         self.sprites.draw(self.screen)

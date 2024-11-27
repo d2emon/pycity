@@ -1,6 +1,6 @@
 import pygame
 import directions
-from key_input import is_key_pressed
+import events.keys
 from sprites.map_sprite import MapSprite
 
 
@@ -39,20 +39,20 @@ class Player(MapSprite):
         self.last_rect = self.rect.copy()
 
         xvel = yvel = 0
-        if is_key_pressed(self.keys[directions.UP]):
+        if events.keys.is_key_pressed(self.keys[directions.UP]):
             xvel, yvel = CONTROLS[directions.UP]
             # self.y -= self.movement_speed
-        if is_key_pressed(self.keys[directions.LEFT]):
+        if events.keys.is_key_pressed(self.keys[directions.LEFT]):
             xvel, yvel = CONTROLS[directions.LEFT]
             # self.x -= self.movement_speed
-        if is_key_pressed(self.keys[directions.DOWN]):
+        if events.keys.is_key_pressed(self.keys[directions.DOWN]):
             xvel, yvel = CONTROLS[directions.DOWN]
             # self.y += self.movement_speed
-        if is_key_pressed(self.keys[directions.RIGHT]):
+        if events.keys.is_key_pressed(self.keys[directions.RIGHT]):
             xvel, yvel = CONTROLS[directions.RIGHT]
             # self.x += self.movement_speed
 
-        # if is_key_pressed(pygame.K_ESCAPE):
+        # if events.keys.is_key_pressed(pygame.K_ESCAPE):
         #     raise SystemExit("QUIT")
 
         # if is_key_pressed(pygame.K_h):

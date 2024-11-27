@@ -10,6 +10,8 @@ class StateGame(Game):
     STATE_PLAYING = states.PLAYING
     STATE_WIN = states.WIN
 
+    screens = {}
+
     def __init__(
         self,
         title="Game",
@@ -69,30 +71,24 @@ class StateGame(Game):
 
     # New methods
 
-    def set_screen(self, screen, state=None, events=None):
-        if state is not None:
-            self.state = state
-
-        self.screen_group.sprite = screen
-        # self.events.update(self.screen_group.events.handlers)
-        # if events:
-        #     self.events.update(events)
-        # # screen_group.events.listeners.append(self.events)
-        # self.events.listeners.append(screen_group.events)
-
-        # self.events.update(screen_group.events.handlers)
-
     def update(self):
         super().update()
 
-        logging.debug("Event: STATE_GAME.UPDATE")
+        # logging.debug("Event: STATE_GAME.UPDATE")
         self.screen_group.update()
 
     def draw(self):
         super().draw()
 
-        logging.debug("Event: STATE_GAME.DRAW")
+        # logging.debug("Event: STATE_GAME.DRAW")
         self.screen_group.draw(self.screen)
+
+    def set_state(self, state):
+        self.state = state
+
+        screen = self.screens.get(state)
+        if screen:
+            self.screen_group.sprite = screen(self)
 
     # Events
 

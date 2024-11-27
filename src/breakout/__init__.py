@@ -3,13 +3,16 @@ import pygame
 from game.state_game import StateGame
 # from windows.controls import TextObject
 from . import states
-# from . import events, states
+from .main import MainScreen
 from .menu import MenuScreen
-# from .menu_screen import MenuScreen
-# from .game_screen import GameScreen
 
 
 class Breakout(StateGame):
+    screens = {
+        states.MENU: MenuScreen,
+        states.PLAYING: MainScreen,
+    }
+
     def __init__(
         self,
         title="Game",
@@ -34,14 +37,19 @@ class Breakout(StateGame):
 
     def game_menu(self):
         logging.debug("Initialize main menu")
-        self.state = states.MENU
-        self.screen_group.sprite = MenuScreen(self.screen.get_rect())
-        # self.set_screen(
-        #     events={
-        #         events.MENU_PLAY: self.on_select_play,
-        #         events.MENU_QUIT: self.on_select_quit,
-        #     },
-        # )
+        self.set_state(states.MENU)
+        # self.state = states.MENU
+        # self.screen_group.sprite = MainScreen(self)
+        # events={
+        #     events.EVENT_WIN: self.on_win,
+        #     events.EVENT_LOOSE: self.on_loose,
+        # },
+
+    def game_play(self):
+        logging.debug("Initialize main game")
+        self.set_state(states.PLAYING)
+        # self.state = states.PLAYING
+        # self.screen_group.sprite = MenuScreen(self)
 
     def start(self):
         super().start()
@@ -54,23 +62,7 @@ class Breakout(StateGame):
 
 
 class Breakout(StateGame):
-    def game_play(self):
-        self.set_screen(
-            GameScreen(self.size),
-            states.PLAYING,
-            events={
-                events.EVENT_WIN: self.on_win,
-                events.EVENT_LOOSE: self.on_loose,
-            },
-        )
-
     # Events
-
-    def on_select_play(self, *args, **kwargs):
-        self.game_play()
-
-    def on_select_quit(self, *args, **kwargs):
-        self.stop()
 
     def on_win(self, *args, **kwargs):
         TextObject.show_message(self, "YOU WIN!!!", center=True)

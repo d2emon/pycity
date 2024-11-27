@@ -110,7 +110,7 @@ class MyGame(Game):
     def update(self):
         super().update()
 
-        logging.debug("Event: MY_GAME.UPDATE")
+        # logging.debug("Event: MY_GAME.UPDATE")
         self.sprites.update(player=self.player_group)
         self.player_group.update(game_map=self.block_map)
 
@@ -136,7 +136,7 @@ class MyGame(Game):
     def draw(self):
         super().draw()
 
-        logging.debug("Event: MY_GAME.DRAW")
+        # logging.debug("Event: MY_GAME.DRAW")
         self.screen.blit(self.player_pos_text, (0, 0))
         self.screen.blit(self.block_pos_text, (0, 24))
 

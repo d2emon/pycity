@@ -1,22 +1,23 @@
-import logging
 import pygame
 from sprites.screen import Screen
-from .items import MainMenuItems
+from .items import MainMenuItems, BUTTON_PLAY, BUTTON_QUIT
 
 
 class MenuScreen(Screen):
     BACKGROUND_IMAGE = "res/global/map.jpg"
 
-    def __init__(self, rect, *groups):
-        super().__init__(rect, *groups)
+    def __init__(self, game, *groups):
+        super().__init__(game, *groups)
 
         background = pygame.sprite.Sprite()
         background.image = pygame.image.load(self.BACKGROUND_IMAGE)
-        background.rect = rect.copy()
+        background.rect = self.rect
 
         self.background = pygame.sprite.GroupSingle(background)
-        self.menu_items = MainMenuItems(self.on_item_click)
-        # self.events.listeners.append(self.menu_items)
+        self.menu_items = MainMenuItems({
+            BUTTON_PLAY: self.on_play_click,
+            BUTTON_QUIT: self.on_quit_click,
+        })
 
     def update(self, *args, **kwargs):
         super().update(*args, **kwargs)
@@ -26,5 +27,8 @@ class MenuScreen(Screen):
         self.background.draw(self.image)
         self.menu_items.draw(self.image)
 
-    def on_item_click(self, *args, **kwargs):
-        logging.debug(f"ITEM CLICK {args} {kwargs}")
+    def on_play_click(self, *args, **kwargs):
+        self.game.game_play()
+
+    def on_quit_click(self, *args, **kwargs):
+        self.game.stop()
