@@ -1,6 +1,6 @@
 import pygame
 from sprites.screen import Screen
-from .items import MainMenuItems, BUTTON_PLAY, BUTTON_QUIT
+from .items import MainMenuItems
 
 
 class MenuScreen(Screen):
@@ -15,8 +15,8 @@ class MenuScreen(Screen):
 
         self.background = pygame.sprite.GroupSingle(background)
         self.menu_items = MainMenuItems({
-            BUTTON_PLAY: self.on_play_click,
-            BUTTON_QUIT: self.on_quit_click,
+            MainMenuItems.BUTTON_PLAY: self.on_play_click,
+            MainMenuItems.BUTTON_QUIT: self.on_quit_click,
         })
 
     def update(self, *args, **kwargs):
