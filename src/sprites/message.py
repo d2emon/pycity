@@ -4,21 +4,20 @@ from .label import Label
 
 
 class Message(Label):
-    default_font_name = 'Arial'
-    default_font_size = 20
-
     def __init__(
         self,
         rect,
         text,
         font=None,
         duration=5,
+        color=(255, 255, 255)
     ):
         super().__init__(
             rect.center,
             text,
             font,
-            color=(255, 255, 255)
+            color=color,
+            center=True
         )
         self.duration = duration
 
