@@ -12,15 +12,15 @@ Typical usage example:
 
 import pygame
 import events.mouse
+from .background import Background
 from .label import Label
 
 
-STATE_NORMAL = "BUTTON.STATE.NORMAL"
-STATE_HOVER = "BUTTON.STATE.HOVER"
-STATE_PRESSED = "BUTTON.STATE.PRESSED"
-
-
 class Button(pygame.sprite.Sprite):
+    STATE_NORMAL = "BUTTON.STATE.NORMAL"
+    STATE_HOVER = "BUTTON.STATE.HOVER"
+    STATE_PRESSED = "BUTTON.STATE.PRESSED"
+
     def __init__(
         self,
         rect,
@@ -41,31 +41,41 @@ class Button(pygame.sprite.Sprite):
         """
         super().__init__()
 
+        # Create sprite
+
         self.image = pygame.Surface(rect.size)
         self.rect = rect
+        self.inner_rect = self.image.get_rect()
+
+        # Set properties
 
         self.on_click = on_click
+        self.state = self.STATE_NORMAL
 
-        self.state = STATE_NORMAL
-
-        self.colors = {
-            STATE_NORMAL: (255, 255, 255),
-            STATE_HOVER: (0, 255, 255),
-            STATE_PRESSED: (0, 0, 255),
+        self.backgrounds = {
+            self.STATE_NORMAL: Background(self.inner_rect, (255, 255, 255)),
+            self.STATE_HOVER: Background(self.inner_rect, (0, 255, 255)),
+            self.STATE_PRESSED: Background(self.inner_rect, (0, 0, 255)),
         }
 
-        label_pos = self.image.get_rect().center
+        # Create elements
+
         self.label = Label(
-            label_pos,
-            text,
+            self.inner_rect.center,
+            text, # self.caption,
             font=font,
             color=text_color,
             center=True,
-        )
+            # x=padding,
+            # y=padding,
+        ) # text
 
-        # Child sprite groups
+        # Fill child sprite groups
 
+        self.__background_group = pygame.sprite.GroupSingle()
         self.labels = pygame.sprite.GroupSingle(self.label)
+
+    # Getters and setters
 
     @property
     def is_hovered(self):
@@ -86,29 +96,59 @@ class Button(pygame.sprite.Sprite):
         """
         return events.mouse.is_pressed(1)
 
-    def __update_state(self):
-        """On mouse move."""
-        if self.state == STATE_PRESSED and not self.is_pressed:
-            self.on_click()
-            return STATE_HOVER
-        elif not self.is_hovered:
-            return STATE_NORMAL
-        elif self.is_pressed:
-            return STATE_PRESSED
-        else:
-            return STATE_HOVER
+    @property
+    def title(self):
+        """Get button title.
 
-    def __draw_background(self):
-        """Draw button background."""
-        color = self.colors.get(self.state)
-        if color is not None:
-            self.image.fill(color)
+        Returns:
+            string: Button title
+        """
+        return self.label.text
+
+    # Actions
+
+    def click(self, *args, **kwargs):
+        """Button click action."""
+        self.hover(*args, **kwargs)
+        self.on_click(*args, **kwargs)
+
+    def hover(self, *args, **kwargs):
+        """Button hover action."""
+        self.state = self.STATE_HOVER
+
+    def leave(self, *args, **kwargs):
+        """Button leave action."""
+        self.state = self.STATE_NORMAL
+
+    def press(self, *args, **kwargs):
+        """Button press action."""
+        self.state = self.STATE_PRESSED
+
+    # Update button
+
+    def __update_state(self):
+        """Update button state."""
+        if self.state == self.STATE_PRESSED and not self.is_pressed:
+            self.click()
+        elif not self.is_hovered:
+            self.leave()
+        elif self.is_pressed:
+            self.press()
+        else:
+            self.hover()
+
+    def __update_background(self):
+        """Select background by state."""
+        background = self.backgrounds.get(self.state)
+        if background is not None:
+            self.__background_group.sprite = background
 
     def update(self, *args, **kwargs):
         """Redraw button."""
-        self.state = self.__update_state()
+        self.__update_state()
+        self.__update_background()
 
         self.labels.update(*args, **kwargs)
 
-        self.__draw_background()
+        self.__background_group.draw(self.image)
         self.labels.draw(self.image)
