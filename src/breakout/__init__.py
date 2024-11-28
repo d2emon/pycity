@@ -37,8 +37,7 @@ class Breakout(StateGame):
 
     def game_menu(self):
         logging.debug("Initialize main menu")
-        self.set_state(states.MENU)
-        # self.state = states.MENU
+        self.state = states.MENU
         # self.screen_group.sprite = MainScreen(self)
         # events={
         #     events.EVENT_WIN: self.on_win,
@@ -47,8 +46,7 @@ class Breakout(StateGame):
 
     def game_play(self):
         logging.debug("Initialize main game")
-        self.set_state(states.PLAYING)
-        # self.state = states.PLAYING
+        self.state = states.PLAYING
         # self.screen_group.sprite = MenuScreen(self)
 
     def start(self):

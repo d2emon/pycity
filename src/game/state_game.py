@@ -1,5 +1,6 @@
 import logging
 import pygame
+import events.keys
 from . import Game, states
 
 
@@ -16,103 +17,149 @@ class StateGame(Game):
         self,
         title="Game",
         window_size=(640, 480),
-        # fps=60,
-
         background_color=(0, 0, 0),
         delay=16,
-
         **config,
     ):
+        """Initialize game window.
+
+        Old Args:
+            fps (int, optional): _description_. Defaults to 60.
+
+        Args:
+            title (str, optional): Window title (caption). Defaults to "Game".
+            window_size (tuple, optional): Window width and height (size). Defaults to (800, 600).
+            background_color (tuple, optional): Background color for screen. Defaults to (0, 0, 0).
+            delay (int, optional): Delay before next tick. Defaults to 16.
+        """
         super().__init__(
             title=title,
             window_size=window_size,
             background_color=background_color,
             delay=delay,
-            # fps=fps
             **config,
         )
-        logging.debug(f"Create game ({config})")
 
-        self.events.update({
-            # self.events.UPDATE: self.on_update,
-            # self.events.DRAW: self.on_draw,
-            # self.events.KEY_UP: self.on_key_up,
-            # self.events.KEY_DOWN: self.on_key_down,
-        })
+        logging.debug(f"Initializing game with states")
+
+        # Set game fields
 
         # self.game_is_over = False
-        self.screen_group = pygame.sprite.GroupSingle()
-        self.state = self.STATE_INITIALIZATION
-        logging.debug(f"Initialize game")
+        self.__state = self.STATE_INITIALIZATION
         # self.objects = []
+
+        # ?
+
+        self.__screen_group = pygame.sprite.GroupSingle()
+
+        # Set INIT error on init
+        # Set UPDATE error on update
+        # Set DRAW error on draw
+        # Set KEY_UP error on key up
+        # Set KEY_DOWN error on key down
+
+    # Getters and setters
+
+    @property
+    def screen(self):
+        """Get current screen.
+
+        Returns:
+            pygame.sprite.Sprite: Current screen sprite.
+        """
+        return self.__screen_group.sprite
+
+    @screen.setter
+    def screen(self, value):
+        """Set current screen.
+
+        Args:
+            value (pygame.sprite.Sprite): New screen sprite.
+        """
+        self.__screen_group.sprite = value
+
+        # Add screen events to handlers
+        # Add custom events to handlers
+        # Add screen to event listeners
+
+    @property
+    def state(self):
+        """Get current state.
+
+        Returns:
+            string: Current game state.
+        """
+        return self.__state
+
+    @state.setter
+    def state(self, value):
+        """Set new state and change screen.
+
+        Args:
+            value (string): New game state.
+        """
+        self.__state = value
+
+        screen = self.screens.get(value)
+        if screen is None:
+            return
+
+        self.screen = screen(self)
 
     @property
     def is_running(self):
+        """Get if game is running (playing).
+
+        Returns:
+            bool: Game is running.
+        """
         return self.state != self.STATE_EXIT
 
     @is_running.setter
     def is_running(self, value):
+        """Set game is running (playing).
+
+        Args:
+            value (bool): Game is running.
+        """
         if value:
-            self.state = self.STATE_PLAYING
+            self.__state = self.STATE_PLAYING
         else:
-            self.state = self.STATE_EXIT
+            self.__state = self.STATE_EXIT
+
+    # Game loop setters
 
     def start(self):
-        logging.debug("Event: STATE_GAME.INIT")
-        self.state = self.STATE_PLAYING
+        """Start game."""
+        logging.debug("Starting game with states")
+        self.__state = self.STATE_PLAYING
 
     def stop(self):
-        logging.debug("Event: STATE_GAME.QUIT")
-        self.state = self.STATE_EXIT
+        """Stop game."""
+        logging.debug("Stopping game with states")
+        self.__state = self.STATE_EXIT
 
     def game_win(self):
-        logging.debug("Event: STATE_GAME.WIN")
-        self.state = self.STATE_WIN
+        """Win game."""
+        logging.debug("Winning game with states")
+        self.__state = self.STATE_WIN
 
-    # New methods
+    # Game loop methods
+
+    def check_keys(self):
+        if events.keys.is_key_pressed(pygame.K_ESCAPE):
+            self.stop()
 
     def update(self):
         super().update()
 
-        # logging.debug("Event: STATE_GAME.UPDATE")
-        self.screen_group.update()
+        self.check_keys()
+
+        self.__screen_group.update()
 
     def draw(self):
         super().draw()
 
         # logging.debug("Event: STATE_GAME.DRAW")
-        self.screen_group.draw(self.screen)
-
-    def set_state(self, state):
-        self.state = state
-
-        screen = self.screens.get(state)
-        if screen:
-            self.screen_group.sprite = screen(self)
-
-    # Events
-
-"""
-
-
-class StateGame(Game):
-    # Events
-
-    def on_close(self, *args, **kwargs):
-        self.stop()
-
-    def on_key_down(self, *args, keys=None, **kwargs):
-        if keys is None:
-            return
-
-        if pygame.K_ESCAPE in keys:
-            self.stop()
-
-    def on_key_up(self, *args, **kwargs):
-        pass
-
-    #
-
-    def update_events(self, events):
-        pass
-"""
+        self.__screen_group.draw(self.window)
+        # pygame.display.flip()
