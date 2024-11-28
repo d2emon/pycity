@@ -14,7 +14,6 @@ class Screen(pygame.sprite.Sprite):
 
         self.load_image()
 
-    @classmethod
     def load_image(self):
         # return pygame.image.load(self.BACKGROUND_IMAGE)
         rect = self.game.window.get_rect()
