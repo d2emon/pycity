@@ -1,7 +1,7 @@
 import pygame
 import directions
 import events.keys
-from sprites.map_sprite import MapSprite
+from .map_sprite import MapSprite
 
 
 min_x = 16 * 32

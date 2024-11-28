@@ -6,12 +6,12 @@ from block_map import BlockMap, MapBlock
 from blocks import block_files
 from breakout import Breakout as Game
 from map import TileKind, Map
-from sprites.building import Building
-from sprites.camera import Camera
-from sprites.player import Player
-# from player import Player
+from my_game.sprites.building import Building
+from my_game.sprites.camera import Camera
+from my_game.sprites.player import Player
+# from my_game.player import Player
 # from bgmap import BgMap
-# from background import Background
+# from my_game.sprites.background import Background
 # from grid import MapGrid
 
 # from games.breakout import Breakout

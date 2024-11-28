@@ -1,6 +1,6 @@
 import pygame
 from loaders.load_map import load_map
-from sprites.map_sprite import MapSprite
+from my_game.sprites.map_sprite import MapSprite
 
 
 class TileKind:
