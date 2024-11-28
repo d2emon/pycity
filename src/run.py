@@ -31,8 +31,6 @@ from sprites.player import Player
 # from utils.state_game import StateGame
 # from windows.controls import TextObject
 # from . import events, states
-# from .menu_screen import MenuScreen
-# from .game_screen import GameScreen
 """
 
 
@@ -114,22 +112,22 @@ class MyGame(Game):
         self.sprites.update(player=self.player_group)
         self.player_group.update(game_map=self.block_map)
 
-        # bg.draw(screen)
+        # bg.draw(window)
 
         self.player_pos_text = self.fonts["my"].render(f"{self.player.x}, {self.player.y}", False, (255, 0, 0))
         self.block_pos_text = self.fonts["my"].render(f"{self.block_map.x}, {self.block_map.y}", False, (255, 0, 0))
 
         # game_map.update(xvel, yvel)
-        # game_map.draw(screen)
+        # game_map.draw(window)
 
         # if show_grid:
-        #     map_grid.draw(screen)
+        #     map_grid.draw(window)
 
-        # hero.draw(screen)
+        # hero.draw(window)
 
         # coords = "{}, {}".format(game_map.x, game_map.y)
         # text_surface = myfont.render(coords, False, (0, 0, 0))
-        # screen.blit(text_surface, (0, 0))
+        # window.blit(text_surface, (0, 0))
 
         # pygame.display.update()
 
@@ -137,8 +135,8 @@ class MyGame(Game):
         super().draw()
 
         # logging.debug("Event: MY_GAME.DRAW")
-        self.screen.blit(self.player_pos_text, (0, 0))
-        self.screen.blit(self.block_pos_text, (0, 24))
+        self.window.blit(self.player_pos_text, (0, 0))
+        self.window.blit(self.block_pos_text, (0, 24))
 
 
 def run():
