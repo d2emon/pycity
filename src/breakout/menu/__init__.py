@@ -1,4 +1,5 @@
 import pygame
+from sprites.image import Image
 from sprites.screen import Screen
 from .items import MainMenuItems
 
@@ -9,9 +10,7 @@ class MenuScreen(Screen):
     def __init__(self, game, *groups):
         super().__init__(game, *groups)
 
-        background = pygame.sprite.Sprite()
-        background.image = pygame.image.load(self.BACKGROUND_IMAGE)
-        background.rect = self.rect
+        background = Image(self.rect, self.BACKGROUND_IMAGE)
 
         self.background = pygame.sprite.GroupSingle(background)
         self.menu_items = MainMenuItems({

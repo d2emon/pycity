@@ -1,15 +1,16 @@
 import logging
+import random
 import pygame
 from sprites.moving import Moving
-# from games.breakout.intersect import get_bounds, COLLIDE_LEFT, COLLIDE_TOP, COLLIDE_RIGHT, COLLIDE_BOTTOM, COLLIDE_HORIZONTAL, COLLIDE_VERTICAL
+from breakout.intersect import get_bounds, intersect, COLLIDE_BOTTOM, COLLIDE_HORIZONTAL, COLLIDE_VERTICAL
 from .images.ball import draw_ball
 
 
 class Ball(Moving):
     def __init__(
         self,
-        pos=None,
-        speed=(0, 1),
+        pos,
+        bounds,
         *groups,
     ):
         image = draw_ball()
@@ -18,51 +19,59 @@ class Ball(Moving):
         if pos:
             rect.center = pos
 
+        speed = random.randint(-2, 2), 1
+
         super().__init__(
             image,
             rect,
             speed,
             *groups,
         )
-        # self.fallen = False
 
-"""
+        self.bounds = bounds
+        self.fallen = False
 
+    def update_speed(self, speed=(0, 0)):
+        x = self.speed[0] + speed[0]
+        y = self.speed[1] + speed[1]
+        return x, y
 
-class Ball(Moving):
-    def reverse_x(self):
-        x, y = self.speed
+    def reverse_x(self, speed=(0, 0)):
+        x, y = self.update_speed(speed)
         self.speed = -x, y
 
-    def reverse_y(self):
-        x, y = self.speed
+    def reverse_y(self, speed=(0, 0)):
+        x, y = self.update_speed(speed)
         self.speed = x, -y
 
-    def update_speed(self, speed):
-        x, y = self.speed
-        dx, dy = speed
-        self.speed = (x + dx), -(y + dy)
-
-    def hit_paddle(self, edge, speed):
-        if edge in COLLIDE_HORIZONTAL:
-            self.reverse_x()
-        elif edge in COLLIDE_VERTICAL:
-            self.update_speed(speed)
-
-    def hit_brick(self, edge):
+    def hit_object(self, edge, speed=(0, 0)):
+        logging.debug(f"HIT OBJECT {edge}")
         if edge in COLLIDE_HORIZONTAL:
             # self.sound_effects['paddle_hit'].play()
-            self.reverse_x()
+            self.reverse_x(speed)
         elif edge in COLLIDE_VERTICAL:
             # self.sound_effects['paddle_hit'].play()
-            self.reverse_y()
+            self.reverse_y(speed)
 
-    def update(self, bounds, *args):
-        super().update(*args)
+    def hit_edge(self, edge):
+        logging.debug(f"HIT EDGE {edge}")
+        if edge == COLLIDE_BOTTOM:
+            self.fallen = True
+        else:
+            self.hit_object(edge)
 
-        for edge in get_bounds(self.rect, bounds):
-            if edge == COLLIDE_BOTTOM:
-                self.fallen = True
-            else:
-                self.hit_brick(edge)
-"""
+    def check_bounds(self):
+        for edge in get_bounds(self.rect, self.bounds):
+            self.hit_edge(edge)
+
+    def check_bricks(self, bricks):
+        for brick in bricks:
+            edge = intersect(self.rect, brick.rect)
+
+            if edge is None:
+                continue
+
+            self.hit_object(edge)
+            bricks.remove(brick)
+
+            yield brick

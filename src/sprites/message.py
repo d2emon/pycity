@@ -21,6 +21,6 @@ class Message(Label):
         )
         self.duration = duration
 
-    def after_render(self):
-        self.render()
+    def pause(self):
         # time.sleep(duration)
+        pass

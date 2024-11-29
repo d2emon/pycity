@@ -3,7 +3,7 @@ import pygame
 import directions
 import events.keys
 from sprites.moving import Moving
-# from games.breakout.intersect import intersect
+from breakout.intersect import intersect
 from .images.paddle import draw_paddle
 from .ball import Ball
 
@@ -33,12 +33,28 @@ class Paddle(Moving):
             directions.LEFT: pygame.K_LEFT,
         }
 
-        self.ball = None
+        self.ball_group = pygame.sprite.GroupSingle()
         self.__base_speed = base_speed
         self.speed = 0, 0
 
-        # self.lives = 5
-        # self.score = 0
+        self.lives = 5
+        self.score = 0
+
+    # Getters
+
+    @property
+    def ball(self):
+        return self.ball_group.sprite
+
+    @property
+    def has_started(self):
+        return self.ball is not None
+
+    @property
+    def game_over(self):
+        return self.lives <= 0
+
+    # Actions
 
     def move_left(self):
         self.speed = -self.__base_speed, 0
@@ -49,11 +65,16 @@ class Paddle(Moving):
     def stop(self):
         self.speed = 0, 0
 
-    def start(self, pos, speed, *groups):
-        self.ball = Ball(pos, speed, *groups)
+    def start(self, rect, *groups):
+        self.ball_group.sprite = Ball(rect.center, rect, *groups)
+
+    def loose(self):
+        # self.sound_effects['paddle_hit'].play()
+        self.lives -= 1
+        self.ball_group.empty()
 
     def update(self, *args, **kwargs):
-        self.speed = 0, 0
+        self.stop()
         if events.keys.is_key_pressed(self.keys[directions.LEFT]):
             self.move_left()
         if events.keys.is_key_pressed(self.keys[directions.RIGHT]):
@@ -61,30 +82,14 @@ class Paddle(Moving):
 
         super().update(*args, **kwargs)
 
-        # if self.ball is None:
-        #     return
+        if not self.has_started:
+            return
 
-        # if self.ball.fallen:
-        #     return self.loose()
+        self.ball.check_bounds()
 
-        # edge = intersect(self.ball.rect, self.rect)
-        # if edge is not None:
-        #     # self.sound_effects['paddle_hit'].play()
-        #     self.ball.hit_paddle(edge, self.speed)
+        if self.ball.fallen:
+            return self.loose()
 
-
-"""
-class Paddle(Moving):
-    @property
-    def has_started(self):
-        return self.ball is not None
-
-    @property
-    def game_over(self):
-        return self.lives <= 0
-
-    def loose(self):
-        # self.sound_effects['paddle_hit'].play()
-        self.lives -= 1
-        self.ball = None
-"""
+        edge = intersect(self.ball.rect, self.rect)
+        if edge is not None:
+            self.ball.hit_object(edge, self.speed)
