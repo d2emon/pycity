@@ -1,5 +1,5 @@
 import pygame
-# import time
+import time
 from .label import Label
 
 
@@ -21,6 +21,5 @@ class Message(Label):
         )
         self.duration = duration
 
-    def pause(self):
-        # time.sleep(duration)
-        pass
+    def update(self, *args, **kwargs):
+        time.sleep(self.duration)

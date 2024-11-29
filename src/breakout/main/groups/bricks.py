@@ -24,3 +24,7 @@ class Bricks(pygame.sprite.Group):
         for y in range(self.height):
             for x in range(self.width):
                 Brick((x, y), self, *groups)
+
+    @property
+    def is_finished(self):
+        return len(self) == 0

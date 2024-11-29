@@ -6,7 +6,7 @@ from . import Game, states
 
 class StateGame(Game):
     STATE_EXIT = states.EXIT
-    # STATE_GAME_OVER = states.GAME_OVER
+    STATE_GAME_OVER = states.GAME_OVER
     STATE_INITIALIZATION = states.INITIALIZATION
     STATE_PLAYING = states.PLAYING
     STATE_WIN = states.WIN
@@ -143,6 +143,11 @@ class StateGame(Game):
         """Win game."""
         logging.debug("Winning game with states")
         self.__state = self.STATE_WIN
+
+    def game_loose(self):
+        """Loose game."""
+        logging.debug("Loosing game with states")
+        self.__state = self.STATE_GAME_OVER
 
     # Game loop methods
 

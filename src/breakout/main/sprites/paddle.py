@@ -1,4 +1,3 @@
-import logging
 import pygame
 import directions
 import events.keys
@@ -37,7 +36,6 @@ class Paddle(Moving):
         self.level = None
 
         self.__base_speed = base_speed
-        # self.speed = 0, 0
 
         self.lives = 5
         self.score = 0

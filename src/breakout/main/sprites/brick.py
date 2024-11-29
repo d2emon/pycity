@@ -1,4 +1,3 @@
-import logging
 import pygame
 from .images.brick import draw_brick
 

@@ -1,4 +1,3 @@
-import logging
 import random
 import pygame
 from sprites.moving import Moving
@@ -14,7 +13,6 @@ class Ball(Moving):
     ):
         image = draw_ball()
         rect = image.get_rect()
-        # rect = pygame.Rect(0, 0, 10, 10)
         rect.center = level.start_pos
 
         speed = random.randint(-2, 2), 1
@@ -45,7 +43,6 @@ class Ball(Moving):
         self.speed = x, -y
 
     def hit_object(self, edge, speed=(0, 0)):
-        logging.debug(f"HIT OBJECT {edge}")
         if edge in COLLIDE_HORIZONTAL:
             self.reverse_x(speed)
         elif edge in COLLIDE_VERTICAL:
