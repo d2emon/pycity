@@ -4,7 +4,8 @@ import pygame
 import config
 from block_map import BlockMap, MapBlock
 from blocks import block_files
-from breakout import Breakout as Game
+# from breakout import Breakout as Game
+from menu_screen import MenuScreen as Game
 from map import TileKind, Map
 from my_game.sprites.building import Building
 from my_game.sprites.camera import Camera
@@ -21,7 +22,6 @@ from my_game.sprites.player import Player
 # import uuid
 # from gamelib.temp_mud.game import Game
 
-# import config
 # # from games.middleearth import MiddleEarth as Game
 # from games.space import Space as Game
 
@@ -156,10 +156,6 @@ def run():
 
     game()
     """
-    ## 1. breakout
-
-    game = Breakout()
-    
     ## 2. map_walk
 
     game = MapWalk()

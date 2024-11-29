@@ -5,7 +5,6 @@ from .main import MainScreen
 from .menu import MenuScreen
 
 
-
 class Breakout(StateGame):
     screens = {
         states.MENU: MenuScreen,
