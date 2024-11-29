@@ -34,8 +34,10 @@ class Paddle(Moving):
         }
 
         self.ball_group = pygame.sprite.GroupSingle()
+        self.level = None
+
         self.__base_speed = base_speed
-        self.speed = 0, 0
+        # self.speed = 0, 0
 
         self.lives = 5
         self.score = 0
@@ -65,8 +67,9 @@ class Paddle(Moving):
     def stop(self):
         self.speed = 0, 0
 
-    def start(self, rect, *groups):
-        self.ball_group.sprite = Ball(rect.center, rect, *groups)
+    def start(self, level):
+        self.level = level
+        self.ball_group.sprite = Ball(level)
 
     def loose(self):
         # self.sound_effects['paddle_hit'].play()
@@ -85,7 +88,10 @@ class Paddle(Moving):
         if not self.has_started:
             return
 
-        self.ball.check_bounds()
+        if self.rect.left <= self.level.left:
+            self.rect.left = self.level.left
+        if self.rect.right >= self.level.right:
+            self.rect.right = self.level.right
 
         if self.ball.fallen:
             return self.loose()
@@ -93,3 +99,6 @@ class Paddle(Moving):
         edge = intersect(self.ball.rect, self.rect)
         if edge is not None:
             self.ball.hit_object(edge, self.speed)
+
+        for brick in self.ball.check_bricks():
+            self.score += brick.points

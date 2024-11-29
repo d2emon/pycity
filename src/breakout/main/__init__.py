@@ -20,7 +20,9 @@ class MainScreen(Screen):
 
         self.__background_group = pygame.sprite.GroupSingle(background)
         self.__player_group = pygame.sprite.GroupSingle(player)
-        self.bricks = Bricks()
+
+        level_rect = pygame.Rect(0, 0, 570, 400)
+        self.level = Bricks(level_rect)
 
         self.start()
 
@@ -33,22 +35,19 @@ class MainScreen(Screen):
         return self.player.ball
 
     def start(self):
-        self.player.start(self.rect)
+        self.player.start(self.level)
 
     def update(self, *args, **kwargs):
         if not self.player.has_started:
             self.start()
-        else:
-            for brick in self.ball.check_bricks(self.bricks):
-                self.player.score += brick.points
 
-        # if not self.bricks:
+        # if len(self.level) <= 0:
         #     return self.events.emit(events.EVENT_WIN)
 
         # if self.player.game_over:
         #     return self.events.emit(events.EVENT_LOOSE)
 
-        self.bricks.update(*args, **kwargs)
+        self.level.update(*args, **kwargs)
         self.player.ball_group.update(*args, **kwargs)
 
         self.__background_group.draw(self.image)
@@ -56,5 +55,5 @@ class MainScreen(Screen):
         super().update(*args, **kwargs)
 
         self.player.ball_group.draw(self.image)
-        self.bricks.draw(self.image)
+        self.level.draw(self.image)
 

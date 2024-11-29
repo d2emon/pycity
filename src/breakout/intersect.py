@@ -35,14 +35,3 @@ def intersect(rect1, rect2):
         return COLLIDE_LEFT if rect1.centerx < rect2.left else COLLIDE_RIGHT
 
     return None
-
-
-def get_bounds(rect1, rect2):
-    if rect1.left < rect2.left:
-        yield COLLIDE_LEFT
-    if rect1.top < rect2.top:
-        yield COLLIDE_TOP
-    if rect1.right > rect2.right:
-        yield COLLIDE_RIGHT
-    if rect1.bottom > rect2.bottom:
-        yield COLLIDE_BOTTOM

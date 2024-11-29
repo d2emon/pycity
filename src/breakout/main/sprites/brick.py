@@ -4,14 +4,14 @@ from .images.brick import draw_brick
 
 
 class Brick(pygame.sprite.Sprite):
-    width = 80
-    height = 20
+    width = 78
+    height = 18
 
     margin_h = 1
     margin_v = 1
 
     offset_x = 10
-    offset_y = 10
+    offset_y = 40
 
     cell_width = width + margin_h
     cell_height = height + margin_v
@@ -19,9 +19,8 @@ class Brick(pygame.sprite.Sprite):
     def __init__(self, pos, *groups):
         super().__init__(*groups)
 
-        self.image = draw_brick()
-
-        self.rect = pygame.Rect(0, 0, self.width, self.height)
+        self.image = draw_brick(self.width, self.height)
+        self.rect = self.image.get_rect()
         if pos:
             x, y = pos
             self.rect.x = self.offset_x + x * self.cell_width
