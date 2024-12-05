@@ -1,3 +1,4 @@
+import logging
 import pygame
 from sprites.image import Image
 from sprites.message import Message
@@ -6,20 +7,20 @@ from .groups.bricks import Bricks
 from .sprites.paddle import Paddle
 
 
-class MainScreen(Screen):
-    BACKGROUND_IMAGE = "res/global/map.jpg"
+class MainScreenGroup(pygame.sprite.LayeredUpdates):
+    backgroundImage = "res/global/map.jpg"
 
-    def __init__(self, game, *groups):
-        super().__init__(game, *groups)
+    def __init__(self, game, *spites):
+        super().__init__(*spites)
 
-        background = Image(self.rect, self.BACKGROUND_IMAGE)
+        self.game = game
+ 
+        rect = game.window.get_rect()
+        self.background = Image(rect, self.backgroundImage)
 
-        player_pos = (self.rect.centerx, 400)
+        player_pos = (rect.centerx, 400)
         base_speed = 10
-        player = Paddle(player_pos, base_speed, self.sprites)
-
-        self.__background_group = pygame.sprite.GroupSingle(background)
-        self.__player_group = pygame.sprite.GroupSingle(player)
+        self.player = Paddle(player_pos, base_speed)
 
         level_rect = pygame.Rect(0, 0, 570, 400)
         self.level = Bricks(level_rect)
@@ -27,10 +28,6 @@ class MainScreen(Screen):
         self.__messages = pygame.sprite.Group()
 
         self.start()
-
-    @property
-    def player(self):
-        return self.__player_group.sprite
 
     @property
     def ball(self):
@@ -41,8 +38,9 @@ class MainScreen(Screen):
             self.player.start(self.level)
 
     def win(self, *args, **kwargs):
+        rect = self.game.window.get_rect()
         message = Message(
-            self.rect,
+            rect,
             "YOU WIN!!!",
             font=pygame.font.SysFont('Arial', 24),
             color=(0, 255, 0),
@@ -51,8 +49,9 @@ class MainScreen(Screen):
         self.game.game_win()
 
     def loose(self, *args, **kwargs):
+        rect = self.game.window.get_rect()
         message = Message(
-            self.rect,
+            rect,
             "YOU LOOSE!!!",
             font=pygame.font.SysFont('Arial', 24),
             color=(255, 0, 0),
@@ -61,8 +60,6 @@ class MainScreen(Screen):
         self.game.game_loose()
 
     def update(self, *args, **kwargs):
-        self.__messages.update(*args, **kwargs)
-
         if self.game.state == self.game.STATE_WIN:
             self.game.stop()
         elif self.game.state == self.game.STATE_GAME_OVER:
@@ -75,13 +72,20 @@ class MainScreen(Screen):
             elif not self.player.has_started:
                 self.start()
 
-        self.level.update(*args, **kwargs)
-        self.player.ball_group.update(*args, **kwargs)
-
-        self.__background_group.draw(self.image)
-
-        self.player.ball_group.draw(self.image)
-        self.level.draw(self.image)
-        self.__messages.draw(self.image)
+        self.empty()
+        self.add(self.background)
+        self.add(self.player, layer=10)
+        if self.ball is not None:
+            self.add(self.ball, layer=8)
+        self.add(*self.level, layer=5)
+        self.add(*self.__messages)
 
         super().update(*args, **kwargs)
+
+class MainScreen(Screen):
+    BACKGROUND_IMAGE = "res/global/map.jpg"
+
+    def __init__(self, game, *groups):
+        super().__init__(game, *groups)
+
+        self.sprites = MainScreenGroup(game)

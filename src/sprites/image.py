@@ -18,3 +18,4 @@ class Image(pygame.sprite.Sprite):
 
         self.image = pygame.image.load(filename)
         self.rect = rect
+        self.layer = 0

@@ -20,6 +20,11 @@ class Message(Label):
             center=True
         )
         self.duration = duration
+        self.is_showing = False
+        self.layer = 25
 
     def update(self, *args, **kwargs):
-        time.sleep(self.duration)
+        if self.is_showing:
+            time.sleep(self.duration)
+        else:
+            self.is_showing = True
