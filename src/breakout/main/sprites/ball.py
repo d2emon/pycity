@@ -1,11 +1,13 @@
+import logging
 import random
 import pygame
 from sprites.moving import Moving
+from sprites.solid import Solid
 from breakout.intersect import intersect, COLLIDE_BOTTOM, COLLIDE_HORIZONTAL, COLLIDE_VERTICAL
 from .images.ball import draw_ball
 
 
-class Ball(Moving):
+class Ball(Moving, Solid):
     def __init__(
         self,
         level,
@@ -42,23 +44,18 @@ class Ball(Moving):
         x, y = self.update_speed(speed)
         self.speed = x, -y
 
-    def hit_object(self, edge, speed=(0, 0)):
+    def hit_object(self, item):
+        edge = intersect(self.rect, item.rect)
+        speed = item.speed if isinstance(item, Moving) else (0, 0)
+        logging.debug(f"{item}: {speed}")
+
+        if edge is None:
+            return
+
         if edge in COLLIDE_HORIZONTAL:
             self.reverse_x(speed)
         elif edge in COLLIDE_VERTICAL:
             self.reverse_y(speed)
-
-    def check_bricks(self):
-        for brick in self.level:
-            edge = intersect(self.rect, brick.rect)
-
-            if edge is None:
-                continue
-
-            self.hit_object(edge)
-            self.level.remove(brick)
-
-            yield brick
 
     def update(self, *args, **kwargs):
         super().update(*args, **kwargs)

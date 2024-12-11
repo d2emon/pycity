@@ -1,8 +1,9 @@
 import pygame
+from sprites.solid import Solid
 from .images.brick import draw_brick
 
 
-class Brick(pygame.sprite.Sprite):
+class Brick(Solid):
     width = 78
     height = 18
 

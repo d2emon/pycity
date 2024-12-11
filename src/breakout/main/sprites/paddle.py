@@ -2,12 +2,13 @@ import pygame
 import directions
 import events.keys
 from sprites.moving import Moving
-from breakout.intersect import intersect
+from sprites.solid import Solid
 from .images.paddle import draw_paddle
 from .ball import Ball
+from .brick import Brick
 
 
-class Paddle(Moving):
+class Paddle(Moving, Solid):
     def __init__(
         self,
         pos,
@@ -94,9 +95,11 @@ class Paddle(Moving):
         if self.ball.fallen:
             return self.loose()
 
-        edge = intersect(self.ball.rect, self.rect)
-        if edge is not None:
-            self.ball.hit_object(edge, self.speed)
+        if self.level:
+            items = self, *self.level
 
-        for brick in self.ball.check_bricks():
-            self.score += brick.points
+            for item in self.ball.get_collides(items):
+                self.ball.hit_object(item)
+                if isinstance(item, Brick):
+                    self.score += item.points
+                    self.level.remove(item)
