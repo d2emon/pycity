@@ -1,58 +1,27 @@
 import pygame
-from sprites.button import Button
 from sprites.image import Image
-from sprites.menu_items import MenuItems
-from sprites.screen import Screen
-from .item import MainMenuItem
+from sprites.screen import Screen, ScreenGroup
+from .items import MainMenuItems
 
-class MenuScreen(Screen):
+
+class MenuScreenGroup(ScreenGroup):
     background_image = "res/global/map.jpg"
     start_rect = pygame.Rect(8, 8, 240, 40)
 
-    def __init__(self, game, *groups):
-        super().__init__(game, *groups)
+    def __init__(self, game, *spites):
+        super().__init__(game, *spites)
 
-        background = Image(self.rect, self.background_image)
-        self.background = pygame.sprite.GroupSingle(background)
+        rect = self.game.window.get_rect()
+        self.background = Image(rect, self.background_image)
+        self.add(self.background)
 
-        self.menu_items = MenuItems()
-
-        # width = self.start_rect + 8
-        height = self.start_rect.height + 8
-
-        rect = self.start_rect.copy()
-        MainMenuItem(
-            rect,
-            'PLAY',
-            self.menu_items,
-            on_click=self.on_play_click,
-        )
-
-        rect = rect.move(0, height)
-        MainMenuItem(
-            rect,
-            'MAP WALK',
-            self.menu_items,
-            on_click=self.on_play_click,
-        )
-
-        rect = rect.move(0, height)
-        MainMenuItem(
-            rect,
-            'QUIT',
-            self.menu_items,
-            on_click=self.on_quit_click,
-        )
-
-    def update(self, *args, **kwargs):
-        super().update(*args, **kwargs)
-
-        self.menu_items.update(*args, **kwargs)
-
-        self.background.draw(self.image)
-        self.menu_items.draw(self.image)
-
-    # Events
+        self.menu_items = MainMenuItems({
+            MainMenuItems.BUTTON_PLAY: self.on_play_click,
+            MainMenuItems.BUTTON_MAP_WALK: self.on_map_walk_click,
+            MainMenuItems.BUTTON_QUIT: self.on_quit_click,
+        })
+        for menu_item in self.menu_items:
+            self.add(menu_item, layer=10)
 
     def on_play_click(self, *args, **kwargs):
         self.game.game_play()
@@ -62,3 +31,8 @@ class MenuScreen(Screen):
 
     def on_quit_click(self, *args, **kwargs):
         self.game.stop()
+
+
+class MenuScreen(Screen):
+    def create_group(self):
+        return MenuScreenGroup(self.game)

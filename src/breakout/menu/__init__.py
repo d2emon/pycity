@@ -1,19 +1,17 @@
 import pygame
 from sprites.image import Image
-from sprites.screen import Screen
+from sprites.screen import Screen, ScreenGroup
 from .items import MainMenuItems
 
 
-class MenuScreenGroup(pygame.sprite.LayeredUpdates):
-    backgroundImage = "res/global/map.jpg"
+class MenuScreenGroup(ScreenGroup):
+    background_image = "res/global/map.jpg"
 
     def __init__(self, game, *spites):
-        super().__init__(*spites)
+        super().__init__(game, *spites)
 
-
-        self.game = game
- 
-        self.background = Image(self.rect, self.backgroundImage)
+        rect = self.game.window.get_rect()
+        self.background = Image(rect, self.background_image)
         self.add(self.background)
 
         self.menu_items = MainMenuItems({
@@ -31,7 +29,5 @@ class MenuScreenGroup(pygame.sprite.LayeredUpdates):
 
 
 class MenuScreen(Screen):
-    def __init__(self, game, *groups):
-        super().__init__(game, *groups)
-
-        self.sprites = MenuScreenGroup(game)
+    def create_group(self):
+        return MenuScreenGroup(self.game)

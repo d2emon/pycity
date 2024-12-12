@@ -2,19 +2,17 @@ import logging
 import pygame
 from sprites.image import Image
 from sprites.message import Message
-from sprites.screen import Screen
+from sprites.screen import Screen, ScreenGroup
 from .groups.bricks import Bricks
 from .sprites.paddle import Paddle
 
 
-class MainScreenGroup(pygame.sprite.LayeredUpdates):
+class MainScreenGroup(ScreenGroup):
     backgroundImage = "res/global/map.jpg"
 
     def __init__(self, game, *spites):
-        super().__init__(*spites)
+        super().__init__(game, *spites)
 
-        self.game = game
- 
         rect = game.window.get_rect()
         self.background = Image(rect, self.backgroundImage)
 
@@ -83,8 +81,6 @@ class MainScreenGroup(pygame.sprite.LayeredUpdates):
         super().update(*args, **kwargs)
 
 class MainScreen(Screen):
-    BACKGROUND_IMAGE = "res/global/map.jpg"
-
     def __init__(self, game, *groups):
         super().__init__(game, *groups)
 

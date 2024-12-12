@@ -1,21 +1,26 @@
 import pygame
 
 
-class Screen(pygame.sprite.Sprite):
-    # BACKGROUND_IMAGE = "../res/global/map.jpg"
-    # BACKGROUND_POS = 0, 0
+class ScreenGroup(pygame.sprite.LayeredUpdates):
+    def __init__(self, game, *spites):
+        super().__init__(*spites)
 
+        self.game = game
+
+
+class Screen(pygame.sprite.Sprite):
     def __init__(self, game, *groups):
         super().__init__(*groups)
 
         self.game = game
- 
-        self.sprites = pygame.sprite.Group()
+        self.sprites = self.create_group()
 
         self.load_image()
 
+    def create_group(self):
+        return ScreenGroup(self.game)
+
     def load_image(self):
-        # return pygame.image.load(self.BACKGROUND_IMAGE)
         rect = self.game.window.get_rect()
         self.image = pygame.Surface(rect.size)
         self.rect = rect

@@ -1,4 +1,3 @@
-import logging
 import random
 import pygame
 from sprites.moving import Moving
@@ -47,7 +46,6 @@ class Ball(Moving, Solid):
     def hit_object(self, item):
         edge = intersect(self.rect, item.rect)
         speed = item.speed if isinstance(item, Moving) else (0, 0)
-        logging.debug(f"{item}: {speed}")
 
         if edge is None:
             return
