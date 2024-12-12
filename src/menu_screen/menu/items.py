@@ -11,17 +11,20 @@ class MainMenuItems(MenuItems):
 
     BUTTON_PLAY = "BUTTON_PLAY"
     BUTTON_MAP_WALK = "BUTTON_MAP_WALK"
+    BUTTON_CITY = "BUTTON_CITY"
     BUTTON_QUIT = "BUTTON_QUIT"
 
     buttons = [
         BUTTON_PLAY,
         BUTTON_MAP_WALK,
+        BUTTON_CITY,
         BUTTON_QUIT,
     ]
 
     button_titles = {
         BUTTON_PLAY: 'PLAY',
         BUTTON_MAP_WALK: 'MAP_WALK',
+        BUTTON_CITY: 'CITY',
         BUTTON_QUIT: 'QUIT',
     }
 

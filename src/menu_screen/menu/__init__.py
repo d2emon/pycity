@@ -18,6 +18,7 @@ class MenuScreenGroup(ScreenGroup):
         self.menu_items = MainMenuItems({
             MainMenuItems.BUTTON_PLAY: self.on_play_click,
             MainMenuItems.BUTTON_MAP_WALK: self.on_map_walk_click,
+            MainMenuItems.BUTTON_CITY: self.on_city_click,
             MainMenuItems.BUTTON_QUIT: self.on_quit_click,
         })
         for menu_item in self.menu_items:
@@ -28,6 +29,9 @@ class MenuScreenGroup(ScreenGroup):
 
     def on_map_walk_click(self, *args, **kwargs):
         self.game.game_map_walk()
+
+    def on_city_click(self, *args, **kwargs):
+        self.game.game_city()
 
     def on_quit_click(self, *args, **kwargs):
         self.game.stop()

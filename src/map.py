@@ -1,6 +1,5 @@
 import pygame
 from loaders.load_map import load_map
-from my_game.sprites.map_sprite import MapSprite
 
 
 class TileKind:
@@ -15,7 +14,7 @@ class Map:
         self.tile_kinds = tile_kinds
         self.tile_size = tile_size        
         self.tiles = list(load_map(map_file))
-        self.sprite_group = pygame.sprite.pygame.sprite.Group()
+        self.sprite_group = pygame.sprite.Group()
 
     def update(self, *groups):
         for y, row in enumerate(self.tiles):
