@@ -8,14 +8,14 @@ Typical usage example:
 
 import pygame
 from game.state_game import StateGame
-from .main import MainScreen
+from .main import MainScreenGroup
 
 
 class MapWalk(StateGame):
     STATE_GAME = 'STATE_GAME'
 
     screens = {
-        STATE_GAME: MainScreen,
+        STATE_GAME: MainScreenGroup,
     }
 
 

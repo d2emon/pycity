@@ -9,14 +9,14 @@ Typical usage example:
 import logging
 import pygame
 from game.state_game import StateGame
-from .main import MainScreen
+from .main import MainScreenGroup
 
 
 class MyGame(StateGame):
     STATE_GAME = 'STATE_GAME'
 
     screens = {
-        STATE_GAME: MainScreen,
+        STATE_GAME: MainScreenGroup,
     }
 
 

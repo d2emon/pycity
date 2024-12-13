@@ -2,7 +2,7 @@ import logging
 import pygame
 from sprites.image import Image
 from sprites.message import Message
-from sprites.screen import Screen, ScreenGroup
+from sprites.screen import ScreenGroup
 from .groups.bricks import Bricks
 from .sprites.paddle import Paddle
 
@@ -79,9 +79,3 @@ class MainScreenGroup(ScreenGroup):
         self.add(*self.__messages)
 
         super().update(*args, **kwargs)
-
-class MainScreen(Screen):
-    def __init__(self, game, *groups):
-        super().__init__(game, *groups)
-
-        self.sprites = MainScreenGroup(game)

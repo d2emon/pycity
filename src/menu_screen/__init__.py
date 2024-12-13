@@ -1,10 +1,10 @@
 import pygame
 from game import states
 from game.state_game import StateGame
-from breakout.main import MainScreen as BreakoutScreen
-from map_walk.main import MainScreen as MapWalkScreen
-from my_game.main import MainScreen as CityScreen
-from .menu import MenuScreen
+from breakout.main import MainScreenGroup as BreakoutScreen
+from map_walk.main import MainScreenGroup as MapWalkScreen
+from my_game.main import MainScreenGroup as CityScreen
+from .menu import MenuScreenGroup
 
 
 class MenuScreen(StateGame):
@@ -14,7 +14,7 @@ class MenuScreen(StateGame):
     PLAY_CITY = 'PLAY_CITY'
 
     screens = {
-        MENU: MenuScreen,
+        MENU: MenuScreenGroup,
         PLAYING: BreakoutScreen,
         MAP_WALK: MapWalkScreen,
         PLAY_CITY: CityScreen,

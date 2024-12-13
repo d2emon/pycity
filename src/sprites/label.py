@@ -16,7 +16,7 @@ class Label(pygame.sprite.Sprite):
         super().__init__()
 
         self.pos = pos
-        self.text = text
+        self.__text = text
         self.center = center
         self.color = color
 
@@ -27,9 +27,20 @@ class Label(pygame.sprite.Sprite):
 
         self.render()
 
+    @property
+    def text(self):
+        return self.__text
+
+    @text.setter
+    def text(self, value):
+        self.__text = value
+        self.render()
+
     def render(self):
         """Redraw text."""
-        self.image = self.font.render(self.text, False, self.color)
+        self.image = self.font.render(self.__text, False, self.color)
         self.rect = self.image.get_rect()
         if self.center:
             self.rect.centerx, self.rect.centery = self.pos
+        else:
+            self.rect.left, self.rect.top = self.pos

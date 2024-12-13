@@ -1,7 +1,8 @@
 import logging
 import pygame
 from sprites.image import Image
-from sprites.screen import Screen, ScreenGroup
+from sprites.label import Label
+from sprites.screen import ScreenGroup
 # from . import data
 # from .sprites.map import MapSprite
 # from .sprites.player import Player
@@ -104,6 +105,20 @@ class MainScreenGroup(ScreenGroup):
         # show_grid = False
         # map_grid = MapGrid(game_map.rect.width, game_map.rect.height, config.GRID_SIZE)
 
+        self.player_pos = Label(
+            (0, 0),
+            f"{self.player.x}, {self.player.y}",
+            font=self.game.fonts["my"],
+            color=(255, 0, 0),
+        )
+
+        self.block_pos = Label(
+            (0, 24),
+            f"{self.block_map.x}, {self.block_map.y}",
+            font=self.game.fonts["my"],
+            color=(255, 0, 0),
+        )
+
         self.start()
 
     def start(self):
@@ -133,8 +148,18 @@ class MainScreenGroup(ScreenGroup):
 
         # bg.draw(window)
 
-        self.player_pos_text = self.game.fonts["my"].render(f"{self.player.x}, {self.player.y}", False, (255, 0, 0))
-        self.block_pos_text = self.game.fonts["my"].render(f"{self.block_map.x}, {self.block_map.y}", False, (255, 0, 0))
+        # self.player_pos_text = self.game.fonts["my"].render(f"{self.player.x}, {self.player.y}", False, (255, 0, 0))
+        # self.block_pos_text = self.game.fonts["my"].render(f"{self.block_map.x}, {self.block_map.y}", False, (255, 0, 0))
+
+        self.player_pos.text = f"{self.player.x}, {self.player.y}"
+        self.add(self.player_pos, layer=50)
+
+        self.block_pos.text = f"{self.block_map.x}, {self.block_map.y}"
+        self.add(self.block_pos, layer=50)
+
+        logging.debug(f"{list(self)}")
+        logging.debug(f"{self.player_pos.text}")
+        logging.debug(f"{self.block_pos.text}")
 
         # game_map.update(xvel, yvel)
         # game_map.draw(window)
@@ -149,31 +174,3 @@ class MainScreenGroup(ScreenGroup):
         # window.blit(text_surface, (0, 0))
 
         # pygame.display.update()
-
-        ####
-
-
-class MainScreen(Screen):
-    """Main screen for game
-
-    Attributes:
-        events (Events): Game events.
-        sprites (Sprites): Screen sprites.
-    """
-
-    def __init__(self, game, *groups):
-        """Initialize main screen.
-
-        Args:
-            rect (pygame.Rect): Main screen rect
-        """
-        super().__init__(game, *groups)
-
-        self.sprites = MainScreenGroup(game)
-
-    def update(self, *args, **kwargs):
-        super().update(*args, **kwargs)
-
-        # logging.debug("Event: MY_GAME.DRAW")
-        self.image.blit(self.sprites.player_pos_text, (0, 0))
-        self.image.blit(self.sprites.block_pos_text, (0, 24))

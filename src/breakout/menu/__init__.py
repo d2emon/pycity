@@ -1,6 +1,6 @@
 import pygame
 from sprites.image import Image
-from sprites.screen import Screen, ScreenGroup
+from sprites.screen import ScreenGroup
 from .items import MainMenuItems
 
 
@@ -26,8 +26,3 @@ class MenuScreenGroup(ScreenGroup):
 
     def on_quit_click(self, *args, **kwargs):
         self.game.stop()
-
-
-class MenuScreen(Screen):
-    def create_group(self):
-        return MenuScreenGroup(self.game)

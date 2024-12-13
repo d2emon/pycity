@@ -1,14 +1,14 @@
 import pygame
 from game.state_game import StateGame
 from . import states
-from .main import MainScreen
-from .menu import MenuScreen
+from .main import MainScreenGroup
+from .menu import MenuScreenGroup
 
 
 class Breakout(StateGame):
     screens = {
-        states.MENU: MenuScreen,
-        states.PLAYING: MainScreen,
+        states.MENU: MenuScreenGroup,
+        states.PLAYING: MainScreenGroup,
     }
 
     def game_menu(self):

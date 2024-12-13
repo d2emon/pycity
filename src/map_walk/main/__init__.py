@@ -8,7 +8,7 @@ Typical usage example:
 import logging
 import pygame
 from sprites.image import Image
-from sprites.screen import Screen, ScreenGroup
+from sprites.screen import ScreenGroup
 from . import data
 from .sprites.map import MapSprite
 from .sprites.player import Player
@@ -54,40 +54,3 @@ class MainScreenGroup(ScreenGroup):
         self.add(self.player, layer=10)
 
         super().update(*args, **kwargs)
-
-
-class MainScreen(Screen):
-    """Main screen for game
-
-    Attributes:
-        events (Events): Game events.
-        sprites (Sprites): Screen sprites.
-    """
-
-    def __init__(self, game, *groups):
-        """Initialize main screen.
-
-        Args:
-            rect (pygame.Rect): Main screen rect
-        """
-        super().__init__(game, *groups)
-
-        self.sprites = MainScreenGroup(game)
-
-    @property
-    def map_sprite(self):
-        """Getter for map sprite.
-
-        Returns:
-            MapSprite: Map sprite
-        """
-        return self.sprites.map_sprite
-
-    @property
-    def player(self):
-        """Getter for player sprite.
-
-        Returns:
-            Player: Player sprite.
-        """
-        return self.sprites.player

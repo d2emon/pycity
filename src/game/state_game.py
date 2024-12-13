@@ -50,7 +50,7 @@ class StateGame(Game):
 
         # ?
 
-        self.__screen_group = pygame.sprite.GroupSingle()
+        self.__screen_group = pygame.sprite.Group()
 
         # Set INIT error on init
         # Set UPDATE error on update
@@ -67,7 +67,7 @@ class StateGame(Game):
         Returns:
             pygame.sprite.Sprite: Current screen sprite.
         """
-        return self.__screen_group.sprite
+        return self.__screen_group
 
     @screen.setter
     def screen(self, value):
@@ -76,7 +76,7 @@ class StateGame(Game):
         Args:
             value (pygame.sprite.Sprite): New screen sprite.
         """
-        self.__screen_group.sprite = value
+        self.__screen_group = value
 
         # Add screen events to handlers
         # Add custom events to handlers
