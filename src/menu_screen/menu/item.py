@@ -7,10 +7,12 @@ class MainMenuItem(Button):
     font_size = 24
     color = (0, 0, 0)
     padding = 5
+    width = 250
+    height = 50
 
-    def __init__(self, rect, title, on_click=lambda *args, **kwargs: None):
+    def __init__(self, title, on_click=lambda *args, **kwargs: None):
         super().__init__(
-            rect,
+            pygame.Rect(0, 0, self.width, self.height),
             title,
             on_click=on_click,
             font=pygame.font.SysFont(

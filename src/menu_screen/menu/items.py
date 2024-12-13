@@ -5,47 +5,24 @@ from .item import MainMenuItem
 
 
 class MainMenuItems(MenuItems):
-    BUTTON_MARGIN = 5, 5
-    BUTTON_WIDTH = 250
-    BUTTON_HEIGHT = 50
+    margins = 5, 5
 
-    BUTTON_PLAY = "BUTTON_PLAY"
-    BUTTON_MAP_WALK = "BUTTON_MAP_WALK"
-    BUTTON_CITY = "BUTTON_CITY"
-    BUTTON_QUIT = "BUTTON_QUIT"
+    def __init__(self, *items):
+        super().__init__(*items)
 
-    buttons = [
-        BUTTON_PLAY,
-        BUTTON_MAP_WALK,
-        BUTTON_CITY,
-        BUTTON_QUIT,
-    ]
+        self.horyzontal = False
 
-    button_titles = {
-        BUTTON_PLAY: 'PLAY',
-        BUTTON_MAP_WALK: 'MAP_WALK',
-        BUTTON_CITY: 'CITY',
-        BUTTON_QUIT: 'QUIT',
-    }
+        self.align_items()
 
-    def __init__(self, events):
-        super().__init__()
+    def align_items(self):
+        top = 0
+        left = 0
 
-        self.add_items(events)
+        for item in self:
+            item.rect.left = left + self.margins[0]
+            item.rect.top = top + self.margins[1]
 
-    def add_items(self, events):
-        rect = pygame.Rect(
-            self.BUTTON_MARGIN[0],
-            self.BUTTON_MARGIN[1],
-            self.BUTTON_WIDTH,
-            self.BUTTON_HEIGHT,
-        )
-        # width = rect.width + self.BUTTON_MARGIN[0] * 2
-        height = rect.height + self.BUTTON_MARGIN[1] * 2
-
-        for id, button in enumerate(self.buttons):
-            self.add(MainMenuItem(
-                rect.move(0, id * height),
-                self.button_titles[button],
-                events[button],
-            ))
+            if self.horyzontal:
+                left = item.rect.right + self.margins[0]
+            else:
+                top = item.rect.bottom + self.margins[1]

@@ -1,6 +1,7 @@
 import pygame
 from sprites.image import Image
 from sprites.screen import Screen, ScreenGroup
+from .item import MainMenuItem
 from .items import MainMenuItems
 
 
@@ -15,12 +16,13 @@ class MenuScreenGroup(ScreenGroup):
         self.background = Image(rect, self.background_image)
         self.add(self.background)
 
-        self.menu_items = MainMenuItems({
-            MainMenuItems.BUTTON_PLAY: self.on_play_click,
-            MainMenuItems.BUTTON_MAP_WALK: self.on_map_walk_click,
-            MainMenuItems.BUTTON_CITY: self.on_city_click,
-            MainMenuItems.BUTTON_QUIT: self.on_quit_click,
-        })
+        self.menu_items = MainMenuItems(
+            MainMenuItem("Play", self.on_play_click),
+            MainMenuItem("Walk Map", self.on_map_walk_click),
+            MainMenuItem("City", self.on_city_click),
+            MainMenuItem("Quit", self.on_quit_click),
+        )
+
         for menu_item in self.menu_items:
             self.add(menu_item, layer=10)
 
