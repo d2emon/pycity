@@ -10,7 +10,7 @@ class MainMenuItems(MenuItems):
     def __init__(self, *items):
         super().__init__(*items)
 
-        self.horyzontal = False
+        self.horizontal = False
 
         self.align_items()
 
@@ -22,7 +22,7 @@ class MainMenuItems(MenuItems):
             item.rect.left = left + self.margins[0]
             item.rect.top = top + self.margins[1]
 
-            if self.horyzontal:
+            if self.horizontal:
                 left = item.rect.right + self.margins[0]
             else:
                 top = item.rect.bottom + self.margins[1]
