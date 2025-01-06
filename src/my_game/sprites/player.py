@@ -19,7 +19,7 @@ CONTROLS = {
 
 
 class Player(MapSprite):
-    default_movement_speed = 2
+    default_movement_speed = 8
 
     def __init__(self, image, pos, *groups):
         super().__init__(image, pos, *groups)
@@ -29,10 +29,10 @@ class Player(MapSprite):
         self.last_rect = self.rect.copy()
         
         self.keys = {
-            directions.UP: pygame.K_w,
-            directions.DOWN: pygame.K_s,
-            directions.RIGHT: pygame.K_d,
-            directions.LEFT: pygame.K_a,
+            directions.UP: pygame.K_UP,
+            directions.DOWN: pygame.K_DOWN,
+            directions.RIGHT: pygame.K_RIGHT,
+            directions.LEFT: pygame.K_LEFT,
         }
 
     def update(self, game_map=None):
