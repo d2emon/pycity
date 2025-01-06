@@ -1,18 +1,19 @@
-import logging
 import pygame
-from sprites.image import Image
+
 from sprites.label import Label
 from sprites.screen import ScreenGroup
 # from . import data
 # from .sprites.map import MapSprite
 # from .sprites.player import Player
 
-from block_map import BlockMap, MapBlock
-from blocks import block_files
-from map import TileKind, Map
 from my_game.sprites.building import Building
 from my_game.sprites.camera import Camera
 from my_game.sprites.player import Player
+
+from ..map_tiles.tiles import create_starter_tiles, create_main_tiles
+from ..map_tiles.block_map import BlockMap
+from ..map_tiles.block_tileset import BlockTileset
+from ..map_tiles.map_tileset import MapTileset
 
 
 class MainScreenGroup(ScreenGroup):
@@ -27,7 +28,7 @@ class MainScreenGroup(ScreenGroup):
 
     ####
 
-    tile_size = 16
+    tile_size = 64  # 16
     block_size = 32 * tile_size
     start_pos = 16 * tile_size, 16 * tile_size
     start_block = 32, 16
@@ -62,26 +63,19 @@ class MainScreenGroup(ScreenGroup):
 
         self.camera = Camera(
             self.game.window_size,
-            (16 * 32 * 3, 16 * 32 * 3),
+            (self.block_size * 3, self.block_size * 3),
             self.game.background_color,
         )
 
-        tile_kinds = [
-            TileKind("tile0", f"{self.image_folder}/tile0.png", True),
-            TileKind("tile1", f"{self.image_folder}/tile1.png", False),
-            TileKind("cross", f"{self.image_folder}/cross.png", False),
-            TileKind("roadH", f"{self.image_folder}/roadH.png", False),
-            TileKind("roadV", f"{self.image_folder}/roadV.png", False),
-            TileKind("railX", f"{self.image_folder}/railX.png", False),
-            TileKind("railH", f"{self.image_folder}/railH.png", False),
-            TileKind("railV", f"{self.image_folder}/railV.png", False),
-        ]
-
-        map_blocks = [
-            MapBlock(filename, tile_kinds, self.tile_size)
-            for filename in block_files
-        ]
-        self.block_map = BlockMap("maps/v0.map", map_blocks, self.block_size, self.start_block)
+        map_tileset = MapTileset(
+            {
+                **create_starter_tiles(f"{self.image_folder}/starter.png"),
+                **create_main_tiles(f"{self.image_folder}/tiles.png"),
+            },
+            self.tile_size,
+        )
+        block_tileset = BlockTileset(map_tileset)
+        self.block_map = BlockMap("maps/v0.map", block_tileset, self.block_size, self.start_block)
         self.block_map.update()
         self.camera.background_sprites = self.block_map.sprite_group
 
@@ -157,9 +151,9 @@ class MainScreenGroup(ScreenGroup):
         self.block_pos.text = f"{self.block_map.x}, {self.block_map.y}"
         self.add(self.block_pos, layer=50)
 
-        logging.debug(f"{list(self)}")
-        logging.debug(f"{self.player_pos.text}")
-        logging.debug(f"{self.block_pos.text}")
+        # logging.debug(f"{list(self)}")
+        # logging.debug(f"{self.player_pos.text}")
+        # logging.debug(f"{self.block_pos.text}")
 
         # game_map.update(xvel, yvel)
         # game_map.draw(window)
