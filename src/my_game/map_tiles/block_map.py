@@ -30,7 +30,6 @@ class BlockMap:
     def update(self, *groups):
         self.sprite_group.empty()
         end_y = self.y + 1 if self.y < len(self.blocks) else len(self.blocks)
-        print(self.start_y, end_y)
         for y, row in enumerate(self.blocks[self.start_y:end_y + 1]):
             end_x = self.x + 1 if self.x < len(row) else len(row)
             for x, block in enumerate(row[self.start_x:end_x + 1]):

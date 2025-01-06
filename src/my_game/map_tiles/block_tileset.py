@@ -15,5 +15,4 @@ class BlockTileset:
 
     def fill(self, data):
         for row in data:
-            print(row)
             yield list(self.fill_row(row))
