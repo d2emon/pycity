@@ -3,44 +3,15 @@ import directions
 from loaders.load_map import load_map
 
 
-min_x = 16 * 32
-max_x = 16 * 32 * 2
-min_y = 16 * 32
-max_y = 16 * 32 * 2
-
-
-class MapBlock:
-    def __init__(self, block_file, tile_kinds, tile_size):
-        self.tile_size = tile_size
-        self.tiles = [
-            [tile_kinds[tile_id] for tile_id in row]
-            for row in load_map(block_file)
-        ]
-
-    def update(self, x_offset, y_offset, *groups):
-        for y, row in enumerate(self.tiles):
-            for x, tile in enumerate(row):
-                image = tile.image
-                pos = (
-                    x_offset + x * self.tile_size,
-                    y_offset + y * self.tile_size,
-                )
-                sprite = pygame.sprite.Sprite(*groups)
-                sprite.image = image
-                sprite.rect = image.get_rect()
-                sprite.rect.topleft = pos
-                sprite.is_solid = tile.is_solid
-
-
 class BlockMap:
     def __init__(self, map_file, blocks, block_size, block_pos):
         self.x, self.y = block_pos
         self.block_size = block_size
         self.sprite_group = pygame.sprite.Group()
-        self.blocks = [
-            [blocks[block_id] for block_id in row]
-            for row in load_map(map_file)
-        ]
+
+        data = load_map(map_file)
+        data = list(data)
+        self.blocks = list(blocks.fill(data))
 
     @property
     def start_x(self):
@@ -59,6 +30,7 @@ class BlockMap:
     def update(self, *groups):
         self.sprite_group.empty()
         end_y = self.y + 1 if self.y < len(self.blocks) else len(self.blocks)
+        print(self.start_y, end_y)
         for y, row in enumerate(self.blocks[self.start_y:end_y + 1]):
             end_x = self.x + 1 if self.x < len(row) else len(row)
             for x, block in enumerate(row[self.start_x:end_x + 1]):
