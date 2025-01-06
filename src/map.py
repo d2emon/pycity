@@ -3,10 +3,23 @@ from loaders.load_map import load_map
 
 
 class TileKind:
-    def __init__(self, name, image, is_solid):
+    def __init__(self, name, is_solid):
         self.name = name
-        self.image = pygame.image.load(image)
+        self.image = None
         self.is_solid = is_solid
+
+
+class TileKindImage(TileKind):
+    def __init__(self, name, image, is_solid):
+        super().__init__(name, is_solid)
+        self.image = pygame.image.load(image)
+
+
+class TileKindTileset(TileKind):
+    def __init__(self, name, is_solid, tileset, area):
+        super().__init__(name, is_solid)
+        self.image = pygame.Surface((64, 64))
+        self.image.blit(tileset, (0, 0), area)
 
 
 class Map:
