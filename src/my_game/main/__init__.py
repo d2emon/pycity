@@ -7,12 +7,12 @@ from sprites.screen import ScreenGroup
 # from .sprites.map import MapSprite
 # from .sprites.player import Player
 
-from block_map import BlockMap, MapBlock
-from blocks import block_files
-from map import TileKind, Map
 from my_game.sprites.building import Building
 from my_game.sprites.camera import Camera
 from my_game.sprites.player import Player
+from .block_map import BlockMap, MapBlock
+from .blocks import block_files
+from .map import TileKind, Map
 
 
 class MainScreenGroup(ScreenGroup):
