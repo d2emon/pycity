@@ -1,4 +1,5 @@
 import pygame
+import config
 from game import states
 from game.state_game import StateGame
 from breakout.main import MainScreenGroup as BreakoutScreen
@@ -19,6 +20,16 @@ class MenuScreen(StateGame):
         MAP_WALK: MapWalkScreen,
         PLAY_CITY: CityScreen,
     }
+
+    def __init__(self, **game_config):
+        super().__init__(
+            title=config.CAPTION,
+            window_size=config.WINDOW_SIZE,
+            background_color=config.BACKGROUND_COLOR,
+            delay=config.DELAY,
+            # fps=60,
+            **game_config,
+        )
 
     def game_menu(self):
         self.state = self.MENU
