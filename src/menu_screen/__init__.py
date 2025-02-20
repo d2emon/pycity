@@ -142,6 +142,22 @@ class MenuScreen(StateGame):
     def on_game_event(self, event):
         super().on_game_event(event)
 
+        if event.type == StateGame.EVENT_STOP:
+            self.stop()
+            return
+
+        if event.type == MenuScreenGroup.EVENT_GAME_BREAKOUT:
+            self.game_play()
+            return
+
+        if event.type == MenuScreenGroup.EVENT_GAME_MAP_WALK:
+            self.game_map_walk()
+            return
+
+        if event.type == MenuScreenGroup.EVENT_GAME_CITY:
+            self.game_city()
+            return
+
         # # Проверка нажатия кнопки мышью
         # self.next_turn_button.process_event(event)
 

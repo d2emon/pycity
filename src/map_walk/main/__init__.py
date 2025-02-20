@@ -24,15 +24,15 @@ class MainScreenGroup(ScreenGroup):
 
     backgroundImage = "res/global/map.jpg"
 
-    def __init__(self, game, *spites):
+    def __init__(self, window, *spites):
         """Intialize main sprites
 
         Args:
             rect (pygame.Rect): Screen rect
         """
-        super().__init__(game, *spites)
+        super().__init__(window, *spites)
 
-        rect = game.window.get_rect()
+        rect = self.window.get_rect()
         self.background = Image(rect, self.backgroundImage)
 
         self.map_sprite = MapSprite(rect, data.VIEWPOINT)

@@ -8,6 +8,9 @@ game_logger = logging.getLogger('state-game')
 
 
 class StateGame(Game):
+    EVENT_PLAY = 50101
+    EVENT_STOP = 50102
+
     STATE_EXIT = states.EXIT
     STATE_GAME_OVER = states.GAME_OVER
     STATE_INITIALIZATION = states.INITIALIZATION
@@ -112,7 +115,7 @@ class StateGame(Game):
         if screen is None:
             return
 
-        self.state_screen = screen(self)
+        self.state_screen = screen(self.window)
 
     @property
     def is_running(self):

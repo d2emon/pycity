@@ -1,4 +1,5 @@
 import pygame
+from game import events
 from sprites.image import Image
 from sprites.screen import ScreenGroup
 from .items import MainMenuItems
@@ -7,10 +8,10 @@ from .items import MainMenuItems
 class MenuScreenGroup(ScreenGroup):
     background_image = "res/global/map.jpg"
 
-    def __init__(self, game, *spites):
-        super().__init__(game, *spites)
+    def __init__(self, window, *spites):
+        super().__init__(window, *spites)
 
-        rect = self.game.window.get_rect()
+        rect = self.window.get_rect()
         self.background = Image(rect, self.background_image)
         self.add(self.background)
 
@@ -21,8 +22,13 @@ class MenuScreenGroup(ScreenGroup):
         for menu_item in self.menu_items:
             self.add(menu_item, layer=10)
 
+        pygame.event.set_allowed([
+            events.EVENT_PLAY,
+            events.EVENT_STOP,
+        ])
+
     def on_play_click(self, *args, **kwargs):
-        self.game.game_play()
+        pygame.event.post(pygame.event.Event(events.EVENT_PLAY))
 
     def on_quit_click(self, *args, **kwargs):
-        self.game.stop()
+        pygame.event.post(pygame.event.Event(events.EVENT_STOP))
