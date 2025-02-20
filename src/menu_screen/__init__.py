@@ -6,6 +6,7 @@ from breakout.main import MainScreenGroup as BreakoutScreen
 from map_walk.main import MainScreenGroup as MapWalkScreen
 from my_game.main import MainScreenGroup as CityScreen
 from .menu import MenuScreenGroup
+from .menu.item import MainMenuItem
 
 
 class MenuScreen(StateGame):
@@ -142,20 +143,15 @@ class MenuScreen(StateGame):
     def on_game_event(self, event):
         super().on_game_event(event)
 
-        if event.type == StateGame.EVENT_STOP:
-            self.stop()
-            return
-
-        if event.type == MenuScreenGroup.EVENT_GAME_BREAKOUT:
-            self.game_play()
-            return
-
-        if event.type == MenuScreenGroup.EVENT_GAME_MAP_WALK:
-            self.game_map_walk()
-            return
-
-        if event.type == MenuScreenGroup.EVENT_GAME_CITY:
-            self.game_city()
+        if event.type == MainMenuItem.EVENT_MENU_BUTTON:
+            if event.button == "BREAKOUT":
+                self.game_play()
+            elif event.button == "MAP_WALK":
+                self.game_map_walk()
+            elif event.button == "CITY":
+                self.game_city()
+            elif event.button == "QUIT":
+                self.stop()
             return
 
         # # Проверка нажатия кнопки мышью

@@ -4,6 +4,7 @@ from game.state_game import StateGame
 from . import states
 from .main import MainScreenGroup
 from .menu import MenuScreenGroup
+from .menu.item import MainMenuItem
 
 
 class Breakout(StateGame):
@@ -27,12 +28,11 @@ class Breakout(StateGame):
     def on_game_event(self, event):
         super().on_game_event(event)
 
-        if event.type == events.EVENT_PLAY:
-            self.game_play()
-            return
-
-        if event.type == events.EVENT_STOP:
-            self.stop()
+        if event.type == MainMenuItem.EVENT_MENU_BUTTON:
+            if event.button == "PLAY":
+                self.game_play()
+            elif event.button == "QUIT":
+                self.stop()
             return
 
         if event.type == MainScreenGroup.EVENT_WIN:

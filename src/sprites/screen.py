@@ -6,3 +6,4 @@ class ScreenGroup(pygame.sprite.LayeredUpdates):
         super().__init__(*spites)
 
         self.window = window
+        self.rect = window.get_rect()

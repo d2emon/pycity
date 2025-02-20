@@ -48,5 +48,5 @@ class MainMenuItems(MenuItems):
             self.add(MainMenuItem(
                 rect.move(0, id * height),
                 self.button_titles[button],
-                events[button],
+                event_type=events[button],
             ))
