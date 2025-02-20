@@ -12,3 +12,7 @@ class Modals(pygame.sprite.Group):
         for modal in self:
             if not modal.visible:
                 self.remove(modal)
+
+    @property
+    def has_modals(self):
+        return len(self) > 0
