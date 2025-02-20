@@ -10,6 +10,9 @@ game_logger = logging.getLogger('game')
 
 
 class Game:
+    EVENT_INIT = 50001
+    EVENT_QUIT = 50002
+
     def __init__(
         self,
         title="Game",
@@ -33,6 +36,12 @@ class Game:
 
         # Initialize pygame
         pygame.init()
+
+        # Initialize events
+        pygame.event.set_allowed([
+            self.EVENT_INIT,
+            self.EVENT_QUIT,
+        ])
 
         # Set window params
         self.background_color = background_color
@@ -171,13 +180,11 @@ class Game:
     # Events
 
     def on_init(self):
-        # Set INIT error on init
+        pygame.event.post(pygame.event.Event(self.EVENT_INIT))
         # GameEvent.send('START')
-        pass
 
     def on_quit(self):
-        # Set QUIT error on quit
-        pass
+        pygame.event.post(pygame.event.Event(self.EVENT_QUIT))
 
     def on_game_event(self, event):
         game_logger.debug(f"Event: {event}")
