@@ -6,6 +6,7 @@ from sprites.image import Image
 from sprites.message import Message
 from sprites.screen import ScreenGroup
 from .groups.bricks import Bricks
+from .resources import MainResources
 from .sprites.paddle import Paddle
 
 
@@ -17,13 +18,11 @@ class MainScreenGroup(ScreenGroup):
     STATE_PLAYING = states.PLAYING
     STATE_WIN = states.WIN
 
-    backgroundImage = "res/global/map.jpg"
-
     def __init__(self, window, *spites):
         super().__init__(window, *spites)
 
         rect = self.window.get_rect()
-        self.background = Image(rect, self.backgroundImage)
+        self.background = Image(rect, MainResources.get('background'))
 
         player_pos = (rect.centerx, 400)
         base_speed = 10

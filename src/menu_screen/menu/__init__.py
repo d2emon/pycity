@@ -4,18 +4,14 @@ from sprites.image import Image
 from sprites.menu_items import MenuItems
 from sprites.screen import ScreenGroup
 from .item import MainMenuItem
+from .resources import MenuResources
 
 
 class MenuScreenGroup(ScreenGroup):
-    # EVENT_MENU_BUTTON = 50200
-
-    background_image = "res/global/map.jpg"
-    start_rect = pygame.Rect(8, 8, 240, 40)
-
     def __init__(self, window, *spites):
         super().__init__(window, *spites)
 
-        self.background = Image(self.rect, self.background_image)
+        self.background = Image(self.rect, MenuResources.get('background'))
         self.add(self.background)
 
         self.menu_items = MenuItems(
