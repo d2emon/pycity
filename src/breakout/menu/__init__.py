@@ -1,8 +1,9 @@
 import pygame
 from game import events
 from sprites.image import Image
+from sprites.menu_items import MenuItems
 from sprites.screen import ScreenGroup
-from .items import MainMenuItems
+from .item import MainMenuItem
 
 
 class MenuScreenGroup(ScreenGroup):
@@ -15,9 +16,9 @@ class MenuScreenGroup(ScreenGroup):
         self.background = Image(rect, self.background_image)
         self.add(self.background)
 
-        self.menu_items = MainMenuItems({
-            MainMenuItems.BUTTON_PLAY: "PLAY",
-            MainMenuItems.BUTTON_QUIT: "QUIT",
-        })
+        self.menu_items = MenuItems(
+            MainMenuItem("PLAY", event_type="BUTTON_PLAY"),
+            MainMenuItem("QUIT", event_type="BUTTON_QUIT"),
+        )
         for menu_item in self.menu_items:
             self.add(menu_item, layer=10)

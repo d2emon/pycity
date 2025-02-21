@@ -5,22 +5,24 @@ from sprites.button import Button
 class MainMenuItem(Button):
     EVENT_MENU_BUTTON = 50200
 
-    BUTTON_FONT_NAME = 'Arial'
-    BUTTON_FONT_SIZE = 24
-    BUTTON_FONT_COLOR = (0, 0, 0)
-    BUTTON_PADDING = 5
+    font_name = 'Arial'
+    font_size = 24
+    color = (0, 0, 0)
+    padding = 5
+    width = 250
+    height = 50
 
-    def __init__(self, rect, title, event_type=None, on_click=lambda *args, **kwargs: None):
+    def __init__(self, title, event_type=None, on_click=lambda *args, **kwargs: None):
         super().__init__(
-            rect,
+            pygame.Rect(0, 0, self.width, self.height),
             title,
             on_click=self.__handle_click,
             font=pygame.font.SysFont(
-                self.BUTTON_FONT_NAME,
-                self.BUTTON_FONT_SIZE,
+                self.font_name,
+                self.font_size,
             ),
-            text_color=self.BUTTON_FONT_COLOR,
-            padding=self.BUTTON_PADDING
+            text_color=self.color,
+            padding=self.padding,
         )
 
         self.__event_type = event_type

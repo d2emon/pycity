@@ -1,9 +1,9 @@
 import pygame
 from game.state_game import StateGame
 from sprites.image import Image
+from sprites.menu_items import MenuItems
 from sprites.screen import ScreenGroup
 from .item import MainMenuItem
-from .items import MainMenuItems
 
 
 class MenuScreenGroup(ScreenGroup):
@@ -18,12 +18,11 @@ class MenuScreenGroup(ScreenGroup):
         self.background = Image(self.rect, self.background_image)
         self.add(self.background)
 
-        self.menu_items = MainMenuItems(
+        self.menu_items = MenuItems(
             MainMenuItem("Play", event_type="BREAKOUT"),
             MainMenuItem("Walk Map", event_type="MAP_WALK"),
             MainMenuItem("City", event_type="CITY"),
             MainMenuItem("Quit", event_type="QUIT"),
         )
-
         for menu_item in self.menu_items:
             self.add(menu_item, layer=10)
