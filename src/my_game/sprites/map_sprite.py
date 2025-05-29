@@ -1,5 +1,5 @@
 import pygame
-from image_loader import load_sprite
+from resources.image_loader import load_sprite
 
 
 class MapSprite(pygame.sprite.Sprite):
