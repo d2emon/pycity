@@ -24,7 +24,6 @@ class ProcGen(StateGame):
     # Game loop methods
 
     def start(self):
-        print("STARTING")
         super().start()
 
         self.game_play()
