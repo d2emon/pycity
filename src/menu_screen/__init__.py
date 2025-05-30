@@ -1,5 +1,4 @@
 import pygame
-import config
 from game import states
 from game.state_game import StateGame
 from breakout.main import MainScreenGroup as BreakoutScreen
@@ -22,15 +21,8 @@ class MenuScreen(StateGame):
         PLAY_CITY: CityScreen,
     }
 
-    def __init__(self, **game_config):
-        super().__init__(
-            title=config.CAPTION,
-            window_size=config.WINDOW_SIZE,
-            background_color=config.BACKGROUND_COLOR,
-            delay=config.DELAY,
-            # fps=60,
-            **game_config,
-        )
+    def __init__(self, window, **game_config):
+        super().__init__(window, **game_config)
 
         # Set game fields
         # self.players = []
@@ -63,8 +55,8 @@ class MenuScreen(StateGame):
         super().start()
         self.game_menu()
 
-    def load(self):
-        super().load()
+    def load(self, window):
+        super().load(window)
 
         # # Игровые параметры
         # self.players = [
@@ -131,12 +123,12 @@ class MenuScreen(StateGame):
         # self.main_gui.rect = self.window.get_rect().inflate(0, -18)
         # self.main_gui.update()
 
-    def draw(self):
+    def draw(self, screen):
         # # Отрисовка игрового поля
         # self.main_gui.draw(self.window)
         # self.main_panel.draw_panels(self.window)
 
-        super().draw()
+        super().draw(screen)
 
     # Events
 
@@ -165,5 +157,4 @@ class MenuScreen(StateGame):
 
 
 if __name__ == "__main__":
-    game = MenuScreen()
-    game()
+    MenuScreen.run()
