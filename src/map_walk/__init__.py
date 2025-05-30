@@ -20,5 +20,4 @@ class MapWalk(StateGame):
 
 
 if __name__ == "__main__":
-    game = MapWalk()
-    game()
+    MapWalk.run()

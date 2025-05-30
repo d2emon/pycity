@@ -45,5 +45,4 @@ class Breakout(StateGame):
 
 
 if __name__ == "__main__":
-    game = Breakout()
-    game()
+    Breakout.run()

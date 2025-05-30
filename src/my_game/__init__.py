@@ -21,5 +21,4 @@ class MyGame(StateGame):
 
 
 if __name__ == "__main__":
-    game = MyGame()
-    game()
+    MyGame.run()
