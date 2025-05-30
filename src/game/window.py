@@ -16,7 +16,7 @@ class Window:
         window_size=(800, 600),
         background_color=(0, 0, 0),
         delay=16,
-        # fps=60,
+        fps=60,
         **config,
     ):
         """Initialize game window.
@@ -46,7 +46,7 @@ class Window:
 
         self.background_color = background_color
         self.delay = delay
-        # self.fps = fps
+        self.fps = fps
         self.title = title
         self.size = window_size
 
@@ -62,8 +62,7 @@ class Window:
         # TODO: Initialize sound system
         # pygame.mixer.pre_init(44100, 16, 2, 4096)
 
-        # TODO: Initialize clock
-        # self.clock = pygame.time.Clock()
+        self.clock = pygame.time.Clock()
 
         pygame.event.post(pygame.event.Event(self.EVENT_INIT))
 
@@ -107,10 +106,12 @@ class Window:
         # Update screen
         pygame.display.flip()
 
+        if self.fps is not None:
+            self.clock.tick(self.fps)
+
     def next_tick(self):
         """Wait for next tick."""
         pygame.time.delay(self.delay)
-        # self.clock.tick(self.fps)
 
     def quit(self):
         """Close game window."""
