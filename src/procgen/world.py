@@ -7,12 +7,18 @@ class World:
         self.width = width
         self.height = height
 
-        self.items = []
+        self.__items = []
         for y in range(height):
             row = []
             for x in range(width):
                 row.append(None)
-            self.items.append(row)
+            self.__items.append(row)
+
+    def get_tile(self, x, y):
+        return self.__items[y][x]
+
+    def set_tile(self, x, y, tile):
+        self.__items[y][x] = tile
 
     # Генерация карты с помощью шума Перлина
     @classmethod
@@ -22,13 +28,15 @@ class World:
         for y in range(height):
             for x in range(width):
                 value = noise.pnoise2(x / scale, y / scale, octaves=6)
+
                 if value < -0.05:
                     tile = tiles.Water(tile_size)
                 elif value < 0.1:
                     tile = tiles.Sand(tile_size)
                 else:
                     tile = tiles.Grass(tile_size)
-                world.items[x][y] = tile
+
+                world.set_tile(x, y, tile)
         return world
 
 

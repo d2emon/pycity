@@ -4,8 +4,6 @@ from tiles import get_tile
 
 class GameMap:
     def __init__(self, world, screen_size, tile_size):
-        self.width = self.world.width
-        self.height = self.world.height
         self.screen_width, self.screen_height = screen_size
 
         self.tile_size = tile_size
@@ -40,10 +38,10 @@ class GameMap:
             sprite.draw(screen)
 
     def fill(self, screen, player):
-        for y in range(self.height):
-            for x in range(self.width):
-                tile = self.world[y][x]
+        for y in range(self.world.height):
+            for x in range(self.world.width):
+                tile = self.world.get_tile(x, y)
                 self.__draw_sprite(screen, tile, (x, y))
 
         # Игрок
-        self.__draw_player(screen, player, self.player_pos)
+        self.__draw_sprite(screen, player, self.player_pos)

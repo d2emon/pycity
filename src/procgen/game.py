@@ -1,6 +1,7 @@
 import pygame
 import noise
 import sys
+import config
 from game_map import GameMap
 from player import Player
 from tiles import get_tile
@@ -33,14 +34,10 @@ class Game:
         self.player.check_keys(keys)
 
     def update(self):
-        self.player.set_camera(self.screen, self.player.pos)
-        self.game_map.screen_width(self.screen)
+        self.game_map.set_camera(self.screen, self.player.pos)
 
         self.screen.fill(self.background_color)
-        self.fill(self.screen)
-
-        # Игрок
-        self.game_map.draw_player(self.screen, self.player)
+        self.game_map.fill(self.screen, self.player)
 
         # Рендер и логика здесь
         pygame.display.flip()
