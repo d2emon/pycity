@@ -48,6 +48,14 @@ BACKGROUND_COLOR = color_schema.background
 DELAY = 16
 # FPS = 60
 
+####
+
+TILE_SIZE = 32
+MAP_WIDTH = 100
+MAP_HEIGHT = 100
+
+####
+
 ## Player
 
 # PLAYER_POS = (WIN_WIDTH / 2, WIN_HEIGHT / 2)
