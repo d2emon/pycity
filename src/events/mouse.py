@@ -6,7 +6,8 @@ def set_pressed(button):
 
 
 def unset_pressed(button):
-    buttons_down.remove(button)
+    if button in buttons_down:
+        buttons_down.remove(button)
 
 
 def is_pressed(buttons):

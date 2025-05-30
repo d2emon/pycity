@@ -6,7 +6,8 @@ def set_pressed(key):
 
 
 def unset_pressed(key):
-    keys_down.remove(key)
+    if key in keys_down:
+        keys_down.remove(key)
 
 
 def is_key_pressed(keys):
