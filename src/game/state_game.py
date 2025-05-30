@@ -31,7 +31,7 @@ class StateGame(Game):
         # self.objects = []
 
         # Create sprites
-        self.__group = pygame.sprite.Group()
+        self.__group = None
 
     # Getters and setters
 
@@ -75,7 +75,7 @@ class StateGame(Game):
         """
         self.logger.debug(f"[State: {value}]")
 
-        if self.__state == value:
+        if self.__state == value and self.__group is not None:
             return
 
         self.__state = value
@@ -144,9 +144,11 @@ class StateGame(Game):
     def update(self):
         super().update()
 
-        self.__group.update()
+        if self.__group is not None:
+            self.__group.update()
 
     def draw(self, screen):
-        self.__group.draw(screen)
+        if self.__group is not None:
+            self.__group.draw(screen)
 
         super().draw(screen)
