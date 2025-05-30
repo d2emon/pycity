@@ -1,6 +1,7 @@
 #! /usr/bin/python
 import config
 from menu_screen import MenuScreen as Game
+from procgen import ProcGen
 # from bgmap import BgMap
 # from grid import MapGrid
 
@@ -64,4 +65,5 @@ from menu_screen import MenuScreen as Game
 
 
 if __name__ == "__main__":
-    Game.run()
+    # Game.run()
+    ProcGen.run()
