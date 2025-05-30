@@ -1,5 +1,5 @@
 import pygame
-from tiles import get_tile
+from .tiles import get_tile
 
 
 class GameMap:

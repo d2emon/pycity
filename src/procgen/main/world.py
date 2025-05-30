@@ -1,5 +1,5 @@
 import noise
-import tiles
+from . import tiles
 
 
 class World:
