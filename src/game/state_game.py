@@ -19,36 +19,11 @@ class StateGame(Game):
 
     state_screens = {}
 
-    def __init__(
-        self,
-        title="Game",
-        window_size=(640, 480),
-        background_color=(0, 0, 0),
-        delay=16,
-        # fps=60,
-        **config,
-    ):
-        """Initialize game window.
+    def __init__(self, window, **config):
+        """Initialize game"""
+        super().__init__(window, **config)
 
-        Old Args:
-            fps (int, optional): _description_. Defaults to 60.
-
-        Args:
-            title (str, optional): Window title (caption). Defaults to "Game".
-            window_size (tuple, optional): Window width and height (size). Defaults to (800, 600).
-            background_color (tuple, optional): Background color for screen. Defaults to (0, 0, 0).
-            delay (int, optional): Delay before next tick. Defaults to 16.
-        """
-        super().__init__(
-            title=title,
-            window_size=window_size,
-            background_color=background_color,
-            delay=delay,
-            # fps=fps,
-            **config,
-        )
-
-        game_logger.debug("Initializing game with states")
+        self.logger.debug("Initializing game with states")
 
         # Set game fields
         # self.game_is_over = False
@@ -57,12 +32,6 @@ class StateGame(Game):
 
         # Create sprites
         self.__group = pygame.sprite.Group()
-
-    def load(self):
-        # # Load resources
-        # GameResources.load()
-
-        super().load()
 
     # Getters and setters
 
@@ -104,7 +73,7 @@ class StateGame(Game):
         Args:
             value (string): New game state.
         """
-        game_logger.debug(f"[State: {value}]")
+        self.logger.debug(f"[State: {value}]")
 
         if self.__state == value:
             return
@@ -142,36 +111,42 @@ class StateGame(Game):
 
     def start(self):
         """Start game."""
-        game_logger.debug("Starting game with states")
+        self.logger.debug("Starting game with states")
 
         self.__state = self.STATE_PLAYING
 
     def stop(self):
         """Stop game."""
-        game_logger.debug("Stopping game with states")
+        self.logger.debug("Stopping game with states")
 
         self.__state = self.STATE_EXIT
 
     def game_win(self):
         """Win game."""
-        game_logger.debug("Winning game with states")
+        self.logger.debug("Winning game with states")
 
         self.__state = self.STATE_WIN
 
     def game_loose(self):
         """Loose game."""
-        game_logger.debug("Loosing game with states")
+        self.logger.debug("Loosing game with states")
 
         self.__state = self.STATE_GAME_OVER
 
     # Game loop methods
+
+    def load(self, window):
+        # # Load resources
+        # GameResources.load()
+
+        super().load(window)
 
     def update(self):
         super().update()
 
         self.__group.update()
 
-    def draw(self):
-        self.__group.draw(self.window)
+    def draw(self, screen):
+        self.__group.draw(screen)
 
-        super().draw()
+        super().draw(screen)
