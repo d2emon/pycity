@@ -64,5 +64,4 @@ from menu_screen import MenuScreen as Game
 
 
 if __name__ == "__main__":
-    game = Game()
-    game()
+    Game.run()
