@@ -21,17 +21,8 @@ class MainScreenGroup(ScreenGroup):
     def __init__(self, window, *spites):
         super().__init__(window, *spites)
 
-        rect = self.window.get_rect()
-        self.background = Image(rect, MainResources.get('background'))
-
-        player_pos = (rect.centerx, 400)
-        base_speed = 10
-        self.player = Paddle(player_pos, base_speed)
-
-        level_rect = pygame.Rect(0, 0, 570, 400)
-        self.level = Bricks(level_rect)
-
         self.__messages = pygame.sprite.Group()
+        self.add(*self.__messages)
 
         self.__state = None
 
@@ -43,13 +34,39 @@ class MainScreenGroup(ScreenGroup):
 
         self.start()
 
+    # Properties
+
     @property
     def ball(self):
         return self.player.ball
 
+    # ScreenGroup loaders
+
+    def create_background(self):
+        background = Image(self.rect, MainResources.get('background'))
+        self.add(background)
+        return background
+
+    def create_player(self):
+        player_pos = (self.rect.centerx, 400)
+        base_speed = 10
+        player = Paddle(player_pos, base_speed)
+        self.add(player, layer=10)
+        return Paddle(player_pos, base_speed)
+
+    def create_level(self):
+        level_rect = pygame.Rect(0, 0, 570, 400)
+        level = Bricks(level_rect)
+        self.add(*level, layer=5)
+        return level
+
     def start(self):
         if self.player.lives > 0:
             self.player.start(self.level)
+        if self.player.ball is not None:
+            self.add(self.player.ball, layer=8)
+
+    ####
 
     def win(self, *args, **kwargs):
         rect = self.window.get_rect()
@@ -85,13 +102,5 @@ class MainScreenGroup(ScreenGroup):
                 self.win()
             elif not self.player.has_started:
                 self.start()
-
-        self.empty()
-        self.add(self.background)
-        self.add(self.player, layer=10)
-        if self.ball is not None:
-            self.add(self.ball, layer=8)
-        self.add(*self.level, layer=5)
-        self.add(*self.__messages)
 
         super().update(*args, **kwargs)

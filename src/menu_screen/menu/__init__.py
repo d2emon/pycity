@@ -11,9 +11,6 @@ class MenuScreenGroup(ScreenGroup):
     def __init__(self, window, *spites):
         super().__init__(window, *spites)
 
-        self.background = Image(self.rect, MenuResources.get('background'))
-        self.add(self.background)
-
         self.menu_items = MenuItems(
             MainMenuItem("Play", event_type="BREAKOUT"),
             MainMenuItem("Walk Map", event_type="MAP_WALK"),
@@ -22,3 +19,10 @@ class MenuScreenGroup(ScreenGroup):
         )
         for menu_item in self.menu_items:
             self.add(menu_item, layer=10)
+
+    # ScreenGroup loaders
+
+    def create_background(self):
+        background = Image(self.rect, MenuResources.get('background'))
+        self.add(background)
+        return background

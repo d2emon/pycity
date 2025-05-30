@@ -23,33 +23,29 @@ class MainScreenGroup(ScreenGroup):
       player (Player): Player sprite.
     """
 
-    def __init__(self, window, *spites):
-        """Intialize main sprites
-
-        Args:
-            rect (pygame.Rect): Screen rect
-        """
-        super().__init__(window, *spites)
-
-        rect = self.window.get_rect()
-        self.background = Image(rect, MainResources.get('background'))
-
-        self.map_sprite = MapSprite(rect, data.VIEWPOINT)
-
-        player_pos = rect.center
-        base_speed = data.PLAYER_SPEED
-        self.player = Player(player_pos, base_speed)
-
+    def __init__(self, window, **sprites):
+        super().__init__(window, **sprites)
         self.start()
+
+    # ScreenGroup loaders
+
+    def create_background(self):
+        background = Image(self.rect, MainResources.get('background'))
+        self.add(background)
+        return background
+
+    def create_player(self):
+        player_pos = self.rect.center
+        base_speed = data.PLAYER_SPEED
+        player = Player(player_pos, base_speed)
+        self.add(player, layer=10)
+        return player
+
+    def create_level(self):
+        level = MapSprite(self.rect, data.VIEWPOINT)
+        self.add(level, layer=5)
+        return level
 
     def start(self):
         if not self.player.has_started:
-            self.player.start(self.map_sprite)
-
-    def update(self, *args, **kwargs):
-        self.empty()
-        self.add(self.background)
-        self.add(self.map_sprite, layer=5)
-        self.add(self.player, layer=10)
-
-        super().update(*args, **kwargs)
+            self.player.start(self.level)

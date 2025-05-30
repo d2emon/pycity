@@ -13,12 +13,16 @@ class MenuScreenGroup(ScreenGroup):
     def __init__(self, window, *spites):
         super().__init__(window, *spites)
 
-        self.background = Image(self.rect, MenuResources.get('background'))
-        self.add(self.background)
-
         self.menu_items = MenuItems(
             MainMenuItem("PLAY", event_type="BUTTON_PLAY"),
             MainMenuItem("QUIT", event_type="BUTTON_QUIT"),
         )
         for menu_item in self.menu_items:
             self.add(menu_item, layer=10)
+
+    # ScreenGroup loaders
+
+    def create_background(self):
+        background = Image(self.rect, MenuResources.get('background'))
+        self.add(background)
+        return background

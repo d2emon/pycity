@@ -53,14 +53,44 @@ class MainScreenGroup(ScreenGroup):
         """
         super().__init__(window, *spites)
 
-        rect = self.window.get_rect()
-        # self.background = Image(rect, self.backgroundImage)
+        self.fonts = self.load_fonts()
 
-        ####
+        self.player_pos = Label(
+            (0, 0),
+            f"{self.player.x}, {self.player.y}",
+            font=self.fonts["my"],
+            color=(255, 0, 0),
+        )
+        self.block_pos = Label(
+            (0, 24),
+            f"{self.block_map.x}, {self.block_map.y}",
+            font=self.fonts["my"],
+            color=(255, 0, 0),
+        )
 
-        self.player = Player(self.player_image, self.start_pos)
+        self.start()
 
-        self.camera = Camera(
+    # ScreenGroup loaders
+
+    def load_fonts(self):
+        fonts = {}
+
+        fonts["my"] = pygame.font.SysFont('Comic Sans MS', 24)
+        # myfont = pygame.font.SysFont('Sans', 16)
+        return fonts
+
+    def create_background(self):
+        # self.background = Image(self.rect, self.backgroundImage)
+        return None
+
+    def create_player(self):
+        # hero = Player(*config.PLAYER_POS)
+        # xvel = yvel = 0
+
+        return Player(self.player_image, self.start_pos)
+
+    def create_level(self):
+        camera = Camera(
             self.window.get_size(),
             (16 * 32 * 3, 16 * 32 * 3),
             (0, 0, 0), # self.game.background_color,
@@ -83,9 +113,9 @@ class MainScreenGroup(ScreenGroup):
         ]
         self.block_map = BlockMap("maps/v0.map", map_blocks, self.block_size, self.start_block)
         self.block_map.update()
-        self.camera.background_sprites = self.block_map.sprite_group
+        camera.background_sprites = self.block_map.sprite_group
 
-        self.camera.foreground_sprites.empty()
+        camera.foreground_sprites.empty()
         for x, y in self.buildings:
             Building(
                 self.building_image,
@@ -93,40 +123,21 @@ class MainScreenGroup(ScreenGroup):
                 # camera.foreground_sprites,
             )
 
-        self.fonts = {}
-
-        self.fonts["my"] = pygame.font.SysFont('Comic Sans MS', 24)
-        # myfont = pygame.font.SysFont('Sans', 16)
-
         # bg = Background(config.WINDOW_SIZE)
 
         # game_map = BgMap(*config.MAP_POS)
-        # hero = Player(*config.PLAYER_POS)
-        # xvel = yvel = 0
 
         # show_grid = False
         # map_grid = MapGrid(game_map.rect.width, game_map.rect.height, config.GRID_SIZE)
 
-        self.player_pos = Label(
-            (0, 0),
-            f"{self.player.x}, {self.player.y}",
-            font=self.fonts["my"],
-            color=(255, 0, 0),
-        )
-
-        self.block_pos = Label(
-            (0, 24),
-            f"{self.block_map.x}, {self.block_map.y}",
-            font=self.fonts["my"],
-            color=(255, 0, 0),
-        )
-
-        self.start()
+        return camera
 
     def start(self):
         # if not self.player.has_started:
         #     self.player.start(self.map_sprite)
         pass
+
+    ####
 
     def update(self, *args, **kwargs):
         self.empty()
@@ -138,8 +149,8 @@ class MainScreenGroup(ScreenGroup):
 
         player_group = pygame.sprite.GroupSingle(self.player)
 
-        self.camera.update(player=player_group)
-        self.add(self.camera, layer=5)
+        self.level.update(player=player_group)
+        self.add(self.level, layer=5)
         # self.sprites.update(player=self.player_group)
 
         self.player.update(game_map=self.block_map)
