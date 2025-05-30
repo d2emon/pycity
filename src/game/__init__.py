@@ -109,7 +109,7 @@ class Game:
             self.process_event(event)
 
         self.update()
-        window.next_tick()  # ???
+        # window.next_tick()  # ???
 
         screen = window.screen
         # TODO: Fix it with layers
