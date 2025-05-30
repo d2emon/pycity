@@ -1,16 +1,24 @@
 import pygame
 
 
-class Player:
-    def __init__(self, tile_size=8):
-        self.pos = [0, 0]
-        self.speed = 3  # Базовая скорость
-        self.vehicle = None
+class Player(pygame.sprite.Sprite):
+    def __init__(self, tile_size=8, *groups):
+        super().__init__(*groups)
 
-        self.tile_size = tile_size
+        self.pos = [0, 0]
+        self.speed = 1  # Базовая скорость
+        self.vehicle = None
         self.size = tile_size
-        self.color = (255, 0, 0)
-        self.rect = pygame.Rect(0, 0, tile_size, tile_size)
+
+        self.image  = pygame.Surface((tile_size, tile_size))
+        self.rect = self.image.get_rect()
+
+        self.create_image()
+
+    def create_image(self):
+        color = (255, 0, 0)
+        pygame.draw.rect(self.image, color, self.image.get_rect())
+
 
     def check_keys(self, keys):
         if keys[pygame.K_LEFT]: self.pos[0] -= self.speed
@@ -23,6 +31,3 @@ class Player:
         if vehicle_type == "horse":
             self.speed = 8
             self.vehicle = "horse"
-
-    def draw(self, screen):
-        pygame.draw.rect(screen, self.color, self.rect)

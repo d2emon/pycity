@@ -1,18 +1,23 @@
 import pygame
 
 
-class Tile:
+class Tile(pygame.sprite.Sprite):
     color_name = "white"
 
-    def __init__(self, size):
-        self.rect = pygame.Rect(0, 0, size, size)
+    def __init__(self, size, *groups):
+        super().__init__(*groups)
+
+        self.image  = pygame.Surface((size, size))
+        self.rect = self.image.get_rect()
+
+        self.create_image()
 
     @property
     def color(self):
         return pygame.Color(self.color_name)
 
-    def draw(self, screen):
-        pygame.draw.rect(screen, self.color, self.rect)
+    def create_image(self):
+        pygame.draw.rect(self.image, self.color, self.image.get_rect())
 
 
 class Water(Tile):

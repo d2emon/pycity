@@ -1,5 +1,5 @@
 import noise
-from . import tiles
+from .sprites import tiles
 
 
 class World:

@@ -10,7 +10,7 @@ import config
 # from sprites.image import Image
 from sprites.screen import ScreenGroup
 from .game_map import GameMap
-from .player import Player
+from .sprites.player import Player
 # from .resources import MainResources
 from .world import World
 
@@ -32,7 +32,10 @@ class MainScreenGroup(ScreenGroup):
 
     def create_player(self):
         player = Player(tile_size=config.TILE_SIZE)
-        # self.add(player, layer=10)
+        self.add(player, layer=10)
+
+        player.rect.center = self.window.get_rect().center
+
         return player
 
     def create_level(self):
@@ -50,10 +53,10 @@ class MainScreenGroup(ScreenGroup):
         self.player.check_keys(keys)
 
         self.level.set_camera(self.window, self.player.pos)
+        self.level.fill()
 
         super().update(*args, **kwargs)
 
     def draw(self, surface, *args, **kwargs):
+        self.level.draw(surface)
         super().draw(surface, *args, **kwargs)
-
-        self.level.fill(surface, self.player)
