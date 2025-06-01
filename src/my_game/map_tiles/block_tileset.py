@@ -1,4 +1,4 @@
-from blocks import block_files
+from ..main.blocks import block_files
 from .map_block import MapBlock
 
 
