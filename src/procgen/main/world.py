@@ -15,6 +15,9 @@ class World:
             self.__items.append(row)
 
     def get_tile(self, x, y):
+        if y < 0 or y >= self.height or x < 0 or x >= self.width:
+            return None
+
         return self.__items[y][x]
 
     def set_tile(self, x, y, tile):
@@ -23,8 +26,8 @@ class World:
     # Генерация карты с помощью шума Перлина
     @classmethod
     def generate_map(cls, width, height, tile_size):
-        water_level = -0.25  # -0.05
-        grass_level = 0.05
+        water_level = -0.2
+        grass_level = 0
         rock_level = 0.2
         scale = 20.0
         world = cls(width, height)
