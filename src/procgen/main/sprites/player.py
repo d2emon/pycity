@@ -15,11 +15,6 @@ class Player(pygame.sprite.Sprite):
 
         self.level = None
 
-        self.min_x = 0
-        self.min_y = 0
-        self.max_x = 100 - 1
-        self.max_y = 100 - 1
-
         self.create_image()
 
     def create_image(self):
