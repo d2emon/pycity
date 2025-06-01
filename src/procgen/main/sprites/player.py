@@ -35,7 +35,6 @@ class Player(pygame.sprite.Sprite):
                 return
 
         self.pos = [new_x, new_y]
-        print(self.pos)
 
     def check_keys(self, keys):
         if keys[pygame.K_LEFT]: self.move(-self.speed, 0)
