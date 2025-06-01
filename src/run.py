@@ -1,5 +1,4 @@
 #! /usr/bin/python
-import logging
 import config
 from menu_screen import MenuScreen as Game
 # from bgmap import BgMap
@@ -22,37 +21,24 @@ from menu_screen import MenuScreen as Game
 """
 
 
-logging.basicConfig(level=config.LOG_LEVEL)
+# start_pos = (
+#     16 * tile_size + 32 * tile_size,
+#     16 * tile_size + 32 * tile_size,
+# )
 
 
-def run():
-    game = Game(
-        title=config.CAPTION,
-        window_size=config.WINDOW_SIZE,
-        background_color=config.BACKGROUND_COLOR,
-        delay=config.DELAY,
-        # fps=60,
-    )
-
-    # start_pos = (
-    #     16 * tile_size + 32 * tile_size,
-    #     16 * tile_size + 32 * tile_size,
-    # )
-
-
-    game()
-    """
-    ## 3. walker
+"""
+## 3. walker
 
     game = Walker()
 
-    ## 4. mud
+## 4. mud
 
     # TODO: Move to log
     print(">", "mud.1", "-nName")
     game = Game(uuid.uuid1(), "Phantom", 0)
 
-    ## 5. space
+## 5. space
 
     game = Game(
         frame_rate=config.FRAME_RATE,
@@ -72,10 +58,11 @@ def run():
     game.play()
     game.end_game()
 
-    ## 6.
-
+## 6.
     world_walker()
-    """
+"""
+
 
 if __name__ == "__main__":
-    run()
+    game = Game()
+    game()

@@ -14,6 +14,9 @@ from ..map_tiles.tiles import create_starter_tiles, create_main_tiles
 from ..map_tiles.block_map import BlockMap
 from ..map_tiles.block_tileset import BlockTileset
 from ..map_tiles.map_tileset import MapTileset
+from .block_map import BlockMap, MapBlock
+from .blocks import block_files
+from .map import TileKind, Map
 
 
 class MainScreenGroup(ScreenGroup):
@@ -46,15 +49,15 @@ class MainScreenGroup(ScreenGroup):
         # (5, 7),
     )
 
-    def __init__(self, game, *spites):
+    def __init__(self, window, *spites):
         """Intialize main sprites
 
         Args:
             rect (pygame.Rect): Screen rect
         """
-        super().__init__(game, *spites)
+        super().__init__(window, *spites)
 
-        rect = game.window.get_rect()
+        rect = self.window.get_rect()
         # self.background = Image(rect, self.backgroundImage)
 
         ####
@@ -87,7 +90,9 @@ class MainScreenGroup(ScreenGroup):
                 # camera.foreground_sprites,
             )
 
-        self.game.fonts["my"] = pygame.font.SysFont('Comic Sans MS', 24)
+        self.fonts = {}
+
+        self.fonts["my"] = pygame.font.SysFont('Comic Sans MS', 24)
         # myfont = pygame.font.SysFont('Sans', 16)
 
         # bg = Background(config.WINDOW_SIZE)
@@ -102,14 +107,14 @@ class MainScreenGroup(ScreenGroup):
         self.player_pos = Label(
             (0, 0),
             f"{self.player.x}, {self.player.y}",
-            font=self.game.fonts["my"],
+            font=self.fonts["my"],
             color=(255, 0, 0),
         )
 
         self.block_pos = Label(
             (0, 24),
             f"{self.block_map.x}, {self.block_map.y}",
-            font=self.game.fonts["my"],
+            font=self.fonts["my"],
             color=(255, 0, 0),
         )
 

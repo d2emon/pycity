@@ -1,20 +1,28 @@
 import logging
 import pygame
+from game import states
+from game.state_game import StateGame
 from sprites.image import Image
 from sprites.message import Message
 from sprites.screen import ScreenGroup
 from .groups.bricks import Bricks
+from .resources import MainResources
 from .sprites.paddle import Paddle
 
 
 class MainScreenGroup(ScreenGroup):
-    backgroundImage = "res/global/map.jpg"
+    EVENT_WIN = 50103
+    EVENT_LOOSE = 50104
 
-    def __init__(self, game, *spites):
-        super().__init__(game, *spites)
+    STATE_GAME_OVER = states.GAME_OVER
+    STATE_PLAYING = states.PLAYING
+    STATE_WIN = states.WIN
 
-        rect = game.window.get_rect()
-        self.background = Image(rect, self.backgroundImage)
+    def __init__(self, window, *spites):
+        super().__init__(window, *spites)
+
+        rect = self.window.get_rect()
+        self.background = Image(rect, MainResources.get('background'))
 
         player_pos = (rect.centerx, 400)
         base_speed = 10
@@ -24,6 +32,14 @@ class MainScreenGroup(ScreenGroup):
         self.level = Bricks(level_rect)
 
         self.__messages = pygame.sprite.Group()
+
+        self.__state = None
+
+        pygame.event.set_allowed([
+            self.EVENT_WIN,
+            self.EVENT_LOOSE,
+            StateGame.EVENT_STOP,
+        ])
 
         self.start()
 
@@ -36,7 +52,7 @@ class MainScreenGroup(ScreenGroup):
             self.player.start(self.level)
 
     def win(self, *args, **kwargs):
-        rect = self.game.window.get_rect()
+        rect = self.window.get_rect()
         message = Message(
             rect,
             "YOU WIN!!!",
@@ -44,10 +60,10 @@ class MainScreenGroup(ScreenGroup):
             color=(0, 255, 0),
         )
         self.__messages.add(message)
-        self.game.game_win()
+        pygame.event.post(self.EVENT_WIN)
 
     def loose(self, *args, **kwargs):
-        rect = self.game.window.get_rect()
+        rect = self.window.get_rect()
         message = Message(
             rect,
             "YOU LOOSE!!!",
@@ -55,14 +71,14 @@ class MainScreenGroup(ScreenGroup):
             color=(255, 0, 0),
         )
         self.__messages.add(message)
-        self.game.game_loose()
+        pygame.event.post(self.EVENT_LOOSE)
 
     def update(self, *args, **kwargs):
-        if self.game.state == self.game.STATE_WIN:
-            self.game.stop()
-        elif self.game.state == self.game.STATE_GAME_OVER:
-            self.game.stop()
-        elif self.game.state == self.game.STATE_PLAYING:
+        if self.__state == self.STATE_WIN:
+            pygame.event.post(pygame.event.Event(StateGame.EVENT_STOP))
+        elif self.__state == self.STATE_GAME_OVER:
+            pygame.event.post(pygame.event.Event(StateGame.EVENT_STOP))
+        elif self.__state == self.STATE_PLAYING:
             if self.player.game_over:
                 self.loose()
             elif self.level.is_finished:

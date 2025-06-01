@@ -10,6 +10,7 @@ import pygame
 from sprites.image import Image
 from sprites.screen import ScreenGroup
 from . import data
+from .resources import MainResources
 from .sprites.map import MapSprite
 from .sprites.player import Player
 
@@ -22,18 +23,16 @@ class MainScreenGroup(ScreenGroup):
       player (Player): Player sprite.
     """
 
-    backgroundImage = "res/global/map.jpg"
-
-    def __init__(self, game, *spites):
+    def __init__(self, window, *spites):
         """Intialize main sprites
 
         Args:
             rect (pygame.Rect): Screen rect
         """
-        super().__init__(game, *spites)
+        super().__init__(window, *spites)
 
-        rect = game.window.get_rect()
-        self.background = Image(rect, self.backgroundImage)
+        rect = self.window.get_rect()
+        self.background = Image(rect, MainResources.get('background'))
 
         self.map_sprite = MapSprite(rect, data.VIEWPOINT)
 

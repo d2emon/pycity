@@ -2,7 +2,8 @@ import logging
 import os
 
 
-LOG_LEVEL = logging.DEBUG
+logging.basicConfig(level=logging.DEBUG)
+
 
 WIN_WIDTH = 640 # 800 # 640
 WIN_HEIGHT = 480 # 640 # 460 # 600

@@ -5,7 +5,7 @@ class Image(pygame.sprite.Sprite):
     def __init__(
         self,
         rect,
-        filename,
+        image,
         *groups,
     ):
         """Initialize image.
@@ -16,6 +16,6 @@ class Image(pygame.sprite.Sprite):
         """
         super().__init__(*groups)
 
-        self.image = pygame.image.load(filename)
+        self.image = image
         self.rect = rect
         self.layer = 0
