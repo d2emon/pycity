@@ -5,7 +5,7 @@ class MapPoint(pygame.sprite.Sprite):
     def __init__(self, pos, tile_size=8, *groups):
         super().__init__(*groups)
 
-        self.pos = pos
+        self.pos = [int(pos[0]), int(pos[1])]
         self.size = tile_size
 
         self.image  = pygame.Surface((tile_size, tile_size), pygame.SRCALPHA)
