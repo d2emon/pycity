@@ -1,5 +1,7 @@
+import random
 import noise
 from .sprites import tiles
+from .sprites.map_points import MapPoint
 
 
 class World:
@@ -13,6 +15,8 @@ class World:
             for _ in range(width):
                 row.append(None)
             self.__items.append(row)
+
+        self.points = []
 
     def get_tile(self, x, y):
         if y < 0 or y >= self.height or x < 0 or x >= self.width:
@@ -59,5 +63,14 @@ class World:
 
                 tile = cls.create_tile(value, tile_size)
                 world.set_tile(x, y, tile)
+
+
+        for _ in range(10):
+            x = random.randrange(0, width)
+            y = random.randrange(0, height)
+
+            point = MapPoint((x, y), tile_size)
+            world.points.append(point)
+
         return world
 

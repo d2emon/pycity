@@ -37,6 +37,11 @@ class GameMap(pygame.sprite.Group):
                 if 0 <= tile.rect.left < self.screen_width and 0 <= tile.rect.top < self.screen_height:
                     self.add(tile)
 
+        points = pygame.sprite.Group(*self.world.points)
+        for point in self.world.points:
+            point.rect.center = self.get_map_rect(*point.pos)
+            self.add(point)
+
     def can_move(self, x, y):
         tile = self.world.get_tile(x, y)
 
