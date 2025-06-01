@@ -65,9 +65,9 @@ class MainScreenGroup(ScreenGroup):
         self.player = Player(self.player_image, self.start_pos)
 
         self.camera = Camera(
-            self.game.window_size,
+            self.window.get_size(),
             (self.block_size * 3, self.block_size * 3),
-            self.game.background_color,
+            (0, 0, 0),
         )
 
         map_tileset = MapTileset(
