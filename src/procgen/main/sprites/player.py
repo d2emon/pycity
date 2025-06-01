@@ -6,7 +6,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__(*groups)
 
         self.pos = [0, 0]
-        self.speed = 1  # Базовая скорость
+        self.speed = 3  # Базовая скорость
         self.vehicle = None
         self.size = tile_size
 
