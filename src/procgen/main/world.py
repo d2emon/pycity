@@ -8,9 +8,9 @@ class World:
         self.height = height
 
         self.__items = []
-        for y in range(height):
+        for _ in range(height):
             row = []
-            for x in range(width):
+            for _ in range(width):
                 row.append(None)
             self.__items.append(row)
 
@@ -23,28 +23,41 @@ class World:
     def set_tile(self, x, y, tile):
         self.__items[y][x] = tile
 
-    # Генерация карты с помощью шума Перлина
     @classmethod
-    def generate_map(cls, width, height, tile_size):
+    def create_tile(cls, value, size):
         water_level = -0.2
         grass_level = 0
         rock_level = 0.2
+
+        if value < water_level:
+            return tiles.Water(size)
+        elif value < grass_level:
+            return tiles.Sand(size)
+        elif value < rock_level:
+            return tiles.Grass(size)
+        else:
+            return tiles.Rock(size)
+
+    # Генерация карты с помощью шума Перлина
+    @classmethod
+    def generate_map(cls, width, height, tile_size):
         scale = 20.0
+        octaves = 6
+        persistence = 0.5
+        lacunarity = 2.0
+
         world = cls(width, height)
         for y in range(height):
             for x in range(width):
-                value = noise.pnoise2(x / scale, y / scale, octaves=6)
+                value = noise.pnoise2(
+                    x / scale,
+                    y / scale,
+                    octaves=octaves,
+                    persistence=persistence,
+                    lacunarity=lacunarity,
+                )
 
-                if value < water_level:
-                    tile = tiles.Water(tile_size)
-                elif value < grass_level:
-                    tile = tiles.Sand(tile_size)
-                elif value < rock_level:
-                    tile = tiles.Grass(tile_size)
-                else:
-                    tile = tiles.Rock(tile_size)
-
+                tile = cls.create_tile(value, tile_size)
                 world.set_tile(x, y, tile)
         return world
-
 
