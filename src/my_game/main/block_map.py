@@ -38,7 +38,7 @@ class BlockMap:
         self.block_size = block_size
         self.sprite_group = pygame.sprite.Group()
         self.blocks = [
-            [blocks[block_id] for block_id in row]
+            [blocks.tiles[block_id] for block_id in row]
             for row in load_map(map_file)
         ]
 
