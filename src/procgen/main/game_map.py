@@ -16,8 +16,8 @@ class GameMap(pygame.sprite.Group):
         player_x, player_y = pos
 
         # Камера следует за игроком
-        self.camera_pos[0] = player_x * self.tile_size - screen.get_width() // 2
-        self.camera_pos[1] = player_y * self.tile_size - screen.get_height() // 2
+        self.camera_pos[0] = player_x - screen.get_width() // 2
+        self.camera_pos[1] = player_y - screen.get_height() // 2
 
     def get_map_rect(self, tile_x, tile_y):
         camera_x, camera_y = self.camera_pos
@@ -42,7 +42,12 @@ class GameMap(pygame.sprite.Group):
             self.add(point)
 
     def can_move(self, x, y):
-        tile = self.world.get_tile(x, y)
+        player_x = (x + self.tile_size // 2) // self.tile_size
+        player_y = (y + self.tile_size // 2) // self.tile_size
+        print(x, player_x)
+        print(y, player_y)
+
+        tile = self.world.get_tile(player_x, player_y)
 
         if tile is None:
             return False
