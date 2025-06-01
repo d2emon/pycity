@@ -1,7 +1,6 @@
-import random
 import noise
 from .sprites import tiles
-from .worldgen.points import Points
+from .worldgen.vor_map import WorldMap
 
 
 class World:
@@ -16,7 +15,7 @@ class World:
                 row.append(None)
             self.__items.append(row)
 
-        self.points = Points()
+        self.world_map = WorldMap()
 
     def get_tile(self, x, y):
         if y < 0 or y >= self.height or x < 0 or x >= self.width:
@@ -73,10 +72,7 @@ class World:
                 tile = cls.create_tile(value, tile_size)
                 world.set_tile(x, y, tile)
 
-        world.points.generate(width, height)
-
-        road_mask = world.generate_road_mask()
-        print(road_mask)
+        world.world_map = WorldMap.generate(width, height)
 
         return world
 

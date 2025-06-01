@@ -1,6 +1,5 @@
 import pygame
 from .sprites.road_map import RoadMap
-from .worldgen.roads import Roads
 
 
 class GameMap(pygame.sprite.Group):
@@ -13,14 +12,19 @@ class GameMap(pygame.sprite.Group):
 
         self.camera_pos = [0, 0]
         self.world = world
-        self.points = pygame.sprite.Group(*world.points)
+        self.points = pygame.sprite.Group()
         self.road_map = RoadMap(world.width * tile_size, world.height * tile_size)
 
-        for point in self.points:
-            point.rect.center = self.get_map_rect(*point.pos)
+        world_map = world.world_map
+        for p in world_map.points:
+            p.rect = world_map.get_tile_rect(*p.pos)
+            self.points.add(p)
 
-        roads = Roads.generate([point.rect.center for point in self.points])
-        roads.draw(self.road_map)
+        for p in world_map.inners:
+            p.rect = world_map.get_tile_rect(*p.pos)
+            self.points.add(p)
+
+        world_map.roads.draw(self.road_map)
 
     def set_camera(self, screen, pos):
         player_x, player_y = pos
