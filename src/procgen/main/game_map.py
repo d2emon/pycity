@@ -36,3 +36,14 @@ class GameMap(pygame.sprite.Group):
                 tile.rect.center = self.get_map_rect(x, y)
                 if 0 <= tile.rect.left < self.screen_width and 0 <= tile.rect.top < self.screen_height:
                     self.add(tile)
+
+    def can_move(self, x, y):
+        tile = self.world.get_tile(x, y)
+
+        if tile is None:
+            return False
+
+        if tile.is_solid:
+            return False
+
+        return True
