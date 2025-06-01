@@ -1,7 +1,7 @@
 import logging
 import pygame
 
-from map import TileKindTileset
+from ..main.map import TileKindTileset
 
 
 class TilesetImage:
