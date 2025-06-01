@@ -32,6 +32,10 @@ class Grass(Tile):
     color_name = 'green'
 
 
+class Rock(Tile):
+    color_name = 'brown'
+
+
 tiles = {
     'water': Water,
     'sand': Sand,
