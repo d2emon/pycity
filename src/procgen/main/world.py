@@ -1,7 +1,7 @@
 import random
 import noise
 from .sprites import tiles
-from .sprites.map_points import MapPoint
+from .worldgen.points import Points
 
 
 class World:
@@ -16,7 +16,7 @@ class World:
                 row.append(None)
             self.__items.append(row)
 
-        self.points = []
+        self.points = Points()
 
     def get_tile(self, x, y):
         if y < 0 or y >= self.height or x < 0 or x >= self.width:
@@ -26,6 +26,15 @@ class World:
 
     def set_tile(self, x, y, tile):
         self.__items[y][x] = tile
+
+    def generate_road_mask(self, scale=20.0):
+        road_mask = [[0 for _ in range(self.width)] for _ in range(self.height)]
+        for y in range(self.height):
+            for x in range(self.width):
+                value = noise.pnoise2(x/scale, y/scale, octaves=3)
+                if abs(value) < 0.05:  # Узкий диапазон для дорог
+                    road_mask[y][x] = 1
+        return road_mask
 
     @classmethod
     def create_tile(cls, value, size):
@@ -64,13 +73,10 @@ class World:
                 tile = cls.create_tile(value, tile_size)
                 world.set_tile(x, y, tile)
 
+        world.points.generate(width, height)
 
-        for _ in range(10):
-            x = random.randrange(0, width)
-            y = random.randrange(0, height)
-
-            point = MapPoint((x, y), tile_size)
-            world.points.append(point)
+        road_mask = world.generate_road_mask()
+        print(road_mask)
 
         return world
 
