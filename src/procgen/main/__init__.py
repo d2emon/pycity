@@ -45,6 +45,10 @@ class MainScreenGroup(ScreenGroup):
             self.window.get_rect().size,
             config.TILE_SIZE,
         )
+
+        if self.player:
+            self.player.level = level
+
         # self.add(level, layer=5)
         return level
 
