@@ -34,7 +34,7 @@ class ColorSchema2:
     background = 0, 153, 255
 
 
-window_config = SmallWindowConfig
+window_config = BigWindowConfig
 color_schema = ColorSchema2
 
 CAPTION = window_config.caption
@@ -51,8 +51,8 @@ DELAY = 16
 ####
 
 TILE_SIZE = 32
-MAP_WIDTH = 100
-MAP_HEIGHT = 100
+MAP_WIDTH = 500
+MAP_HEIGHT = 500
 
 ####
 
