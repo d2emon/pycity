@@ -3,6 +3,7 @@ import pygame
 
 class Tile(pygame.sprite.Sprite):
     color_name = "white"
+    is_solid = False
 
     def __init__(self, size, *groups):
         super().__init__(*groups)
@@ -22,7 +23,7 @@ class Tile(pygame.sprite.Sprite):
 
 class Water(Tile):
     color_name = 'blue'
-
+    is_solid = True
 
 class Sand(Tile):
     color_name = 'khaki'
@@ -34,7 +35,7 @@ class Grass(Tile):
 
 class Rock(Tile):
     color_name = 'brown'
-
+    is_solid = True
 
 tiles = {
     'water': Water,
