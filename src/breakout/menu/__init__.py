@@ -7,9 +7,7 @@ from .resources import MenuResources
 
 class MenuScreenGroup(MenuScreenGroup):
     def create_background(self):
-        background = Image(self.rect, MenuResources.get('background'))
-        self.add(background)
-        return background
+        return Image(self.rect, MenuResources.get('background'))
 
     def create_menu_items(self):
         yield MainMenuItem("PLAY", event_type="BUTTON_PLAY")

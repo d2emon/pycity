@@ -26,9 +26,7 @@ class MainScreenGroup(ScreenGroup):
     # ScreenGroup loaders
 
     def create_background(self):
-        background = Background(self.rect, (128, 128, 128))
-        self.add(background, layer=0)
-        return background
+        return Background(self.rect, (128, 128, 128))
 
     def create_player(self):
         player = Player(tile_size=config.TILE_SIZE)

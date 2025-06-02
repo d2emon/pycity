@@ -80,7 +80,7 @@ class MainScreenGroup(ScreenGroup):
         return fonts
 
     def create_background(self):
-        # self.background = Image(self.rect, self.backgroundImage)
+        # return Image(self.rect, self.backgroundImage)
         return None
 
     def create_player(self):

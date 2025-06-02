@@ -43,9 +43,7 @@ class MainScreenGroup(ScreenGroup):
     # ScreenGroup loaders
 
     def create_background(self):
-        background = Image(self.rect, MainResources.get('background'))
-        self.add(background)
-        return background
+        return Image(self.rect, MainResources.get('background'))
 
     def create_player(self):
         player_pos = (self.rect.centerx, 400)
