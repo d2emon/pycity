@@ -26,6 +26,7 @@ class Level(pygame.sprite.Sprite):
             self.rect.size,
             self.tile_size,
         )
+        self.camera_pos = [0, 0]
 
     def can_move(self, x, y):
         player_x = (x + self.tile_size // 2) // self.tile_size
@@ -42,11 +43,15 @@ class Level(pygame.sprite.Sprite):
         return True
 
     def set_camera(self, screen, pos):
-        return self.level_map.set_camera(screen, pos)
+        player_x, player_y = pos
+
+        # Камера следует за игроком
+        self.camera_pos[0] = player_x - screen.get_width() // 2
+        self.camera_pos[1] = player_y - screen.get_height() // 2
 
     def fill(self):
         self.image.blit(self.background.image, self.background.rect)
 
-        self.level_map.fill()
+        self.level_map.fill(self.camera_pos)
 
         self.level_map.draw(self.image)

@@ -10,7 +10,6 @@ class GameMap(pygame.sprite.Group):
 
         self.tile_size = tile_size
 
-        self.camera_pos = [0, 0]
         self.world = world
         self.points = pygame.sprite.Group()
         self.road_map = RoadMap(world.width * tile_size, world.height * tile_size)
@@ -25,34 +24,27 @@ class GameMap(pygame.sprite.Group):
 
         world.roads.draw(self.road_map)
 
-    def set_camera(self, screen, pos):
-        player_x, player_y = pos
-
-        # Камера следует за игроком
-        self.camera_pos[0] = player_x - screen.get_width() // 2
-        self.camera_pos[1] = player_y - screen.get_height() // 2
-
-    def get_map_rect(self, tile_x, tile_y):
-        camera_x, camera_y = self.camera_pos
+    def get_map_rect(self, tile_x, tile_y, camera_pos):
+        camera_x, camera_y = camera_pos
 
         x = tile_x * self.tile_size - camera_x
         y = tile_y * self.tile_size - camera_y
 
         return x, y
 
-    def fill(self):
+    def fill(self, camera_pos):
         self.empty()
 
         for y in range(self.world.height):
             for x in range(self.world.width):
                 tile = self.world.get_tile(x, y)
-                tile.rect.center = self.get_map_rect(x, y)
+                tile.rect.center = self.get_map_rect(x, y, camera_pos)
                 if 0 <= tile.rect.left < self.screen_width and 0 <= tile.rect.top < self.screen_height:
                     self.add(tile)
 
         for point in self.points:
-            point.rect.center = self.get_map_rect(*point.pos)
+            point.rect.center = self.get_map_rect(*point.pos, camera_pos)
             self.add(*self.points)
 
-        self.road_map.rect.topleft = self.get_map_rect(0, 0)
+        self.road_map.rect.topleft = self.get_map_rect(0, 0, camera_pos)
         self.add(self.road_map)
