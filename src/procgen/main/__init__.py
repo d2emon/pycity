@@ -9,7 +9,6 @@ import pygame
 import config
 from sprites.background import Background
 from sprites.screen import ScreenGroup
-from .game_map import GameMap
 from .sprites.level import Level
 from .sprites.player import Player
 from .world import World
@@ -17,11 +16,6 @@ from .world import World
 
 class MainScreenGroup(ScreenGroup):
     """Sprites for main screen."""
-
-    def __init__(self, window, **sprites):
-        super().__init__(window, **sprites)
-
-        self.world = None
 
     # ScreenGroup loaders
 
@@ -39,13 +33,8 @@ class MainScreenGroup(ScreenGroup):
         return player
 
     def create_level(self):
-        self.world = World.generate_map(config.MAP_WIDTH, config.MAP_HEIGHT, config.TILE_SIZE)
-        level_map = GameMap(
-            self.world,
-            self.window.get_rect().size,
-            config.TILE_SIZE,
-        )
-        return Level(level_map, self.window.get_rect())
+        world = World.generate_map(config.MAP_WIDTH, config.MAP_HEIGHT, config.TILE_SIZE)
+        return Level(world, self.window.get_rect())
 
     def update(self, *args, **kwargs):
         keys = pygame.key.get_pressed()

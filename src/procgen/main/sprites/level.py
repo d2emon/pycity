@@ -1,17 +1,23 @@
 import pygame
+import config
 from sprites.background import Background
+from ..game_map import GameMap
 
 
 class Level(pygame.sprite.Sprite):
-    def __init__(self, level_map, rect, *groups):
+    def __init__(self, world, rect, *groups):
         super().__init__(*groups)
-
-        self.level_map = level_map
 
         self.rect = pygame.Rect(rect)
         self.image  = pygame.Surface(self.rect.size, pygame.SRCALPHA)
 
         self.background = Background(self.image.get_rect(), (0, 128, 0))
+
+        self.level_map = GameMap(
+            world,
+            self.rect.size,
+            config.TILE_SIZE,
+        )
 
     def can_move(self, x, y):
         return self.level_map.can_move(x, y)
