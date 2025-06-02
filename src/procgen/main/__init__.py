@@ -22,6 +22,10 @@ class MainScreenGroup(ScreenGroup):
     def create_background(self):
         return Background(self.rect, (128, 128, 128))
 
+    def create_level(self):
+        world = World.generate_map(config.MAP_WIDTH, config.MAP_HEIGHT, config.TILE_SIZE)
+        return Level(world, self.window.get_rect())
+
     def create_player(self):
         player = Player(tile_size=config.TILE_SIZE)
         player.rect.center = self.window.get_rect().center
@@ -31,10 +35,6 @@ class MainScreenGroup(ScreenGroup):
             player.level = self.level
 
         return player
-
-    def create_level(self):
-        world = World.generate_map(config.MAP_WIDTH, config.MAP_HEIGHT, config.TILE_SIZE)
-        return Level(world, self.window.get_rect())
 
     def update(self, *args, **kwargs):
         keys = pygame.key.get_pressed()
