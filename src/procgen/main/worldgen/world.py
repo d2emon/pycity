@@ -1,6 +1,6 @@
 import noise
 from ..sprites import tiles
-from .vor_map import WorldMap
+from .vor_map import VoronoiMap
 
 
 class World:
@@ -30,7 +30,7 @@ class World:
 
     @classmethod
     def get_tile_rect(cls, x, y):
-        return WorldMap.get_tile_rect(x, y)
+        return VoronoiMap.get_tile_rect(x, y)
 
     def generate_road_mask(self, scale=20.0):
         road_mask = [[0 for _ in range(self.width)] for _ in range(self.height)]
@@ -78,7 +78,9 @@ class World:
                 tile = cls.create_tile(value, tile_size)
                 world.set_tile(x, y, tile)
 
-        world_map = WorldMap.generate(width, height)
+        world_map = VoronoiMap(width, height)
+        world_map.fill()
+
         world.points = world_map.points
         world.inners = world_map.inners
         world.roads = world_map.roads
