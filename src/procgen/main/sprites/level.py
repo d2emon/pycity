@@ -1,6 +1,7 @@
 import pygame
 import config
 from sprites.background import Background
+from .road_map import RoadMap
 from ..game_map import GameMap
 
 
@@ -32,6 +33,9 @@ class Level(pygame.sprite.Sprite):
         self.inners = pygame.sprite.Group()
         self.points = pygame.sprite.Group()
 
+        self.road_map = RoadMap(self.rect.width, self.rect.height)
+        self.road_map_group = pygame.sprite.GroupSingle(self.road_map)
+
         self.load(self.world)
 
     def get_map_rect(self, tile_pos):
@@ -50,13 +54,19 @@ class Level(pygame.sprite.Sprite):
                 tile.rect.topleft = self.get_map_rect((x, y))
                 self.land.add(tile)
 
+        self.points.empty()
         for p in world.points:
             p.rect = world.get_tile_rect(*p.pos)
             self.points.add(p)
 
+        self.inners.empty()
         for p in world.inners:
             p.rect = world.get_tile_rect(*p.pos)
             self.inners.add(p)
+
+        world.roads.draw(self.road_map)
+
+        self.fill()
 
     def can_move(self, x, y):
         player_x = (x + self.tile_size // 2) // self.tile_size
@@ -88,6 +98,4 @@ class Level(pygame.sprite.Sprite):
         self.land.draw(self.image)
         self.inners.draw(self.image)
         self.points.draw(self.image)
-
-        self.level_map.fill(self.camera_pos)
-        self.level_map.draw(self.image)
+        self.road_map_group.draw(self.image)
