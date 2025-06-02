@@ -13,8 +13,9 @@ class Level(pygame.sprite.Sprite):
 
         self.background = Background(self.image.get_rect(), (0, 128, 0))
 
+        self.world = world
         self.level_map = GameMap(
-            world,
+            self.world,
             self.rect.size,
             config.TILE_SIZE,
         )
