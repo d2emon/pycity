@@ -154,7 +154,7 @@ class MainScreenGroup(ScreenGroup):
         # self.sprites.update(player=self.player_group)
 
         self.player.update(game_map=self.block_map)
-        self.add(self.player, layer=10)
+        self.add(self.player, layer=self.player_layer)
         # self.player_group.update(game_map=self.block_map)
 
         ####

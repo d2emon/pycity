@@ -35,9 +35,7 @@ class MainScreenGroup(ScreenGroup):
     def create_player(self):
         player_pos = self.rect.center
         base_speed = data.PLAYER_SPEED
-        player = Player(player_pos, base_speed)
-        self.add(player, layer=10)
-        return player
+        return Player(player_pos, base_speed)
 
     def create_level(self):
         level = MapSprite(self.rect, data.VIEWPOINT)

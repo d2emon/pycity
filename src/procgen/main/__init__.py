@@ -32,6 +32,10 @@ class MainScreenGroup(ScreenGroup):
         player = Player(tile_size=config.TILE_SIZE)
         player.rect.center = self.window.get_rect().center
         self.add(player, layer=10)
+
+        if self.level:
+            player.level = self.level
+
         return player
 
     def create_level(self):
@@ -42,9 +46,6 @@ class MainScreenGroup(ScreenGroup):
             config.TILE_SIZE,
         )
         level = Level(level_map, self.window.get_rect())
-
-        if self.player:
-            self.player.level = level
 
         self.add(level, layer=5)
         return level

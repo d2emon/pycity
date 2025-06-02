@@ -48,8 +48,6 @@ class MainScreenGroup(ScreenGroup):
     def create_player(self):
         player_pos = (self.rect.centerx, 400)
         base_speed = 10
-        player = Paddle(player_pos, base_speed)
-        self.add(player, layer=10)
         return Paddle(player_pos, base_speed)
 
     def create_level(self):
