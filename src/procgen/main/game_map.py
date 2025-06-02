@@ -15,16 +15,15 @@ class GameMap(pygame.sprite.Group):
         self.points = pygame.sprite.Group()
         self.road_map = RoadMap(world.width * tile_size, world.height * tile_size)
 
-        world_map = world.world_map
-        for p in world_map.points:
-            p.rect = world_map.get_tile_rect(*p.pos)
+        for p in world.points:
+            p.rect = world.get_tile_rect(*p.pos)
             self.points.add(p)
 
-        for p in world_map.inners:
-            p.rect = world_map.get_tile_rect(*p.pos)
+        for p in world.inners:
+            p.rect = world.get_tile_rect(*p.pos)
             self.points.add(p)
 
-        world_map.roads.draw(self.road_map)
+        world.roads.draw(self.road_map)
 
     def set_camera(self, screen, pos):
         player_x, player_y = pos

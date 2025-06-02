@@ -15,7 +15,9 @@ class World:
                 row.append(None)
             self.__items.append(row)
 
-        self.world_map = WorldMap()
+        self.points = None
+        self.inners = None
+        self.roads = None
 
     def get_tile(self, x, y):
         if y < 0 or y >= self.height or x < 0 or x >= self.width:
@@ -25,6 +27,10 @@ class World:
 
     def set_tile(self, x, y, tile):
         self.__items[y][x] = tile
+
+    @classmethod
+    def get_tile_rect(cls, x, y):
+        return WorldMap.get_tile_rect(x, y)
 
     def generate_road_mask(self, scale=20.0):
         road_mask = [[0 for _ in range(self.width)] for _ in range(self.height)]
@@ -72,7 +78,10 @@ class World:
                 tile = cls.create_tile(value, tile_size)
                 world.set_tile(x, y, tile)
 
-        world.world_map = WorldMap.generate(width, height)
+        world_map = WorldMap.generate(width, height)
+        world.points = world_map.points
+        world.inners = world_map.inners
+        world.roads = world_map.roads
 
         return world
 
