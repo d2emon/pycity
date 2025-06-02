@@ -52,9 +52,7 @@ class MainScreenGroup(ScreenGroup):
 
     def create_level(self):
         level_rect = pygame.Rect(0, 0, 570, 400)
-        level = Bricks(level_rect)
-        self.add(*level, layer=5)
-        return level
+        return Bricks(level_rect)
 
     def start(self):
         if self.player.lives > 0:

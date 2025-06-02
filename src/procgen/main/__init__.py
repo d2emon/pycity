@@ -45,10 +45,7 @@ class MainScreenGroup(ScreenGroup):
             self.window.get_rect().size,
             config.TILE_SIZE,
         )
-        level = Level(level_map, self.window.get_rect())
-
-        self.add(level, layer=5)
-        return level
+        return Level(level_map, self.window.get_rect())
 
     def update(self, *args, **kwargs):
         keys = pygame.key.get_pressed()

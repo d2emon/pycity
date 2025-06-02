@@ -38,9 +38,7 @@ class MainScreenGroup(ScreenGroup):
         return Player(player_pos, base_speed)
 
     def create_level(self):
-        level = MapSprite(self.rect, data.VIEWPOINT)
-        self.add(level, layer=5)
-        return level
+        return MapSprite(self.rect, data.VIEWPOINT)
 
     def start(self):
         if not self.player.has_started:

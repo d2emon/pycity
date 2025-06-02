@@ -4,6 +4,7 @@ from .menu_items import MenuItems
 
 class ScreenGroup(pygame.sprite.LayeredUpdates):
     background_layer = 0
+    level_layer = 5
     player_layer = 10
 
     def __init__(self, window, *spites):
@@ -17,6 +18,8 @@ class ScreenGroup(pygame.sprite.LayeredUpdates):
             self.add(self.background, layer=self.background_layer)
 
         self.level = self.create_level()
+        if self.level is not None:
+            self.add(self.level, layer=self.level_layer)
 
         self.player = self.create_player()
         if self.player is not None:
