@@ -56,17 +56,3 @@ class GameMap(pygame.sprite.Group):
 
         self.road_map.rect.topleft = self.get_map_rect(0, 0)
         self.add(self.road_map)
-
-    def can_move(self, x, y):
-        player_x = (x + self.tile_size // 2) // self.tile_size
-        player_y = (y + self.tile_size // 2) // self.tile_size
-
-        tile = self.world.get_tile(player_x, player_y)
-
-        if tile is None:
-            return False
-
-        if tile.is_solid:
-            return False
-
-        return True
