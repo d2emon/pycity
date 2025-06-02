@@ -29,6 +29,8 @@ class Level(pygame.sprite.Sprite):
         self.camera_pos = [0, 0]
 
         self.land = pygame.sprite.Group()
+        self.inners = pygame.sprite.Group()
+        self.points = pygame.sprite.Group()
 
         self.load(self.world)
 
@@ -47,6 +49,14 @@ class Level(pygame.sprite.Sprite):
                 tile = world.get_tile(x, y)
                 tile.rect.topleft = self.get_map_rect((x, y))
                 self.land.add(tile)
+
+        for p in world.points:
+            p.rect = world.get_tile_rect(*p.pos)
+            self.points.add(p)
+
+        for p in world.inners:
+            p.rect = world.get_tile_rect(*p.pos)
+            self.inners.add(p)
 
     def can_move(self, x, y):
         player_x = (x + self.tile_size // 2) // self.tile_size
@@ -76,6 +86,8 @@ class Level(pygame.sprite.Sprite):
     def fill(self):
         self.image.blit(self.background.image, self.background.rect)
         self.land.draw(self.image)
+        self.inners.draw(self.image)
+        self.points.draw(self.image)
 
         self.level_map.fill(self.camera_pos)
         self.level_map.draw(self.image)
