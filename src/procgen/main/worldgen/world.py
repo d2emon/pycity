@@ -1,6 +1,6 @@
 import noise
-from .sprites import tiles
-from .worldgen.vor_map import WorldMap
+from ..sprites import tiles
+from .vor_map import WorldMap
 
 
 class World:

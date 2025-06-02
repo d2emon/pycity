@@ -11,7 +11,7 @@ from sprites.background import Background
 from sprites.screen import ScreenGroup
 from .sprites.level import Level
 from .sprites.player import Player
-from .world import World
+from .worldgen.world import World
 
 
 class MainScreenGroup(ScreenGroup):
