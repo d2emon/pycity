@@ -35,13 +35,6 @@ class GameMap(pygame.sprite.Group):
     def fill(self, camera_pos):
         self.empty()
 
-        for y in range(self.world.height):
-            for x in range(self.world.width):
-                tile = self.world.get_tile(x, y)
-                tile.rect.center = self.get_map_rect(x, y, camera_pos)
-                if 0 <= tile.rect.left < self.screen_width and 0 <= tile.rect.top < self.screen_height:
-                    self.add(tile)
-
         for point in self.points:
             point.rect.center = self.get_map_rect(*point.pos, camera_pos)
             self.add(*self.points)

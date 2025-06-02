@@ -28,6 +28,26 @@ class Level(pygame.sprite.Sprite):
         )
         self.camera_pos = [0, 0]
 
+        self.land = pygame.sprite.Group()
+
+        self.load(self.world)
+
+    def get_map_rect(self, tile_pos):
+        tile_x, tile_y = tile_pos
+
+        x = tile_x * self.tile_size
+        y = tile_y * self.tile_size
+
+        return x, y
+
+    def load(self, world):
+        self.land.empty()
+        for y in range(world.height):
+            for x in range(world.width):
+                tile = world.get_tile(x, y)
+                tile.rect.topleft = self.get_map_rect((x, y))
+                self.land.add(tile)
+
     def can_move(self, x, y):
         player_x = (x + self.tile_size // 2) // self.tile_size
         player_y = (y + self.tile_size // 2) // self.tile_size
@@ -49,9 +69,13 @@ class Level(pygame.sprite.Sprite):
         self.camera_pos[0] = player_x - screen.get_width() // 2
         self.camera_pos[1] = player_y - screen.get_height() // 2
 
+        rect = screen.get_rect()
+        self.rect.left = rect.centerx - player_x - self.tile_size // 2
+        self.rect.top = rect.centery - player_y - self.tile_size // 2
+
     def fill(self):
         self.image.blit(self.background.image, self.background.rect)
+        self.land.draw(self.image)
 
         self.level_map.fill(self.camera_pos)
-
         self.level_map.draw(self.image)
