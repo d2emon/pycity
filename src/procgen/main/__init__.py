@@ -7,11 +7,11 @@ Typical usage example:
 """
 import pygame
 import config
-# from sprites.image import Image
+from sprites.background import Background
 from sprites.screen import ScreenGroup
 from .game_map import GameMap
+from .sprites.level import Level
 from .sprites.player import Player
-# from .resources import MainResources
 from .world import World
 
 
@@ -26,30 +26,31 @@ class MainScreenGroup(ScreenGroup):
     # ScreenGroup loaders
 
     def create_background(self):
-        # background = Image(self.rect, MainResources.get('background'))
-        # self.add(background)
-        return None
+        background = Background(self.rect, (128, 128, 128))
+        self.add(background, layer=0)
+        return background
 
     def create_player(self):
         player = Player(tile_size=config.TILE_SIZE)
-        self.add(player, layer=10)
 
         player.rect.center = self.window.get_rect().center
 
+        self.add(player, layer=10)
         return player
 
     def create_level(self):
         self.world = World.generate_map(config.MAP_WIDTH, config.MAP_HEIGHT, config.TILE_SIZE)
-        level = GameMap(
+        level_map = GameMap(
             self.world,
             self.window.get_rect().size,
             config.TILE_SIZE,
         )
+        level = Level(level_map, self.window.get_rect())
 
         if self.player:
             self.player.level = level
 
-        # self.add(level, layer=5)
+        self.add(level, layer=5)
         return level
 
     def update(self, *args, **kwargs):
@@ -60,7 +61,3 @@ class MainScreenGroup(ScreenGroup):
         self.level.fill()
 
         super().update(*args, **kwargs)
-
-    def draw(self, surface, *args, **kwargs):
-        self.level.draw(surface)
-        super().draw(surface, *args, **kwargs)
