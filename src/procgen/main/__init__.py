@@ -32,9 +32,7 @@ class MainScreenGroup(ScreenGroup):
 
     def create_player(self):
         player = Player(tile_size=config.TILE_SIZE)
-
         player.rect.center = self.window.get_rect().center
-
         self.add(player, layer=10)
         return player
 
