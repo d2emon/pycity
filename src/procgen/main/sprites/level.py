@@ -2,7 +2,6 @@ import pygame
 import config
 from sprites.background import Background
 from .road_map import RoadMap
-from ..game_map import GameMap
 
 
 class Level(pygame.sprite.Sprite):
@@ -22,11 +21,6 @@ class Level(pygame.sprite.Sprite):
 
         self.world = world
         self.tile_size = tile_size
-        self.level_map = GameMap(
-            self.world,
-            self.rect.size,
-            self.tile_size,
-        )
         self.camera_pos = [0, 0]
 
         self.land = pygame.sprite.Group()

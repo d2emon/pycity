@@ -47,6 +47,5 @@ class MainScreenGroup(ScreenGroup):
         self.player.check_keys(keys)
 
         self.level.set_camera(self.window, self.player.pos)
-        self.level.fill()
 
         super().update(*args, **kwargs)
