@@ -1,14 +1,16 @@
 import pygame
+import config
 
 
 class Tile(pygame.sprite.Sprite):
     color_name = "white"
     is_solid = False
+    size = config.TILE_SIZE
 
-    def __init__(self, size, *groups):
+    def __init__(self, *groups):
         super().__init__(*groups)
 
-        self.image  = pygame.Surface((size, size))
+        self.image  = pygame.Surface((self.size, self.size))
         self.rect = self.image.get_rect()
 
         self.create_image()
@@ -25,6 +27,7 @@ class Water(Tile):
     color_name = 'blue'
     is_solid = True
 
+
 class Sand(Tile):
     color_name = 'khaki'
 
@@ -36,17 +39,3 @@ class Grass(Tile):
 class Rock(Tile):
     color_name = 'brown'
     is_solid = True
-
-tiles = {
-    'water': Water,
-    'sand': Sand,
-    'grass': Grass,
-}
-
-
-def get_tile(tile_id, size):
-    tile = tiles[tile_id]
-    if tile is None:
-        return None
-
-    return tile(size)
