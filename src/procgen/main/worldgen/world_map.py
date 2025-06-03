@@ -63,9 +63,3 @@ class WorldMap:
         point = Road(object_id, nodes)
         self.roads.append(point)
         return point
-
-    def generate_points(self, count=10):
-        for object_id in range(count):
-            x = random.randrange(0, self.width)
-            y = random.randrange(0, self.height)
-            self.add_point(object_id, (x, y))
