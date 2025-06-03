@@ -28,10 +28,6 @@ class World:
     def set_tile(self, x, y, tile):
         self.__items[y][x] = tile
 
-    @classmethod
-    def get_tile_rect(cls, x, y):
-        return VoronoiMap.get_tile_rect(x, y)
-
     def generate_road_mask(self, scale=20.0):
         road_mask = [[0 for _ in range(self.width)] for _ in range(self.height)]
         for y in range(self.height):
@@ -65,20 +61,15 @@ class World:
         lacunarity = 2.0
 
         world = cls(width, height)
-        for y in range(height):
-            for x in range(width):
-                value = noise.pnoise2(
-                    x / scale,
-                    y / scale,
-                    octaves=octaves,
-                    persistence=persistence,
-                    lacunarity=lacunarity,
-                )
-
-                tile = cls.create_tile(value, tile_size)
-                world.set_tile(x, y, tile)
 
         world_map = VoronoiMap(width, height)
+
+        for tile_data in world_map.fill_tiles():
+            pos, value, rect = tile_data
+            tile = cls.create_tile(value, tile_size)
+            tile.rect = rect
+            world.set_tile(pos[0], pos[1], tile)
+
         world_map.fill()
 
         world.points = world_map.points

@@ -2,6 +2,7 @@ import pygame
 import config
 from sprites.background import Background
 from .road_map import RoadMap
+from ..worldgen.tile_map import TileMap
 
 
 class Level(pygame.sprite.Sprite):
@@ -20,8 +21,7 @@ class Level(pygame.sprite.Sprite):
         self.background = Background(self.image.get_rect(), (0, 128, 0))
 
         self.world = world
-        self.tile_size = tile_size
-        self.camera_pos = [0, 0]
+        self.tile_map = TileMap(tile_size)
 
         self.land = pygame.sprite.Group()
         self.inners = pygame.sprite.Group()
@@ -32,30 +32,21 @@ class Level(pygame.sprite.Sprite):
 
         self.load(self.world)
 
-    def get_map_rect(self, tile_pos):
-        tile_x, tile_y = tile_pos
-
-        x = tile_x * self.tile_size
-        y = tile_y * self.tile_size
-
-        return x, y
-
     def load(self, world):
+        self.world = world
+
         self.land.empty()
         for y in range(world.height):
             for x in range(world.width):
                 tile = world.get_tile(x, y)
-                tile.rect.topleft = self.get_map_rect((x, y))
                 self.land.add(tile)
 
         self.points.empty()
         for p in world.points:
-            p.rect = world.get_tile_rect(*p.pos)
             self.points.add(p)
 
         self.inners.empty()
         for p in world.inners:
-            p.rect = world.get_tile_rect(*p.pos)
             self.inners.add(p)
 
         world.roads.draw(self.road_map)
@@ -63,10 +54,9 @@ class Level(pygame.sprite.Sprite):
         self.fill()
 
     def can_move(self, x, y):
-        player_x = (x + self.tile_size // 2) // self.tile_size
-        player_y = (y + self.tile_size // 2) // self.tile_size
+        player_pos = self.tile_map.get_pos((x, y))
 
-        tile = self.world.get_tile(player_x, player_y)
+        tile = self.world.get_tile(*player_pos)
 
         if tile is None:
             return False
@@ -77,15 +67,11 @@ class Level(pygame.sprite.Sprite):
         return True
 
     def set_camera(self, screen, pos):
-        player_x, player_y = pos
-
-        # Камера следует за игроком
-        self.camera_pos[0] = player_x - screen.get_width() // 2
-        self.camera_pos[1] = player_y - screen.get_height() // 2
+        x, y = pos
 
         rect = screen.get_rect()
-        self.rect.left = rect.centerx - player_x - self.tile_size // 2
-        self.rect.top = rect.centery - player_y - self.tile_size // 2
+        self.rect.left = rect.centerx - x
+        self.rect.top = rect.centery - y
 
     def fill(self):
         self.image.blit(self.background.image, self.background.rect)
