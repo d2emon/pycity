@@ -19,62 +19,55 @@ class World:
         self.inners = None
         self.roads = None
 
-    def get_tile(self, x, y):
+    def get_tile(self, pos):
+        x, y = pos
+
         if y < 0 or y >= self.height or x < 0 or x >= self.width:
             return None
 
         return self.__items[y][x]
 
-    def set_tile(self, x, y, tile):
+    def set_tile(self, pos, tile):
+        x, y = pos
         self.__items[y][x] = tile
 
-    def generate_road_mask(self, scale=20.0):
-        road_mask = [[0 for _ in range(self.width)] for _ in range(self.height)]
-        for y in range(self.height):
-            for x in range(self.width):
-                value = noise.pnoise2(x/scale, y/scale, octaves=3)
-                if abs(value) < 0.05:  # Узкий диапазон для дорог
-                    road_mask[y][x] = 1
-        return road_mask
+    def create_tile(self, pos, value):
+        tile = self.tile_by_value(value)
+        self.set_tile(pos, tile)
+        return tile
+
+    def load(self, world_map):
+        for y, row in enumerate(world_map.tiles):
+            for x, value in enumerate(row):
+                tile = self.create_tile((x, y), value)
+                tile.rect = world_map.get_tile_rect((x, y))
+
+        self.points = world_map.points
+        self.inners = world_map.inners
+        self.roads = world_map.roads
 
     @classmethod
-    def create_tile(cls, value, size):
+    def tile_by_value(cls, value):
         water_level = -0.2
         grass_level = 0
         rock_level = 0.2
 
         if value < water_level:
-            return tiles.Water(size)
+            return tiles.Water()
         elif value < grass_level:
-            return tiles.Sand(size)
+            return tiles.Sand()
         elif value < rock_level:
-            return tiles.Grass(size)
+            return tiles.Grass()
         else:
-            return tiles.Rock(size)
+            return tiles.Rock()
 
     # Генерация карты с помощью шума Перлина
     @classmethod
     def generate_map(cls, width, height, tile_size):
-        scale = 20.0
-        octaves = 6
-        persistence = 0.5
-        lacunarity = 2.0
-
         world = cls(width, height)
 
-        world_map = VoronoiMap(width, height)
-
-        for tile_data in world_map.fill_tiles():
-            pos, value, rect = tile_data
-            tile = cls.create_tile(value, tile_size)
-            tile.rect = rect
-            world.set_tile(pos[0], pos[1], tile)
-
-        world_map.fill()
-
-        world.points = world_map.points
-        world.inners = world_map.inners
-        world.roads = world_map.roads
+        world_map = VoronoiMap.generate(width, height)
+        world.load(world_map)
 
         return world
 
