@@ -24,12 +24,12 @@ class MainScreenGroup(ScreenGroup):
 
     def create_level(self):
         level_rect = pygame.Rect(
-            200,
-            200,
+            0,
+            0,
             config.MAP_WIDTH * config.TILE_SIZE,
             config.MAP_HEIGHT * config.TILE_SIZE,
         )
-        world = World.generate_map(config.MAP_WIDTH, config.MAP_HEIGHT, config.TILE_SIZE)
+        world = World.generate_map(config.MAP_WIDTH, config.MAP_HEIGHT)
         return Level(level_rect, world, config.TILE_SIZE)
 
     def create_player(self):

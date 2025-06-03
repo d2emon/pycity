@@ -63,7 +63,7 @@ class World:
 
     # Генерация карты с помощью шума Перлина
     @classmethod
-    def generate_map(cls, width, height, tile_size):
+    def generate_map(cls, width, height):
         world = cls(width, height)
 
         world_map = VoronoiMap.generate(width, height)
