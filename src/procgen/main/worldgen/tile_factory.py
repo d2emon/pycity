@@ -17,6 +17,25 @@ class TileFactory:
             lacunarity=self.lacunarity,
         )
 
+
+    def generate_roads(self, width, height):
+        roads = [
+            [0 for _ in range(width)]
+            for _ in range(height)
+        ]
+
+        for y in range(height):
+            for x in range(width):
+                value = noise.pnoise2(
+                    x / self.scale,
+                    y / self.scale,
+                    octaves=3
+                )
+                if 0.04 < abs(value) < 0.05:  # Узкий диапазон для дорог
+                    roads[y][x] = 1
+
+        return roads
+
     def generate(self, width, height):
         return [
             [self.generate_tile(x, y) for x in range(width)]
