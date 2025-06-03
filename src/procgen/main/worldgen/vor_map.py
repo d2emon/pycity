@@ -1,14 +1,21 @@
 import pygame
 import config
-from scipy.spatial import Voronoi
+from .map_objects.road import Road as MapRoad
+from .map_objects.tree import Oak
+from .point_factory import PointFactory
 from .points import Points
 from .roads import Road, Roads
+from .tile_factory import TileFactory
+from .tile_map import TileMap
+from .voronoi_factory import VoronoiFactory
 from .world_map import WorldMap
 from ..sprites.map_points import MapPoint
 
 
 class VoronoiMap:
-    tile_size = config.TILE_SIZE
+    tile_map = TileMap(config.TILE_SIZE)
+    water_level = -0.2
+    max_road_height = 0.8
 
     def __init__(self, width, height):
         self.width = width
@@ -18,77 +25,146 @@ class VoronoiMap:
         self.points = pygame.sprite.Group()
         self.roads = Roads()
 
-        self.world_map = WorldMap(
-            width,
-            height,
-            self.tile_size,
-            # Metadata
-            map_name="Voronoi Map",
-            generator="VoronoiMapGenerator",
-        )
+        self.tiles = []
 
-    def add_inner(self, pos):
-        x = int(pos[0])
-        y = int(pos[1])
-        if 0 <= x < self.width and 0 <= y < self.height:
-            point = MapPoint((x, y), self.tile_size)
-            self.inners.add(point)
+        self.height_map = []
+        self.water_map = []
 
-    def add_point(self, pos):
-        x = int(pos[0])
-        y = int(pos[1])
-        if 0 <= x < self.width and 0 <= y < self.height:
-            point = MapPoint((x, y), self.tile_size)
-            self.points.add(point)
-
-    def add_road(self, nodes):
-        road = Road(*nodes)
-        self.roads.items.append(road)
-
-    def load_world_map(self, world_map):
-        for point in world_map.map_points:
-            self.add_point(point)
-
-        for road in world_map.road_nodes:
-            self.add_road(road)
-
-    def fill_world(self):
-        world_map = WorldMap(
-            self.width,
-            self.height,
-            self.tile_size,
-            # Metadata
-            map_name="Voronoi Map",
-            generator="VoronoiMapGenerator",
-        )
-        world_map.generate_points(10)
-
-        vor = Voronoi(world_map.map_points)
-        for point_id, point in enumerate(vor.vertices):
-            world_map.add_point(point_id, point)
-
-        for road_id, simplex in enumerate(vor.ridge_vertices):
-            if -1 not in simplex:  # Игнорируем рёбра, уходящие в бесконечность
-                start = vor.vertices[simplex[0]]
-                start_rect = self.get_tile_rect(*start)
-
-                end = vor.vertices[simplex[1]]
-                end_rect = self.get_tile_rect(*end)
-
-                world_map.add_road(road_id, [start_rect.center, end_rect.center])
-
-        return world_map
-
-    def fill(self):
-        world_map = self.fill_world()
-        self.load_world_map(world_map)
-        self.world_map = world_map
+    # Helpers
 
     @classmethod
-    def get_tile_rect(cls, x, y):
-        return pygame.Rect(
-            int(x) * cls.tile_size,
-            int(y) * cls.tile_size,
-            cls.tile_size,
-            cls.tile_size,
+    def int_pos(cls, pos):
+        return int(pos[0]), int(pos[1])
+
+    # Validators
+
+    def is_valid_pos(self, pos):
+        x, y = pos
+        return 0 <= x < self.width and 0 <= y < self.height
+
+    def is_valid_road(self, start, end):
+        samples = 10
+        max_height = 0.8
+
+        for i in range(samples + 1):
+            x = int(start[0] + (end[0] - start[0]) * i / samples)
+            y = int(start[1] + (end[1] - start[1]) * i / samples)
+            if self.get_tile((x, y)) > self.max_road_height or self.is_water((x, y)):
+                return False
+
+        return True
+
+    # Subitem constructors
+
+    def __create_map_point(self, pos):
+        x, y = self.int_pos(pos)
+
+        if not self.is_valid_pos((x, y)):
+            return None
+
+        point = MapPoint((x, y), self.tile_map.tile_size)
+        point.rect = self.tile_map.get_tile(point.pos)
+
+        return point
+
+    def __create_road(self, *nodes):
+        return Road(*nodes)
+
+    def create_inner(self, pos):
+        point = self.__create_map_point(pos)
+        if point:
+            self.inners.add(point)
+        return point
+
+    def create_point(self, pos):
+        point = self.__create_map_point(pos)
+        if point:
+            self.points.add(point)
+        return point
+
+    def create_road(self, nodes):
+        road = self.__create_road(*nodes)
+        self.roads.items.append(road)
+        return road
+
+    # WorldMap constructors
+
+    @classmethod
+    def create_map_object(cls, pos):
+        return Oak(None, pos)
+
+    @classmethod
+    def create_map_road(cls, start, end):
+        start_rect = cls.tile_map.get_tile(start)
+        end_rect = cls.tile_map.get_tile(end)
+
+        return MapRoad(None, [start_rect.center, end_rect.center])
+
+    # Loaders
+
+    def load_world_map(self, world_map):
+        # self.points.empty()
+        for point in world_map.map_points:
+            self.create_point(point)
+
+        for road in world_map.road_nodes:
+            self.create_road(road)
+
+    # Getters
+
+    def get_tile(self, pos):
+        x, y = pos
+        return self.tiles[y][x]
+
+    def get_tile_rect(self, pos):
+        return self.tile_map.get_tile(pos)
+
+    def is_water(self, pos):
+        tile = self.get_tile(pos)
+        return tile > self.water_level
+
+    # Road helpers
+
+    def smooth_road(self, road):
+        line = list(road) # np.array([road[0], road[1]])
+        simplified = list(line)  # rdp(line, epsilon=2.0)  # Параметр "epsilon" контролирует уровень упрощения
+        if len(simplified) > 1:
+            return simplified
+
+    # Generator
+
+    @classmethod
+    def generate(cls, width, height):
+        voronoi_map = cls(width, height)
+
+        tile_factory = TileFactory()
+        voronoi_map.tiles = tile_factory.generate(width, height)
+
+        point_factory = PointFactory(width, height)
+        centers = point_factory.generate(10)
+
+        voronoi_factory = VoronoiFactory(width, height)
+        graph = voronoi_factory.generate(centers)
+
+        world_map = WorldMap(
+            width,
+            height,
+            config.TILE_SIZE,
+            # Metadata
+            map_name="Voronoi Map",
+            generator="VoronoiMapGenerator",
         )
+        world_map.objects = [cls.create_map_object(pos) for pos in graph.points]
+        world_map.roads = [cls.create_map_road(*ridge) for ridge in graph.ridges]
+
+        voronoi_map.load_world_map(world_map)
+
+        return voronoi_map
+
+    ####
+
+    def road_weight(self, road):
+        # city1 = np.argmin([np.linalg.norm(road[0] - p) for p in points])
+        # city2 = np.argmin([np.linalg.norm(road[1] - p) for p in points])
+        weight = 1.0  # city1.size + city2.size
+        return weight
