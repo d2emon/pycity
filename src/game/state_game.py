@@ -113,25 +113,25 @@ class StateGame(Game):
         """Start game."""
         self.logger.debug("Starting game with states")
 
-        self.__state = self.STATE_PLAYING
+        self.state = self.STATE_PLAYING
 
     def stop(self):
         """Stop game."""
         self.logger.debug("Stopping game with states")
 
-        self.__state = self.STATE_EXIT
+        self.state = self.STATE_EXIT
 
     def game_win(self):
         """Win game."""
         self.logger.debug("Winning game with states")
 
-        self.__state = self.STATE_WIN
+        self.state = self.STATE_WIN
 
     def game_loose(self):
         """Loose game."""
         self.logger.debug("Loosing game with states")
 
-        self.__state = self.STATE_GAME_OVER
+        self.state = self.STATE_GAME_OVER
 
     # Game loop methods
 
