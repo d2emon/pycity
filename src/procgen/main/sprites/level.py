@@ -79,3 +79,17 @@ class Level(pygame.sprite.Sprite):
         self.inners.draw(self.image)
         self.points.draw(self.image)
         self.road_map_group.draw(self.image)
+
+    @classmethod
+    def from_world(cls, world, tile_size=config.TILE_SIZE):
+        rect = pygame.Rect(
+            0,
+            0,
+            world.width * tile_size,
+            world.height * tile_size,
+        )
+        return cls(
+            rect,
+            world,
+            tile_size,
+        )
