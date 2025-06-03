@@ -2,7 +2,7 @@ import pygame
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, tile_size=8, *groups):
+    def __init__(self, tile_size=8, level=None, *groups):
         super().__init__(*groups)
 
         self.pos = [0, 0]
@@ -13,7 +13,7 @@ class Player(pygame.sprite.Sprite):
         self.image  = pygame.Surface((tile_size, tile_size))
         self.rect = self.image.get_rect()
 
-        self.level = None
+        self.level = level
 
         self.create_image()
 
