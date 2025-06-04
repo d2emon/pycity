@@ -33,6 +33,9 @@ class World:
         self.__tiles[y][x] = value
 
     def load_world(self, world_map):
+        self.width = world_map.heightmap.width
+        self.height = world_map.heightmap.height
+
         for pos, value in world_map.heightmap.values:
             tile = self.tile_by_value(value)
             tile.rect = world_map.get_tile_rect(pos)
