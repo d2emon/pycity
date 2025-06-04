@@ -53,13 +53,13 @@ class World:
         rock_level = 0.2
 
         if value < water_level:
-            return tiles.Water()
+            return tiles.Water(value)
         elif value < grass_level:
-            return tiles.Sand()
+            return tiles.Sand(value)
         elif value < rock_level:
-            return tiles.Grass()
+            return tiles.Grass(value)
         else:
-            return tiles.Rock()
+            return tiles.Rock(value)
 
     # Генерация карты с помощью шума Перлина
     @classmethod

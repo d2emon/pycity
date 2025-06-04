@@ -7,11 +7,13 @@ class Tile(pygame.sprite.Sprite):
     is_solid = False
     size = config.TILE_SIZE
 
-    def __init__(self, *groups):
+    def __init__(self, height=1.0, *groups):
         super().__init__(*groups)
 
         self.image  = pygame.Surface((self.size, self.size))
         self.rect = self.image.get_rect()
+
+        self.height = height
 
         self.create_image()
 
