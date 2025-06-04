@@ -23,17 +23,7 @@ class VoronoiMap:
 
         self.heightmap = Heightmap(width, height)
 
-    # Helpers
-
-    @classmethod
-    def int_pos(cls, pos):
-        return int(pos[0]), int(pos[1])
-
     # Validators
-
-    def is_valid_pos(self, pos):
-        x, y = pos
-        return 0 <= x < self.width and 0 <= y < self.height
 
     def is_valid_road(self, start, end):
         samples = 10
