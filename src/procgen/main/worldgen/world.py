@@ -1,11 +1,12 @@
-from procgen.world_map.heightmap import Heightmap
 from ..sprites import tiles
 from .vor_map import VoronoiMap
 
 
-class World(Heightmap):
+class World:
     def __init__(self, width, height):
-        super().__init__(width, height)
+        self.width = width
+        self.height = height
+
         self.__tiles = [
             [None for _ in range(width)]
             for _ in range(height)
@@ -32,9 +33,7 @@ class World(Heightmap):
         self.__tiles[y][x] = value
 
     def load_world(self, world_map):
-        self.load(world_map.tiles)
-
-        for pos, value in self.values:
+        for pos, value in world_map.heightmap.values:
             tile = self.tile_by_value(value)
             tile.rect = world_map.get_tile_rect(pos)
             self.set_tile(pos, tile)
