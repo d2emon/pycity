@@ -11,8 +11,8 @@ class World:
             for _ in range(height)
         ]
 
-        self.points = None
-        self.inners = None
+        self.points = []
+        self.inners = []
         self.roads = None
 
     def get_tile(self, pos):
@@ -40,8 +40,7 @@ class World:
             tile.rect = world_map.get_tile_rect(pos)
             self.set_tile(pos, tile)
 
-        self.points = world_map.points
-        self.inners = world_map.inners
+        self.points = [point for point in world_map.points if point is not None]
         self.roads = world_map.roads
 
     @classmethod
