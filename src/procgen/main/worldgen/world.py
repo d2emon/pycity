@@ -9,11 +9,10 @@ class World:
         self.width = width
         self.height = height
 
-        self.points = []
-        self.inners = []
         self.roads = Roads()
 
-        self.tiles = Tiles(width, height)
+        self.tiles = None
+        self.map_points = []
 
     @classmethod
     def load(cls, world_map):
@@ -23,13 +22,7 @@ class World:
         )
 
         world.tiles = Tiles.load(world_map.heightmap, world_map.tile_map)
-
-        world.points = []
-        for map_object in world_map.map_points:
-            pos = map_object.pos
-            point = MapPoint(pos, world_map.tile_map.tile_size)
-            point.rect = world_map.tile_map.get_tile(pos)
-            world.points.append(point)
+        world.map_points = world_map.map_points
 
         world.roads = Roads()
         for nodes in world_map.road_nodes:

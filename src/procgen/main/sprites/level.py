@@ -1,6 +1,7 @@
 import pygame
 import config
 from sprites.background import Background
+from .map_points import MapPoint
 from .road_map import RoadMap
 from ..worldgen.tile_map import TileMap
 
@@ -42,12 +43,13 @@ class Level(pygame.sprite.Sprite):
                 self.land.add(tile)
 
         self.points.empty()
-        for p in world.points:
-            self.points.add(p)
+        for map_object in world.map_points:
+            pos = map_object.pos
+            point = MapPoint(pos, world.tiles.tile_size)
+            point.rect = world.tiles.get_tile(pos)
+            self.points.add(point)
 
         self.inners.empty()
-        for p in world.inners:
-            self.inners.add(p)
 
         world.roads.draw(self.road_map)
 
