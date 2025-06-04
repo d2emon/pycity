@@ -22,6 +22,7 @@ class Level(pygame.sprite.Sprite):
         self.background = Background(self.image.get_rect(), (0, 128, 0))
 
         self.world = world
+        self.tiles = world.tiles
         self.tile_map = TileMap(tile_size)
 
         self.land = pygame.sprite.Group()
@@ -35,18 +36,19 @@ class Level(pygame.sprite.Sprite):
 
     def load(self, world):
         self.world = world
+        self.tiles = world.tiles
 
         self.land.empty()
         for y in range(world.height):
             for x in range(world.width):
-                tile = world.tiles.get_tile((x, y))
+                tile = self.tiles.get_tile((x, y))
                 self.land.add(tile)
 
         self.points.empty()
         for map_object in world.map_points:
             pos = map_object.pos
-            point = MapPoint(pos, world.tiles.tile_size)
-            point.rect = world.tiles.get_tile(pos)
+            point = MapPoint(pos, self.tiles.tile_size)
+            point.rect = self.tiles.get_tile(pos)
             self.points.add(point)
 
         self.inners.empty()
@@ -58,7 +60,7 @@ class Level(pygame.sprite.Sprite):
     def can_move(self, x, y):
         player_pos = self.tile_map.get_pos((x, y))
 
-        tile = self.world.tiles.get_tile(player_pos)
+        tile = self.tiles.get_tile(player_pos)
 
         if tile is None:
             return False
