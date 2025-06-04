@@ -24,10 +24,8 @@ class MainScreenGroup(ScreenGroup):
         return Background(self.rect, (128, 128, 128))
 
     def create_level(self):
-        world = World(config.MAP_WIDTH, config.MAP_HEIGHT)
-
         world_map = generate_world(config.MAP_WIDTH, config.MAP_HEIGHT, config.TILE_SIZE)
-        world.load(world_map)
+        world = World.load(world_map)
 
         return Level.from_world(
             world,

@@ -33,26 +33,29 @@ class World:
 
         self.__tiles[y][x] = value
 
-    def load(self, world_map):
-        self.width = world_map.heightmap.width
-        self.height = world_map.heightmap.height
+    @classmethod
+    def load(cls, world_map):
+        world = cls(
+            world_map.heightmap.width,
+            world_map.heightmap.height,
+        )
 
         for pos, value in world_map.heightmap.values:
-            tile = self.tile_by_value(value)
+            tile = world.tile_by_value(value)
             tile.rect = world_map.tile_map.get_tile(pos)
-            self.set_tile(pos, tile)
+            world.set_tile(pos, tile)
 
-        self.points = []
+        world.points = []
         for map_object in world_map.map_points:
             pos = map_object.pos
             point = MapPoint(pos, world_map.tile_map.tile_size)
             point.rect = world_map.tile_map.get_tile(pos)
-            self.points.append(point)
+            world.points.append(point)
 
-        self.roads = Roads()
+        world.roads = Roads()
         for nodes in world_map.road_nodes:
             road = Road(*nodes)
-            self.roads.items.append(road)
+            world.roads.items.append(road)
 
     @classmethod
     def tile_by_value(cls, value):
