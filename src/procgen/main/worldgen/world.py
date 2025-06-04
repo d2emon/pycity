@@ -1,3 +1,4 @@
+from procgen.world_map.tiles import Tiles
 from ..sprites import tiles
 from ..sprites.map_points import MapPoint
 from .roads import Road, Roads
@@ -8,30 +9,11 @@ class World:
         self.width = width
         self.height = height
 
-        self.__tiles = [
-            [None for _ in range(width)]
-            for _ in range(height)
-        ]
-
         self.points = []
         self.inners = []
         self.roads = Roads()
 
-    def get_tile(self, pos):
-        x, y = pos
-
-        if y < 0 or y >= self.height or x < 0 or x >= self.width:
-            return None
-
-        return self.__tiles[y][x]
-
-    def set_tile(self, pos, value):
-        x, y = pos
-
-        if y < 0 or y >= self.height or x < 0 or x >= self.width:
-            return
-
-        self.__tiles[y][x] = value
+        self.tiles = Tiles(width, height)
 
     @classmethod
     def load(cls, world_map):
@@ -40,10 +22,7 @@ class World:
             world_map.heightmap.height,
         )
 
-        for pos, value in world_map.heightmap.values:
-            tile = world.tile_by_value(value)
-            tile.rect = world_map.tile_map.get_tile(pos)
-            world.set_tile(pos, tile)
+        world.tiles = Tiles.load(world_map.heightmap, world_map.tile_map)
 
         world.points = []
         for map_object in world_map.map_points:
@@ -56,6 +35,8 @@ class World:
         for nodes in world_map.road_nodes:
             road = Road(*nodes)
             world.roads.items.append(road)
+
+        return world
 
     @classmethod
     def tile_by_value(cls, value):
