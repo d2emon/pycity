@@ -1,5 +1,6 @@
 import pygame
 import config
+from procgen.world_map.heightmap import Heightmap
 from .map_objects.road import Road as MapRoad
 from .map_objects.tree import Oak
 from .point_factory import PointFactory
@@ -14,7 +15,6 @@ from ..sprites.map_points import MapPoint
 
 class VoronoiMap:
     tile_map = TileMap(config.TILE_SIZE)
-    water_level = -0.2
     max_road_height = 0.8
 
     def __init__(self, width, height):
@@ -25,10 +25,7 @@ class VoronoiMap:
         self.points = pygame.sprite.Group()
         self.roads = Roads()
 
-        self.tiles = []
-
-        self.height_map = []
-        self.water_map = []
+        self.heightmap = Heightmap(width, height)
 
     # Helpers
 
@@ -49,7 +46,8 @@ class VoronoiMap:
         for i in range(samples + 1):
             x = int(start[0] + (end[0] - start[0]) * i / samples)
             y = int(start[1] + (end[1] - start[1]) * i / samples)
-            if self.get_tile((x, y)) > self.max_road_height or self.is_water((x, y)):
+            pos = x, y
+            if self.height.get_value(pos) > self.max_road_height or self.heightmap.is_water(pos):
                 return False
 
         return True
@@ -112,16 +110,8 @@ class VoronoiMap:
 
     # Getters
 
-    def get_tile(self, pos):
-        x, y = pos
-        return self.tiles[y][x]
-
     def get_tile_rect(self, pos):
         return self.tile_map.get_tile(pos)
-
-    def is_water(self, pos):
-        tile = self.get_tile(pos)
-        return tile > self.water_level
 
     # Road helpers
 
@@ -138,7 +128,8 @@ class VoronoiMap:
         voronoi_map = cls(width, height)
 
         tile_factory = TileFactory()
-        voronoi_map.tiles = tile_factory.generate(width, height)
+        tiles = tile_factory.generate(width, height)
+        voronoi_map.heightmap.load(tiles)
 
         point_factory = PointFactory(width, height)
         centers = point_factory.generate(10)
