@@ -12,6 +12,7 @@ from sprites.screen import ScreenGroup
 from .sprites.level import Level
 from .sprites.player import Player
 from .worldgen.world import World
+from .worldgen.vor_map import VoronoiMap
 
 
 class MainScreenGroup(ScreenGroup):
@@ -24,7 +25,9 @@ class MainScreenGroup(ScreenGroup):
 
     def create_level(self):
         world = World(config.MAP_WIDTH, config.MAP_HEIGHT)
-        world.generate_voronoi()
+
+        voronoi_map = VoronoiMap.generate(config.MAP_WIDTH, config.MAP_HEIGHT)
+        world.load(voronoi_map)
 
         return Level.from_world(
             world,

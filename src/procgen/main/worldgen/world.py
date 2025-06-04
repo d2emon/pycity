@@ -1,5 +1,4 @@
 from ..sprites import tiles
-from .vor_map import VoronoiMap
 
 
 class World:
@@ -32,7 +31,7 @@ class World:
 
         self.__tiles[y][x] = value
 
-    def load_world(self, world_map):
+    def load(self, world_map):
         self.width = world_map.heightmap.width
         self.height = world_map.heightmap.height
 
@@ -44,10 +43,6 @@ class World:
         self.points = world_map.points
         self.inners = world_map.inners
         self.roads = world_map.roads
-
-    def generate_voronoi(self):
-        world_map = VoronoiMap.generate(self.width, self.height)
-        self.load_world(world_map)
 
     @classmethod
     def tile_by_value(cls, value):
