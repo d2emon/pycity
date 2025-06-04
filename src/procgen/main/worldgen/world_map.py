@@ -70,8 +70,6 @@ class WorldMap:
         self.roads.append(point)
         return point
 
-    ####
-
     # Helpers
 
     @classmethod
@@ -83,6 +81,8 @@ class WorldMap:
     def is_valid_pos(self, pos):
         x, y = pos
         return 0 <= x < self.width and 0 <= y < self.height
+
+    # Getters
 
     def get_valid_pos(self, pos):
         x, y = self.int_pos(pos)
