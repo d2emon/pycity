@@ -3,6 +3,7 @@ from .map_objects.road import Road
 from .map_objects.tree import Oak
 from .rpg import RPGMap
 from .terrain import Grass, Rock, Water, TerrainData
+from .tile_map import TileMap
 
 
 class WorldMap:
@@ -13,6 +14,8 @@ class WorldMap:
         tile_size=8,
         **metadata,
     ):
+        self.tile_map = TileMap(tile_size)
+
         # Metadata
         self.width = width
         self.height = height
@@ -66,7 +69,7 @@ class WorldMap:
         return point
 
     def add_road(self, object_id, nodes):
-        point = Road(object_id, nodes)
+        point = Road(object_id, [self.tile_map.get_center(point) for point in nodes])
         self.roads.append(point)
         return point
 
