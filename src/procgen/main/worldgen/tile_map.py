@@ -19,3 +19,9 @@ class TileMap:
         tile_x = x // self.tile_size
         tile_y = y // self.tile_size
         return tile_x, tile_y
+
+    def get_center(self, pos):
+        tile_x, tile_y = pos
+        x = tile_x * self.tile_size + self.tile_size // 2
+        y = tile_y * self.tile_size + self.tile_size // 2
+        return x, y
