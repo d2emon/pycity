@@ -1,19 +1,15 @@
-import noise
+from procgen.world_map.heightmap import Heightmap
 from ..sprites import tiles
 from .vor_map import VoronoiMap
 
 
-class World:
+class World(Heightmap):
     def __init__(self, width, height):
-        self.width = width
-        self.height = height
-
-        self.__items = []
-        for _ in range(height):
-            row = []
-            for _ in range(width):
-                row.append(None)
-            self.__items.append(row)
+        super().__init__(width, height)
+        self.__tiles = [
+            [None for _ in range(width)]
+            for _ in range(height)
+        ]
 
         self.points = None
         self.inners = None
@@ -25,26 +21,31 @@ class World:
         if y < 0 or y >= self.height or x < 0 or x >= self.width:
             return None
 
-        return self.__items[y][x]
+        return self.__tiles[y][x]
 
-    def set_tile(self, pos, tile):
+    def set_tile(self, pos, value):
         x, y = pos
-        self.__items[y][x] = tile
 
-    def create_tile(self, pos, value):
-        tile = self.tile_by_value(value)
-        self.set_tile(pos, tile)
-        return tile
+        if y < 0 or y >= self.height or x < 0 or x >= self.width:
+            return
 
-    def load(self, world_map):
-        for y, row in enumerate(world_map.tiles):
-            for x, value in enumerate(row):
-                tile = self.create_tile((x, y), value)
-                tile.rect = world_map.get_tile_rect((x, y))
+        self.__tiles[y][x] = value
+
+    def load_world(self, world_map):
+        self.load(world_map.tiles)
+
+        for pos, value in self.values:
+            tile = self.tile_by_value(value)
+            tile.rect = world_map.get_tile_rect(pos)
+            self.set_tile(pos, tile)
 
         self.points = world_map.points
         self.inners = world_map.inners
         self.roads = world_map.roads
+
+    def generate_voronoi(self):
+        world_map = VoronoiMap.generate(self.width, self.height)
+        self.load_world(world_map)
 
     @classmethod
     def tile_by_value(cls, value):
@@ -60,14 +61,3 @@ class World:
             return tiles.Grass(value)
         else:
             return tiles.Rock(value)
-
-    # Генерация карты с помощью шума Перлина
-    @classmethod
-    def generate_map(cls, width, height):
-        world = cls(width, height)
-
-        world_map = VoronoiMap.generate(width, height)
-        world.load(world_map)
-
-        return world
-

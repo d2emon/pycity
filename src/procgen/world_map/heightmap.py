@@ -20,15 +20,18 @@ class Heightmap:
         x, y = pos
 
         if y < 0 or y >= self.height or x < 0 or x >= self.width:
-            self.__items[y][x] = value
+            return
+
+        self.__items[y][x] = value
 
     def load(self, data):
         for y, row in enumerate(data):
             for x, value in enumerate(row):
+                print(x, y, value)
                 self.set_value((x, y), value)
 
     @property
     def values(self):
         for y in range(self.height):
             for x in range(self.width):
-                yield (x, y), value
+                yield (x, y), self.get_value((x, y))
