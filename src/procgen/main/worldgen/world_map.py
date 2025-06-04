@@ -1,6 +1,8 @@
 import random
+from procgen.world_map.tiles import Tiles
 from .map_objects.road import Road
 from .map_objects.tree import Oak
+from .roads import Road as RoadData, Roads
 from .rpg import RPGMap
 from .terrain import Grass, Rock, Water, TerrainData
 from .tile_map import TileMap
@@ -62,6 +64,15 @@ class WorldMap:
     @property
     def road_nodes(self):
         return [road.nodes for road in self.roads]
+
+    @property
+    def road_data(self):
+        roads = [RoadData(*road.nodes) for road in self.roads]
+        return Roads(*roads)
+
+    @property
+    def tiles(self):
+        return Tiles.load(self.heightmap, self.tile_map)
 
     def add_point(self, object_id, pos):
         point = Oak(object_id, pos)

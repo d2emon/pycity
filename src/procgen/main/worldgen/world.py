@@ -1,7 +1,4 @@
 from procgen.world_map.tiles import Tiles
-from ..sprites import tiles
-from ..sprites.map_points import MapPoint
-from .roads import Road, Roads
 
 
 class World:
@@ -9,10 +6,9 @@ class World:
         self.width = width
         self.height = height
 
-        self.roads = Roads()
-
         self.tiles = None
         self.map_points = []
+        self.road_data = None
 
     @classmethod
     def load(cls, world_map):
@@ -21,12 +17,8 @@ class World:
             world_map.heightmap.height,
         )
 
-        world.tiles = Tiles.load(world_map.heightmap, world_map.tile_map)
+        world.tiles = world_map.tiles
         world.map_points = world_map.map_points
-
-        world.roads = Roads()
-        for nodes in world_map.road_nodes:
-            road = Road(*nodes)
-            world.roads.items.append(road)
+        world.road_data = world_map.road_data
 
         return world
