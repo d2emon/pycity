@@ -1,8 +1,13 @@
+import config
 from ..sprites import tiles
 from ..sprites.map_points import MapPoint
+from .roads import Road, Roads
+from .tile_map import TileMap
 
 
 class World:
+    tile_map = TileMap(config.TILE_SIZE)
+
     def __init__(self, width, height):
         self.width = width
         self.height = height
@@ -14,7 +19,7 @@ class World:
 
         self.points = []
         self.inners = []
-        self.roads = None
+        self.roads = Roads()
 
     def get_tile(self, pos):
         x, y = pos
@@ -38,17 +43,20 @@ class World:
 
         for pos, value in world_map.heightmap.values:
             tile = self.tile_by_value(value)
-            tile.rect = world_map.get_tile_rect(pos)
+            tile.rect = self.tile_map.get_tile(pos)
             self.set_tile(pos, tile)
 
         self.points = []
-        for map_object in world_map.points:
+        for map_object in world_map.map_points:
             pos = map_object.pos
-            point = MapPoint(pos, world_map.tile_map.tile_size)
-            point.rect = world_map.tile_map.get_tile(pos)
+            point = MapPoint(pos, self.tile_map.tile_size)
+            point.rect = self.tile_map.get_tile(pos)
             self.points.append(point)
 
-        self.roads = world_map.roads
+        self.roads = Roads()
+        for nodes in world_map.road_nodes:
+            road = Road(*nodes)
+            self.roads.items.append(road)
 
     @classmethod
     def tile_by_value(cls, value):
