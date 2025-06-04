@@ -41,7 +41,6 @@ class VoronoiMap:
 
     def is_valid_road(self, start, end):
         samples = 10
-        max_height = 0.8
 
         for i in range(samples + 1):
             x = int(start[0] + (end[0] - start[0]) * i / samples)
