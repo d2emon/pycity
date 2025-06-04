@@ -1,7 +1,6 @@
 import pygame
 import config
 from procgen.world_map.heightmap import Heightmap
-from .map_objects.road import Road as MapRoad
 from .point_factory import PointFactory
 from .roads import Road, Roads
 from .tile_factory import TileFactory
@@ -39,22 +38,10 @@ class VoronoiMap:
 
     # Subitem constructors
 
-    def __create_road(self, *nodes):
-        return Road(*nodes)
-
     def create_road(self, nodes):
-        road = self.__create_road(*nodes)
+        road = Road(*nodes)
         self.roads.items.append(road)
         return road
-
-    # WorldMap constructors
-
-    @classmethod
-    def create_map_road(cls, start, end):
-        start_rect = cls.tile_map.get_tile(start)
-        end_rect = cls.tile_map.get_tile(end)
-
-        return MapRoad(None, [start_rect.center, end_rect.center])
 
     # Getters
 
@@ -94,7 +81,11 @@ class VoronoiMap:
         for pos in graph.points:
             world_map.add_point(None, pos)
 
-        world_map.roads = [cls.create_map_road(*ridge) for ridge in graph.ridges]
+        for ridge in graph.ridges:
+            world_map.add_road(
+                None,
+                [cls.tile_map.get_center(point) for point in ridge],
+            )
 
         voronoi_map = cls(width, height)
         voronoi_map.heightmap = world_map.heightmap
