@@ -4,9 +4,11 @@ from procgen.main.worldgen.roads import Road, Roads
 
 
 class Tiles:
-    def __init__(self, width, height):
+    def __init__(self, width, height, tile_map):
         self.width = width
         self.height = height
+        self.__tile_map = tile_map
+        self.tile_size = tile_map.tile_size
         self.__tiles = [
             [None for _ in range(width)]
             for _ in range(height)
@@ -61,6 +63,7 @@ class Tiles:
         tiles = cls(
             heightmap.width,
             heightmap.height,
+            tile_map,
         )
 
         for pos, value in heightmap.values:
