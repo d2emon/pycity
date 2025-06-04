@@ -1,4 +1,5 @@
 from ..sprites import tiles
+from ..sprites.map_points import MapPoint
 
 
 class World:
@@ -40,7 +41,13 @@ class World:
             tile.rect = world_map.get_tile_rect(pos)
             self.set_tile(pos, tile)
 
-        self.points = [point for point in world_map.points if point is not None]
+        self.points = []
+        for map_object in world_map.points:
+            pos = map_object.pos
+            point = MapPoint(pos, world_map.tile_map.tile_size)
+            point.rect = world_map.tile_map.get_tile(pos)
+            self.points.append(point)
+
         self.roads = world_map.roads
 
     @classmethod

@@ -2,15 +2,12 @@ import pygame
 import config
 from procgen.world_map.heightmap import Heightmap
 from .map_objects.road import Road as MapRoad
-from .map_objects.tree import Oak
 from .point_factory import PointFactory
-from .points import Points
 from .roads import Road, Roads
 from .tile_factory import TileFactory
 from .tile_map import TileMap
 from .voronoi_factory import VoronoiFactory
 from .world_map import WorldMap
-from ..sprites.map_points import MapPoint
 
 
 class VoronoiMap:
@@ -52,17 +49,6 @@ class VoronoiMap:
 
     # Subitem constructors
 
-    def create_map_point(self, pos):
-        x, y = self.int_pos(pos)
-
-        if not self.is_valid_pos((x, y)):
-            return None
-
-        point = MapPoint((x, y), self.tile_map.tile_size)
-        point.rect = self.tile_map.get_tile(point.pos)
-
-        return point
-
     def __create_road(self, *nodes):
         return Road(*nodes)
 
@@ -72,10 +58,6 @@ class VoronoiMap:
         return road
 
     # WorldMap constructors
-
-    @classmethod
-    def create_map_object(cls, pos):
-        return Oak(None, pos)
 
     @classmethod
     def create_map_road(cls, start, end):
@@ -101,14 +83,6 @@ class VoronoiMap:
 
     @classmethod
     def generate(cls, width, height):
-        voronoi_map = cls(width, height)
-
-        point_factory = PointFactory(width, height)
-        centers = point_factory.generate(10)
-
-        voronoi_factory = VoronoiFactory(width, height)
-        graph = voronoi_factory.generate(centers)
-
         world_map = WorldMap(
             width,
             height,
@@ -117,14 +91,24 @@ class VoronoiMap:
             map_name="Voronoi Map",
             generator="VoronoiMapGenerator",
         )
-        world_map.objects = [cls.create_map_object(pos) for pos in graph.points]
-        world_map.roads = [cls.create_map_road(*ridge) for ridge in graph.ridges]
 
         tile_factory = TileFactory()
-        voronoi_map.heightmap = tile_factory.generate(width, height)
+        world_map.heightmap = tile_factory.generate(width, height)
 
-        voronoi_map.points = [voronoi_map.create_map_point(pos) for pos in world_map.map_points]
+        point_factory = PointFactory(width, height)
+        centers = point_factory.generate(10)
 
+        voronoi_factory = VoronoiFactory(width, height)
+        graph = voronoi_factory.generate(centers)
+
+        for pos in graph.points:
+            world_map.add_point(None, pos)
+
+        world_map.roads = [cls.create_map_road(*ridge) for ridge in graph.ridges]
+
+        voronoi_map = cls(width, height)
+        voronoi_map.heightmap = world_map.heightmap
+        voronoi_map.points = world_map.map_points
         for road in world_map.road_nodes:
             voronoi_map.create_road(road)
 

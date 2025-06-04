@@ -30,6 +30,8 @@ class WorldMap:
         self.roads = []
         self.rpg = RPGMap()
 
+        self.heightmap = None
+
     @property
     def metadata(self):
         return {
@@ -48,7 +50,11 @@ class WorldMap:
 
     @property
     def map_points(self):
-        return [point.pos for point in self.objects]
+        for map_object in self.objects:
+            pos = self.get_valid_pos(map_object.pos)
+            if pos:
+                map_object.pos = pos
+                yield map_object
 
     @property
     def road_nodes(self):
@@ -63,3 +69,25 @@ class WorldMap:
         point = Road(object_id, nodes)
         self.roads.append(point)
         return point
+
+    ####
+
+    # Helpers
+
+    @classmethod
+    def int_pos(cls, pos):
+        return int(pos[0]), int(pos[1])
+
+    # Validators
+
+    def is_valid_pos(self, pos):
+        x, y = pos
+        return 0 <= x < self.width and 0 <= y < self.height
+
+    def get_valid_pos(self, pos):
+        x, y = self.int_pos(pos)
+
+        if not self.is_valid_pos((x, y)):
+            return None
+
+        return x, y
