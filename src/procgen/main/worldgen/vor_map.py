@@ -128,8 +128,7 @@ class VoronoiMap:
         voronoi_map = cls(width, height)
 
         tile_factory = TileFactory()
-        tiles = tile_factory.generate(width, height)
-        voronoi_map.heightmap.load(tiles)
+        voronoi_map.heightmap = tile_factory.generate(width, height)
 
         point_factory = PointFactory(width, height)
         centers = point_factory.generate(10)

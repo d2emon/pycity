@@ -1,4 +1,5 @@
 import noise
+from procgen.world_map.heightmap import Heightmap
 
 
 class TileFactory:
@@ -37,7 +38,9 @@ class TileFactory:
         return roads
 
     def generate(self, width, height):
-        return [
+        heightmap = Heightmap(width, height)
+        heightmap.load([
             [self.generate_tile(x, y) for x in range(width)]
             for y in range(height)
-        ]
+        ])
+        return heightmap
