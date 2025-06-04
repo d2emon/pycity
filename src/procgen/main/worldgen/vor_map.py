@@ -21,8 +21,7 @@ class VoronoiMap:
         self.width = width
         self.height = height
 
-        self.inners = pygame.sprite.Group()
-        self.points = pygame.sprite.Group()
+        self.points = []
         self.roads = Roads()
 
         self.heightmap = Heightmap(width, height)
@@ -53,7 +52,7 @@ class VoronoiMap:
 
     # Subitem constructors
 
-    def __create_map_point(self, pos):
+    def create_map_point(self, pos):
         x, y = self.int_pos(pos)
 
         if not self.is_valid_pos((x, y)):
@@ -66,18 +65,6 @@ class VoronoiMap:
 
     def __create_road(self, *nodes):
         return Road(*nodes)
-
-    def create_inner(self, pos):
-        point = self.__create_map_point(pos)
-        if point:
-            self.inners.add(point)
-        return point
-
-    def create_point(self, pos):
-        point = self.__create_map_point(pos)
-        if point:
-            self.points.add(point)
-        return point
 
     def create_road(self, nodes):
         road = self.__create_road(*nodes)
@@ -96,16 +83,6 @@ class VoronoiMap:
         end_rect = cls.tile_map.get_tile(end)
 
         return MapRoad(None, [start_rect.center, end_rect.center])
-
-    # Loaders
-
-    def load_world_map(self, world_map):
-        # self.points.empty()
-        for point in world_map.map_points:
-            self.create_point(point)
-
-        for road in world_map.road_nodes:
-            self.create_road(road)
 
     # Getters
 
@@ -126,9 +103,6 @@ class VoronoiMap:
     def generate(cls, width, height):
         voronoi_map = cls(width, height)
 
-        tile_factory = TileFactory()
-        voronoi_map.heightmap = tile_factory.generate(width, height)
-
         point_factory = PointFactory(width, height)
         centers = point_factory.generate(10)
 
@@ -146,7 +120,13 @@ class VoronoiMap:
         world_map.objects = [cls.create_map_object(pos) for pos in graph.points]
         world_map.roads = [cls.create_map_road(*ridge) for ridge in graph.ridges]
 
-        voronoi_map.load_world_map(world_map)
+        tile_factory = TileFactory()
+        voronoi_map.heightmap = tile_factory.generate(width, height)
+
+        voronoi_map.points = [voronoi_map.create_map_point(pos) for pos in world_map.map_points]
+
+        for road in world_map.road_nodes:
+            voronoi_map.create_road(road)
 
         return voronoi_map
 
