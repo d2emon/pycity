@@ -11,7 +11,6 @@ from .world_map import WorldMap
 
 class VoronoiMap:
     tile_map = TileMap(config.TILE_SIZE)
-    max_road_height = 0.8
 
     def __init__(self, width, height):
         self.width = width
@@ -21,20 +20,6 @@ class VoronoiMap:
         self.roads = Roads()
 
         self.heightmap = Heightmap(width, height)
-
-    # Validators
-
-    def is_valid_road(self, start, end):
-        samples = 10
-
-        for i in range(samples + 1):
-            x = int(start[0] + (end[0] - start[0]) * i / samples)
-            y = int(start[1] + (end[1] - start[1]) * i / samples)
-            pos = x, y
-            if self.height.get_value(pos) > self.max_road_height or self.heightmap.is_water(pos):
-                return False
-
-        return True
 
     # Subitem constructors
 
@@ -47,14 +32,6 @@ class VoronoiMap:
 
     def get_tile_rect(self, pos):
         return self.tile_map.get_tile(pos)
-
-    # Road helpers
-
-    def smooth_road(self, road):
-        line = list(road) # np.array([road[0], road[1]])
-        simplified = list(line)  # rdp(line, epsilon=2.0)  # Параметр "epsilon" контролирует уровень упрощения
-        if len(simplified) > 1:
-            return simplified
 
     # Generator
 
@@ -94,11 +71,3 @@ class VoronoiMap:
             voronoi_map.create_road(road)
 
         return voronoi_map
-
-    ####
-
-    def road_weight(self, road):
-        # city1 = np.argmin([np.linalg.norm(road[0] - p) for p in points])
-        # city2 = np.argmin([np.linalg.norm(road[1] - p) for p in points])
-        weight = 1.0  # city1.size + city2.size
-        return weight
