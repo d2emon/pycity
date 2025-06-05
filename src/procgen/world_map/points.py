@@ -1,7 +1,7 @@
 import random
 import pygame
 import config
-from ..sprites.map_points import MapPoint
+from procgen.main.sprites.map_points import MapPoint
 
 
 class Points(pygame.sprite.Group):
