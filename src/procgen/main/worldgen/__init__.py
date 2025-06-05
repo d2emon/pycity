@@ -1,7 +1,7 @@
+from procgen.world_map.world import World
 from .point_factory import PointFactory
 from .tile_factory import TileFactory
 from .voronoi_factory import VoronoiFactory
-from .world import World
 
 
 def generate_world(width, height, tile_size):

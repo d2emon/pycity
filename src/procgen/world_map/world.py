@@ -1,11 +1,11 @@
 import random
-from procgen.world_map.tiles import Tiles
-from .map_objects.road import Road
-from .map_objects.tree import Oak
-from .roads import Road as RoadData, Roads
-from .rpg import RPGMap
-from .terrain import Grass, Rock, Water, TerrainData
-from .tile_map import TileMap
+from procgen.main.worldgen.map_objects.road import Road
+from procgen.main.worldgen.map_objects.tree import Oak
+from procgen.main.worldgen.roads import Road as RoadData, Roads
+from procgen.main.worldgen.rpg import RPGMap
+from procgen.main.worldgen.terrain import Grass, Rock, Water, TerrainData
+from procgen.main.worldgen.tile_map import TileMap
+from .tiles import Tiles
 
 
 class World:
