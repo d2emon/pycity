@@ -141,8 +141,9 @@ class RoadFactory:
             else:
                 stack.append(self.current_branch(new_pos, angle, steps))
 
-    def generate_from_centre(self, pos, max_steps, branch_prob=0.3):
+    def generate_from_center(self, pos):
         angle = random.randint(45, 360)
+        max_steps = random.randint(3, 6)
         while angle < 360:
-            yield from self.generate_l_roads(pos, angle, max_steps, branch_prob)
+            yield from self.generate_l_roads(pos, angle, max_steps, 0.2)
             angle += random.randint(45, 360)

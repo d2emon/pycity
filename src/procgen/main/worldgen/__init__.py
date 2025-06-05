@@ -34,11 +34,11 @@ def generate_world(width, height, tile_size):
         world.add_road(None, road)
 
     for center in graph.centers:
-        for road in road_factory.generate_from_centre(center, 5):
+        for road in road_factory.generate_from_center(center):
             world.add_road(None, road)
 
     for center in graph.points:
-        for road in road_factory.generate_from_centre(center, 5):
+        for road in road_factory.generate_from_center(center):
             world.add_road(None, road)
 
     return world
