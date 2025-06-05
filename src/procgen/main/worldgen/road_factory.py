@@ -7,6 +7,7 @@ class RoadData:
     def __init__(self, start, end):
         self.start = start
         self.end = end
+        self.weight = 1
         self.is_correct = True
 
     @property
@@ -110,6 +111,7 @@ class RoadFactory:
     def from_nodes(self, start, end):
         road = RoadData(start, end)
         road.is_correct = self.is_valid_road(road)
+        road.weight = 2
         return road
 
     def generate_l_roads(self, start_pos, start_angle, max_steps, branch_prob=0.3):
