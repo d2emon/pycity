@@ -8,7 +8,7 @@ from .terrain import Grass, Rock, Water, TerrainData
 from .tile_map import TileMap
 
 
-class WorldMap:
+class World:
     def __init__(
         self,
         width=255,
