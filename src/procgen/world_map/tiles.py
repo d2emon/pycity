@@ -56,6 +56,10 @@ class Tiles:
         x, y = valid_pos
         self.__tiles[y][x] = value
 
+    def get_tile_by_pos(self, pos):
+        tile_pos = self.__tile_map.get_pos(pos)
+        return self.get_tile(tile_pos)
+
     ####
 
     @classmethod
