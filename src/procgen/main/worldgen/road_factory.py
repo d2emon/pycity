@@ -1,3 +1,8 @@
+import math
+import random
+from collections import deque
+
+
 class RoadData:
     def __init__(self, start, end):
         self.start = start
@@ -55,3 +60,78 @@ class RoadFactory:
         # city1 = np.argmin([np.linalg.norm(road[0] - p) for p in points])
         # city2 = np.argmin([np.linalg.norm(road[1] - p) for p in points])
         return city1.size + city2.size
+
+    # L Roads
+
+    @classmethod
+    def next_point(cls, pos, angle, length=10):
+        """Вычисляем следующую точку"""
+        return [
+            int(pos[0] + length * math.cos(math.radians(angle))),
+            int(pos[1] + length * math.sin(math.radians(angle))),
+        ]
+
+    # Левое ответвление
+    @classmethod
+    def left_branch(cls, pos, angle, steps):
+        return (
+            pos,
+            angle - random.randint(30, 45),  # Угол поворота
+            steps - 1
+        )
+
+
+    # Продолжаем текущую ветку
+    @classmethod
+    def right_branch(cls, pos, angle, steps):
+        return (
+            pos,
+            angle + random.randint(30, 45),  # Небольшой изгиб
+            steps - 1
+        )
+
+
+    # Правое ответвление
+    @classmethod
+    def current_branch(cls, pos, angle, steps):
+        return (
+            pos,
+            angle + random.randint(-15, 15),
+            steps - 1
+        )
+
+    def generate_l_roads(self, start_pos, start_angle, max_steps, branch_prob=0.3):
+        """Генерирует дорогу с ответвлениями через L-систему."""
+        
+        min_length = 1
+        max_length = 5
+
+        # Инициализация
+        stack = deque()
+        stack.append((start_pos, start_angle, max_steps))
+        
+        while stack:
+            pos, angle, steps = stack.pop()
+            
+            if steps <= 0:
+                continue
+
+            length = random.randint(min_length, max_length)            
+            new_pos = self.next_point(pos, angle, length)
+            yield [
+                pos,
+                new_pos,
+            ]
+            
+            # Решаем, создавать ли ветвление
+            if random.random() < branch_prob and steps > 1:
+                stack.append(self.left_branch(new_pos, angle, steps))
+                stack.append(self.right_branch(new_pos, angle, steps))
+            else:
+                stack.append(self.current_branch(new_pos, angle, steps))
+
+    def generate_from_centre(self, pos, max_steps, branch_prob=0.3):
+        angle = random.randint(45, 360)
+        while angle < 360:
+            yield from self.generate_l_roads(pos, angle, max_steps, branch_prob)
+            angle += random.randint(45, 360)
