@@ -3,7 +3,6 @@ import config
 from sprites.background import Background
 from .map_points import MapPoint
 from .road_map import RoadMap
-from ..worldgen.tile_map import TileMap
 
 
 class Level(pygame.sprite.Sprite):
@@ -23,7 +22,6 @@ class Level(pygame.sprite.Sprite):
 
         self.world = world
         self.tiles = world.tiles
-        self.tile_map = TileMap(tile_size)
 
         self.land = pygame.sprite.Group()
         self.inners = pygame.sprite.Group()
@@ -58,9 +56,7 @@ class Level(pygame.sprite.Sprite):
         self.fill()
 
     def can_move(self, x, y):
-        player_pos = self.tile_map.get_pos((x, y))
-
-        tile = self.tiles.get_tile(player_pos)
+        tile = self.tiles.get_tile_by_pos((x, y))
 
         if tile is None:
             return False
