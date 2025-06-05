@@ -33,6 +33,12 @@ class Road:
             color=color,
         )
 
+    @classmethod
+    def from_road_data(cls, road):
+        is_correct = road.metadata.get('is_correct')
+        color = (100, 100, 100) if is_correct else (255, 0, 0)
+        return cls(*road.nodes, color=color)
+
 
 class Roads:
     def __init__(self, *items):
