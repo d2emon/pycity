@@ -36,6 +36,15 @@ class RoadData:
             y = int(self.start[1] + dy * i)
             yield x, y
 
+    @classmethod
+    def build(cls, start, angle, length=10):
+        """Вычисляем следующую точку"""
+        end = [
+            int(start[0] + length * math.cos(math.radians(angle))),
+            int(start[1] + length * math.sin(math.radians(angle))),
+        ]
+        return cls(start, end)
+
 
 class RoadFactory:
     max_road_height = 0.8
@@ -67,14 +76,6 @@ class RoadFactory:
 
     # L Roads
 
-    @classmethod
-    def next_point(cls, pos, angle, length=10):
-        """Вычисляем следующую точку"""
-        return [
-            int(pos[0] + length * math.cos(math.radians(angle))),
-            int(pos[1] + length * math.sin(math.radians(angle))),
-        ]
-
     # Левое ответвление
     @classmethod
     def left_branch(cls, pos, angle, steps):
@@ -84,7 +85,6 @@ class RoadFactory:
             steps - 1
         )
 
-
     # Продолжаем текущую ветку
     @classmethod
     def right_branch(cls, pos, angle, steps):
@@ -93,7 +93,6 @@ class RoadFactory:
             angle + random.randint(30, 45),  # Небольшой изгиб
             steps - 1
         )
-
 
     # Правое ответвление
     @classmethod
@@ -120,9 +119,10 @@ class RoadFactory:
             if steps <= 0:
                 continue
 
-            length = random.randint(min_length, max_length)            
-            new_pos = self.next_point(pos, angle, length)
-            yield RoadData(pos, new_pos)
+            length = random.randint(min_length, max_length)
+            road = RoadData.build(pos, angle, length)
+            new_pos = road.end
+            yield road
             
             # Решаем, создавать ли ветвление
             if random.random() < branch_prob and steps > 1:
