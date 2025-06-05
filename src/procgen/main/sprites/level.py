@@ -18,8 +18,7 @@ class Level(pygame.sprite.Sprite):
 
         self.background = Background(self.image.get_rect(), (0, 128, 0))
 
-        self.world = world
-        self.tiles = world.tiles
+        self.tiles = None
 
         self.land = pygame.sprite.Group()
         self.inners = pygame.sprite.Group()
@@ -28,23 +27,20 @@ class Level(pygame.sprite.Sprite):
         self.road_map = RoadMap(self.rect.width, self.rect.height)
         self.road_map_group = pygame.sprite.GroupSingle(self.road_map)
 
-        self.load(self.world)
-
     def load(self, world):
-        self.world = world
         self.tiles = world.tiles
 
         self.land.empty()
         for y in range(world.height):
             for x in range(world.width):
-                tile = self.tiles.get_tile((x, y))
+                tile = world.tiles.get_tile((x, y))
                 self.land.add(tile)
 
         self.points.empty()
         for map_object in world.map_points:
             pos = map_object.pos
-            point = MapPoint(pos, self.tiles.tile_size)
-            point.rect = self.tiles.get_tile(pos)
+            point = MapPoint(pos, world.tile_size)
+            point.rect = world.tiles.get_tile(pos)
             self.points.add(point)
 
         self.inners.empty()
@@ -86,4 +82,6 @@ class Level(pygame.sprite.Sprite):
             world.width * world.tile_size,
             world.height * world.tile_size,
         )
-        return cls(rect, world)
+        level = cls(rect, world)
+        level.load(world)
+        return level
