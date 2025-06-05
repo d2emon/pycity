@@ -1,10 +1,10 @@
 import random
-from procgen.main.worldgen.map_objects.road import Road
-from procgen.main.worldgen.map_objects.tree import Oak
 from procgen.main.worldgen.roads import Road as RoadData, Roads
-from procgen.main.worldgen.rpg import RPGMap
 from procgen.main.worldgen.terrain import Grass, Rock, Water, TerrainData
 from procgen.main.worldgen.tile_map import TileMap
+from .map_objects.road import Road
+from .map_objects.tree import Oak
+from .rpg import RPGMap
 from .tiles import Tiles
 
 
