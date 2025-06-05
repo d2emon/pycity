@@ -1,6 +1,5 @@
 from procgen.main.sprites import tiles
 from procgen.main.sprites.map_points import MapPoint
-from procgen.main.worldgen.roads import Road, Roads
 from .tile_map import TileMap
 
 

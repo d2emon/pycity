@@ -1,7 +1,7 @@
 import random
-from procgen.main.worldgen.roads import Road as RoadData, Roads
 from .map_objects.road import Road
 from .map_objects.tree import Oak
+from .roads import Road as RoadData, Roads
 from .rpg import RPGMap
 from .terrain import TerrainData
 from .tiles import Tiles
