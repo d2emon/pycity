@@ -78,8 +78,8 @@ class World:
         self.objects.append(point)
         return point
 
-    def add_road(self, object_id, nodes):
-        point = Road(object_id, [self.tiles.get_tile_center(point) for point in nodes])
+    def add_road(self, object_id, road_data):
+        point = Road(object_id, [self.tiles.get_tile_center(point) for point in road_data.nodes])
         self.roads.append(point)
         return point
 

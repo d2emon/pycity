@@ -17,6 +17,10 @@ class RoadData:
         return self.end[1] - self.start[1]
 
     @property
+    def nodes(self):
+        return [self.start, self.end]
+
+    @property
     def line(self):
         # np.array([road[0], road[1]])
         return [self.start, self.end]
@@ -118,10 +122,7 @@ class RoadFactory:
 
             length = random.randint(min_length, max_length)            
             new_pos = self.next_point(pos, angle, length)
-            yield [
-                pos,
-                new_pos,
-            ]
+            yield RoadData(pos, new_pos)
             
             # Решаем, создавать ли ветвление
             if random.random() < branch_prob and steps > 1:
