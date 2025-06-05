@@ -7,6 +7,7 @@ class RoadData:
     def __init__(self, start, end):
         self.start = start
         self.end = end
+        self.is_correct = True
 
     @property
     def width(self):
@@ -56,7 +57,10 @@ class RoadFactory:
 
     def is_valid_road(self, road):
         for pos in road.points:
-            if self.heightmap.get_value(pos) > self.max_road_height or self.heightmap.is_water(pos):
+            if self.heightmap.is_water(pos):
+                return False
+
+            if self.heightmap.get_value(pos) > self.max_road_height:
                 return False
 
         return True
@@ -103,6 +107,11 @@ class RoadFactory:
             steps - 1
         )
 
+    def from_nodes(self, start, end):
+        road = RoadData(start, end)
+        road.is_correct = self.is_valid_road(road)
+        return road
+
     def generate_l_roads(self, start_pos, start_angle, max_steps, branch_prob=0.3):
         """Генерирует дорогу с ответвлениями через L-систему."""
         
@@ -122,6 +131,7 @@ class RoadFactory:
             length = random.randint(min_length, max_length)
             road = RoadData.build(pos, angle, length)
             new_pos = road.end
+            road.is_correct = self.is_valid_road(road)
             yield road
             
             # Решаем, создавать ли ветвление

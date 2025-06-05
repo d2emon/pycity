@@ -70,7 +70,7 @@ class World:
 
     @property
     def road_data(self):
-        roads = [RoadData(*road.nodes) for road in self.roads]
+        roads = [RoadData.from_road_data(road) for road in self.roads]
         return Roads(*roads)
 
     def add_point(self, object_id, pos):
@@ -79,7 +79,7 @@ class World:
         return point
 
     def add_road(self, object_id, road_data):
-        point = Road(object_id, [self.tiles.get_tile_center(point) for point in road_data.nodes])
+        point = Road(object_id, [self.tiles.get_tile_center(point) for point in road_data.nodes], is_correct=road_data.is_correct)
         self.roads.append(point)
         return point
 
