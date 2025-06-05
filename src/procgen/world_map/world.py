@@ -1,6 +1,6 @@
 import random
 from procgen.main.worldgen.roads import Road as RoadData, Roads
-from procgen.main.worldgen.terrain import Grass, Rock, Water, TerrainData
+from procgen.main.worldgen.terrain import TerrainData
 from .map_objects.road import Road
 from .map_objects.tree import Oak
 from .rpg import RPGMap
@@ -22,11 +22,7 @@ class World:
         self.__metadata = metadata
 
         # Layers
-        self.terrain = TerrainData(
-            Grass,
-            Rock,
-            Water,
-        )
+        self.terrain = TerrainData()
         self.objects = []
         self.zoning = []
         self.roads = []
