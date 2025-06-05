@@ -1,5 +1,4 @@
 import pygame
-import config
 from sprites.background import Background
 from .map_points import MapPoint
 from .road_map import RoadMap
@@ -10,7 +9,6 @@ class Level(pygame.sprite.Sprite):
         self,
         rect,
         world,
-        tile_size=config.TILE_SIZE,
         *groups,
     ):
         super().__init__(*groups)
@@ -81,15 +79,11 @@ class Level(pygame.sprite.Sprite):
         self.road_map_group.draw(self.image)
 
     @classmethod
-    def from_world(cls, world, tile_size=config.TILE_SIZE):
+    def from_world(cls, world):
         rect = pygame.Rect(
             0,
             0,
-            world.width * tile_size,
-            world.height * tile_size,
+            world.width * world.tile_size,
+            world.height * world.tile_size,
         )
-        return cls(
-            rect,
-            world,
-            tile_size,
-        )
+        return cls(rect, world)

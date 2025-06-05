@@ -24,10 +24,7 @@ class MainScreenGroup(ScreenGroup):
 
     def create_level(self):
         world = generate_world(config.MAP_WIDTH, config.MAP_HEIGHT, config.TILE_SIZE)
-        return Level.from_world(
-            world,
-            tile_size=config.TILE_SIZE,
-        )
+        return Level.from_world(world)
 
     def create_player(self):
         player = Player(
