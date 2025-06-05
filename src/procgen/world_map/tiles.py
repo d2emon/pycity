@@ -1,14 +1,16 @@
 from procgen.main.sprites import tiles
 from procgen.main.sprites.map_points import MapPoint
 from procgen.main.worldgen.roads import Road, Roads
+from .tile_map import TileMap
 
 
 class Tiles:
-    def __init__(self, width, height, tile_map):
+    def __init__(self, width, height, tile_size):
         self.width = width
         self.height = height
-        self.__tile_map = tile_map
-        self.tile_size = tile_map.tile_size
+        self.tile_size = tile_size
+
+        self.__tile_map = TileMap(tile_size)
         self.__tiles = [
             [None for _ in range(width)]
             for _ in range(height)
@@ -53,6 +55,8 @@ class Tiles:
         if valid_pos is None:
             return
 
+        value.rect = self.__tile_map.get_tile(valid_pos)
+
         x, y = valid_pos
         self.__tiles[y][x] = value
 
@@ -60,19 +64,21 @@ class Tiles:
         tile_pos = self.__tile_map.get_pos(pos)
         return self.get_tile(tile_pos)
 
+    def get_tile_center(self, pos):
+        return self.__tile_map.get_center(pos)
+
     ####
 
     @classmethod
-    def load(cls, heightmap, tile_map):
+    def load(cls, heightmap, tile_size):
         tiles = cls(
             heightmap.width,
             heightmap.height,
-            tile_map,
+            tile_size,
         )
 
         for pos, value in heightmap.values:
             tile = tiles.tile_by_value(value)
-            tile.rect = tile_map.get_tile(pos)
             tiles.set_tile(pos, tile)
 
         return tiles

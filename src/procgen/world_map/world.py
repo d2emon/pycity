@@ -4,7 +4,6 @@ from procgen.main.worldgen.terrain import Grass, Rock, Water, TerrainData
 from .map_objects.road import Road
 from .map_objects.tree import Oak
 from .rpg import RPGMap
-from .tile_map import TileMap
 from .tiles import Tiles
 
 
@@ -16,8 +15,6 @@ class World:
         tile_size=8,
         **metadata,
     ):
-        self.tile_map = TileMap(tile_size)
-
         # Metadata
         self.width = width
         self.height = height
@@ -35,7 +32,8 @@ class World:
         self.roads = []
         self.rpg = RPGMap()
 
-        self.heightmap = None
+        self.__heightmap = None
+        self.tiles = None
 
     @property
     def metadata(self):
@@ -54,6 +52,15 @@ class World:
         }
 
     @property
+    def heightmap(self):
+        return self.__heightmap
+
+    @heightmap.setter
+    def heightmap(self, value):
+        self.__heightmap = value
+        self.tiles = Tiles.load(value, self.tile_size)
+
+    @property
     def map_points(self):
         for map_object in self.objects:
             pos = self.get_valid_pos(map_object.pos)
@@ -70,17 +77,13 @@ class World:
         roads = [RoadData(*road.nodes) for road in self.roads]
         return Roads(*roads)
 
-    @property
-    def tiles(self):
-        return Tiles.load(self.heightmap, self.tile_map)
-
     def add_point(self, object_id, pos):
         point = Oak(object_id, pos)
         self.objects.append(point)
         return point
 
     def add_road(self, object_id, nodes):
-        point = Road(object_id, [self.tile_map.get_center(point) for point in nodes])
+        point = Road(object_id, [self.tiles.get_tile_center(point) for point in nodes])
         self.roads.append(point)
         return point
 
