@@ -58,10 +58,7 @@ class RoadFactory:
 
     def is_valid_road(self, road):
         for pos in road.points:
-            if self.heightmap.is_water(pos):
-                return False
-
-            if self.heightmap.get_value(pos) > self.max_road_height:
+            if not self.heightmap.is_valid(pos, self.max_road_height):
                 return False
 
         return True
