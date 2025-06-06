@@ -25,9 +25,6 @@ def generate_world(width, height, tile_size):
     voronoi_factory = VoronoiFactory(width, height)
     graph = voronoi_factory.generate(centers)
 
-    for pos in graph.points:
-        world.add_point(None, pos)
-
     road_factory = RoadFactory(world.heightmap)
 
     for ridge in graph.ridges:
@@ -36,26 +33,30 @@ def generate_world(width, height, tile_size):
             road = road_factory.from_nodes(*path)
             world.add_road(None, road)
 
-    for center in graph.centers:
-        for road in road_factory.generate_from_center(
-            center,
-            step_max_length=3,
-            branch_prob=0.1,
-        ):
-            for path in generate_roads(road, world.heightmap):
-                subroad = road_factory.from_nodes(*path)
-                world.add_road(None, subroad)
+    for pos in graph.centers:
+        world.add_point(None, pos)
+        if world.heightmap.is_valid(pos):
+            for road in road_factory.generate_from_center(
+                pos,
+                step_max_length=3,
+                branch_prob=0.1,
+            ):
+                for path in generate_roads(road, world.heightmap):
+                    subroad = road_factory.from_nodes(*path)
+                    world.add_road(None, subroad)
                 
 
-    for center in graph.points:
-        for road in road_factory.generate_from_center(
-            center,
-            step_min_length=2,
-            step_max_length=5,
-            branch_prob=0.4,
-        ):
-            for path in generate_roads(road, world.heightmap):
-                subroad = road_factory.from_nodes(*path)
-                world.add_road(None, subroad)
+    for pos in graph.points:
+        if world.heightmap.is_valid(pos):
+            world.add_point(None, pos)
+            for road in road_factory.generate_from_center(
+                pos,
+                step_min_length=2,
+                step_max_length=5,
+                branch_prob=0.4,
+            ):
+                for path in generate_roads(road, world.heightmap):
+                    subroad = road_factory.from_nodes(*path)
+                    world.add_road(None, subroad)
 
     return world
