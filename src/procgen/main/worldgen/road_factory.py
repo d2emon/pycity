@@ -119,12 +119,16 @@ class RoadFactory:
         road.weight = 2
         return road
 
-    def generate_l_roads(self, start_pos, start_angle, max_steps, branch_prob=0.3):
+    def generate_l_roads(
+        self,
+        start_pos,
+        start_angle,
+        max_steps,
+        min_length=1,
+        max_length=5,
+        branch_prob=0.3,
+    ):
         """Генерирует дорогу с ответвлениями через L-систему."""
-        
-        min_length = 1
-        max_length = 5
-
         # Инициализация
         stack = deque()
         stack.append((start_pos, start_angle, max_steps))
@@ -155,9 +159,22 @@ class RoadFactory:
             else:
                 stack.append(self.current_branch(new_pos, angle, steps))
 
-    def generate_from_center(self, pos):
+    def generate_from_center(
+        self,
+        pos,
+        step_min_length=1,
+        step_max_length=5,
+        branch_prob=0.3,
+    ):
         angle = random.randint(45, 360)
         max_steps = random.randint(3, 6)
         while angle < 360:
-            yield from self.generate_l_roads(pos, angle, max_steps, 0.2)
+            yield from self.generate_l_roads(
+                pos,
+                angle,
+                max_steps,
+                min_length=step_min_length,
+                max_length=step_max_length,
+                branch_prob=branch_prob,
+            )
             angle += random.randint(45, 360)
