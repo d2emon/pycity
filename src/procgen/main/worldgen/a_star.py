@@ -16,25 +16,12 @@ class AStar:
         if not self.heightmap:
             return True
 
-        if self.heightmap.is_water(pos):
-            return False
+        return self.heightmap.is_valid(pos, self.max_height)
 
-        height = self.heightmap.get_value(pos)
-        if height > self.max_height:
-            return False
-
-        return True
-
-    def get_obstacles(self, path):
-        for pos in path:
-            if not self.is_valid(pos):
-                yield pos
-
-    def get_neighbors(self, pos, obstacles):
+    def get_neighbors(self, pos):
         """Возвращает соседние тайлы (4-направления)"""
         x, y = pos
         neighbors = [(x+1, y), (x-1, y), (x, y+1), (x, y-1)]
-        # return [n for n in neighbors if n not in obstacles]
         for n in neighbors:
             if self.is_valid(n):
                 yield n
@@ -52,8 +39,6 @@ class AStar:
         """Обход препятствий с помощью упрощенного A*"""
         if not self.heightmap:
             return original_path
-
-        obstacles = list(self.get_obstacles(original_path))
 
         # Проверяем, есть ли препятствия на пути
         obstructed = any(not self.is_valid(pos) for pos in original_path)
@@ -81,7 +66,7 @@ class AStar:
                 # Восстанавливаем путь
                 return list(self.build_path(start_pos, current, came_from))
 
-            for neighbor in self.get_neighbors(current, obstacles):
+            for neighbor in self.get_neighbors(current):
                 neighbor_pos = (neighbor[0], neighbor[1])
                 tentative_g = g_score[current] + 1
 
