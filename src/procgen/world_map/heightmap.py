@@ -27,7 +27,7 @@ class Heightmap:
         self.__items[y][x] = value
 
     def is_water(self, pos):
-        return self.get_value(pos) > self.water_level
+        return self.get_value(pos) <= self.water_level
 
     def load(self, data):
         for y, row in enumerate(data):
