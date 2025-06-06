@@ -29,6 +29,16 @@ class Heightmap:
     def is_water(self, pos):
         return self.get_value(pos) <= self.water_level
 
+    def is_valid(self, pos, max_height=0.2):
+        if self.is_water(pos):
+            return False
+
+        height = self.get_value(pos)
+        if height > max_height:
+            return False
+
+        return True
+
     def load(self, data):
         for y, row in enumerate(data):
             for x, value in enumerate(row):
