@@ -2,6 +2,7 @@ from procgen.world_map.world import World
 from .point_factory import PointFactory
 from .road_factory import RoadFactory
 from .tile_factory import TileFactory
+from .tile_road_factory import generate_roads
 from .voronoi_factory import VoronoiFactory
 
 
@@ -30,8 +31,10 @@ def generate_world(width, height, tile_size):
     road_factory = RoadFactory(world.heightmap)
 
     for ridge in graph.ridges:
-        road = road_factory.from_nodes(*ridge)
-        world.add_road(None, road)
+        main_road = road_factory.from_nodes(*ridge)
+        for path in generate_roads(main_road, world.heightmap):
+            road = road_factory.from_nodes(*path)
+            world.add_road(None, road)
 
     for center in graph.centers:
         for road in road_factory.generate_from_center(
@@ -39,7 +42,10 @@ def generate_world(width, height, tile_size):
             step_max_length=3,
             branch_prob=0.1,
         ):
-            world.add_road(None, road)
+            for path in generate_roads(road, world.heightmap):
+                subroad = road_factory.from_nodes(*path)
+                world.add_road(None, subroad)
+                
 
     for center in graph.points:
         for road in road_factory.generate_from_center(
@@ -48,6 +54,8 @@ def generate_world(width, height, tile_size):
             step_max_length=5,
             branch_prob=0.4,
         ):
-            world.add_road(None, road)
+            for path in generate_roads(road, world.heightmap):
+                subroad = road_factory.from_nodes(*path)
+                world.add_road(None, subroad)
 
     return world
