@@ -49,7 +49,7 @@ class RoadData:
 
 
 class RoadFactory:
-    max_road_height = 0.8
+    max_road_height = 0.2
 
     def __init__(self, heightmap):
         self.heightmap = heightmap
@@ -78,6 +78,11 @@ class RoadFactory:
         # city1 = np.argmin([np.linalg.norm(road[0] - p) for p in points])
         # city2 = np.argmin([np.linalg.norm(road[1] - p) for p in points])
         return city1.size + city2.size
+
+    def build_valid_road(self, pos, angle, length):
+        road = RoadData.build(pos, angle, length)
+        road.is_correct = self.is_valid_road(road)
+        return road
 
     # L Roads
 
@@ -131,10 +136,17 @@ class RoadFactory:
                 continue
 
             length = random.randint(min_length, max_length)
-            road = RoadData.build(pos, angle, length)
+    
+            road = self.build_valid_road(pos, angle, length)
+            if not road.is_correct:
+                direction = 1 if random.randrange(2) == 0 else -1
+                angle += random.randint(60, 120) * direction
+                road = self.build_valid_road(pos, angle, length)
+            
             new_pos = road.end
-            road.is_correct = self.is_valid_road(road)
-            yield road
+
+            if road.is_correct:
+                yield road
             
             # Решаем, создавать ли ветвление
             if random.random() < branch_prob and steps > 1:
