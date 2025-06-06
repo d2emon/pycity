@@ -71,7 +71,8 @@ class Window:
     # Events
 
     def on_game_event(self, event):
-        self.logger.debug(f"Event: {event}")
+        logger = logging.getLogger('window.event')
+        logger.debug(f"Event: {event}")
 
         if event.type == pygame.KEYDOWN:
             events.keys.set_pressed(event.key)
