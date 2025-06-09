@@ -2,15 +2,15 @@ import pygame
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, tile_size=8, level=None, *groups):
+    def __init__(self, level=None, *groups):
         super().__init__(*groups)
 
         self.pos = [0, 0]
         self.speed = 3  # Базовая скорость
         self.vehicle = None
-        self.size = tile_size
+        self.size = 4
 
-        self.image  = pygame.Surface((tile_size, tile_size))
+        self.image  = pygame.Surface((self.size, self.size))
         self.rect = self.image.get_rect()
 
         self.level = level

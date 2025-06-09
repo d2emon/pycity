@@ -28,7 +28,6 @@ class MainScreenGroup(ScreenGroup):
 
     def create_player(self):
         player = Player(
-            tile_size=config.TILE_SIZE,
             level=self.level,
         )
         self.add(player, layer=10)
