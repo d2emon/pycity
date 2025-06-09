@@ -20,7 +20,7 @@ def generate_world(width, height, tile_size):
     world.heightmap = tile_factory.generate(width, height)
 
     point_factory = PointFactory(width, height)
-    centers = point_factory.generate(10)
+    centers = point_factory.generate_equally()
 
     voronoi_factory = VoronoiFactory(width, height)
     graph = voronoi_factory.generate(centers)
@@ -31,6 +31,7 @@ def generate_world(width, height, tile_size):
         main_road = road_factory.from_nodes(*ridge)
         for path in generate_roads(main_road, world.heightmap):
             road = road_factory.from_nodes(*path)
+            road.weight = 4
             world.add_road(None, road)
 
     for pos in graph.centers:
@@ -44,7 +45,6 @@ def generate_world(width, height, tile_size):
                 for path in generate_roads(road, world.heightmap):
                     subroad = road_factory.from_nodes(*path)
                     world.add_road(None, subroad)
-                
 
     for pos in graph.points:
         if world.heightmap.is_valid(pos):
