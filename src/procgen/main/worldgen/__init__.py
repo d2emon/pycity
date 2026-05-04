@@ -9,11 +9,43 @@ from .voronoi_factory import VoronoiFactory
 from .nested.universe import UniverseFactory
 from .nested.factory import SizeFactory
 
+from ...world_map.map_objects.universe import Supercluster
+from ...world_map.map_objects.tree import Oak
+
 
 def log_model(model):
-    logging.debug("Model: %s (%s)", model, model.factory)
+    logging.debug("Model: %s: %s (%s)", model.object_id, model, model.factory)
     logging.debug("Size: (%s, %s) in %s", model.width, model.height, model.pos)
     logging.debug("Name: %s", model.name)
+
+
+def generate_universe(width, height, tile_size):
+    world = World(
+        width,
+        height,
+        tile_size,
+        # Metadata
+        map_name="Universe Map",
+        generator="UniverseMapGenerator",
+    )
+
+    universe_size_factory = SizeFactory()
+    universe_size_factory.min_width = universe_size_factory.max_width = width
+    universe_size_factory.min_height = universe_size_factory.max_height = height
+
+    universe_factory = UniverseFactory()
+    universe_factory.size_factory = universe_size_factory
+    universe = universe_factory()
+    log_model(universe)
+
+    for supercluster in universe.children:
+        log_model(supercluster)
+        point = Supercluster(supercluster.object_id, supercluster.pos)
+        world.add_point(point)
+
+    tile_factory = TileFactory()
+    world.heightmap = tile_factory.generate(width, height)
+    return world
 
 
 def generate_world(width, height, tile_size):
@@ -25,17 +57,6 @@ def generate_world(width, height, tile_size):
         map_name="Voronoi Map",
         generator="VoronoiMapGenerator",
     )
-
-    universe_size_factory = SizeFactory()
-    universe_size_factory.min_width = universe_size_factory.max_width = width
-    universe_size_factory.min_height = universe_size_factory.max_height = height
-
-    universe_factory = UniverseFactory()
-    universe_factory.size_factory = universe_size_factory
-    universe = universe_factory()
-    log_model(universe)
-    for supercluster in universe.children:
-        log_model(supercluster)
 
     tile_factory = TileFactory()
     world.heightmap = tile_factory.generate(width, height)
@@ -56,7 +77,8 @@ def generate_world(width, height, tile_size):
             world.add_road(None, road)
 
     for pos in graph.centers:
-        world.add_point(None, pos)
+        point = Oak(None, pos)
+        world.add_point(point)
         if world.heightmap.is_valid(pos):
             for road in road_factory.generate_from_center(
                 pos,
@@ -69,7 +91,8 @@ def generate_world(width, height, tile_size):
 
     for pos in graph.points:
         if world.heightmap.is_valid(pos):
-            world.add_point(None, pos)
+            point = Oak(None, pos)
+            world.add_point(point)
             for road in road_factory.generate_from_center(
                 pos,
                 step_min_length=2,

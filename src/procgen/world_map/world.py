@@ -73,10 +73,8 @@ class World:
         roads = [RoadData.from_road_data(road) for road in self.roads]
         return Roads(*roads)
 
-    def add_point(self, object_id, pos):
-        point = Oak(object_id, pos)
+    def add_point(self, point):
         self.objects.append(point)
-        return point
 
     def add_road(self, object_id, road_data):
         point = Road(

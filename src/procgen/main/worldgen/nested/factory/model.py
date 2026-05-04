@@ -4,9 +4,10 @@ class Factory:
 
 
 class Model:
-    def __init__(self, name, *children, factory=None, parent=None):
+    def __init__(self, object_id, name, *children, factory=None, parent=None):
         self.children_data = []
 
+        self.object_id = object_id
         self.name = name
         self.factory = factory
         self.parent = parent
@@ -27,8 +28,8 @@ class Model:
 
 
 class Location(Model):
-    def __init__(self, name, *children, factory=None, parent=None):
-        super().__init__(name, *children, factory=factory, parent=parent)
+    def __init__(self, object_id, name, *children, factory=None, parent=None):
+        super().__init__(object_id, name, *children, factory=factory, parent=parent)
 
         self.x = 0
         self.y = 0

@@ -4,6 +4,12 @@ import os
 
 logging.basicConfig(level=logging.DEBUG)
 
+game_logger = logging.getLogger('game.event')
+game_logger.setLevel(logging.WARNING)
+
+window_logger = logging.getLogger('window.event')
+window_logger.setLevel(logging.WARNING)
+
 
 class WindowConfig:
     caption = "Mapper"
@@ -51,8 +57,8 @@ DELAY = 16
 ####
 
 TILE_SIZE = 32
-MAP_WIDTH = 500
-MAP_HEIGHT = 500
+MAP_WIDTH = 64
+MAP_HEIGHT = 64
 
 ####
 

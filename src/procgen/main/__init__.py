@@ -11,7 +11,7 @@ from sprites.background import Background
 from sprites.screen import ScreenGroup
 from .sprites.level import Level
 from .sprites.player import Player
-from .worldgen import generate_world
+from .worldgen import generate_universe
 
 
 class MainScreenGroup(ScreenGroup):
@@ -23,7 +23,7 @@ class MainScreenGroup(ScreenGroup):
         return Background(self.rect, (128, 128, 128))
 
     def create_level(self):
-        world = generate_world(config.MAP_WIDTH, config.MAP_HEIGHT, config.TILE_SIZE)
+        world = generate_universe(config.MAP_WIDTH, config.MAP_HEIGHT, config.TILE_SIZE)
         return Level.from_world(world)
 
     def create_player(self):

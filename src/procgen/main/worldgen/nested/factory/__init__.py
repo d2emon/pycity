@@ -1,4 +1,5 @@
 import random
+import uuid
 from .model import Factory, Location, Model
 
 
@@ -40,8 +41,9 @@ class NestedFactory(Factory):
         self.name_factory = NameFactory(self.default_name)
 
     def model_factory(self, parent=None):
+        object_id = str(uuid.uuid4())
         name = self.name_factory()
-        return self.model(name, factory=self, parent=parent)
+        return self.model(object_id, name, factory=self, parent=parent)
 
     def child_factories(self):
         yield from []
