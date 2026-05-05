@@ -1,6 +1,8 @@
 import random
 import uuid
-from .model import Factory, Location, Model
+from procgen.main.worldgen.models.model import Model
+from procgen.main.worldgen.models.location import Location
+from .model import Factory
 
 
 class NameFactory(Factory):
@@ -17,6 +19,13 @@ class SizeFactory(Factory):
         self.max_width = max_size
         self.min_height = min_size
         self.max_height = max_size
+
+    @classmethod
+    def exact(cls, width, height):
+        factory = cls()
+        factory.min_width = factory.max_width = width
+        factory.min_height = factory.max_height = height
+        return factory
 
     def width(self):
         return random.randint(self.min_width, self.max_width) if self.min_width < self.max_width else self.min_width

@@ -1,6 +1,7 @@
 """
 universe stuff
 """
+from procgen.main.worldgen.models.universe import Universe
 from ..factory import NestedFactory, NestedLocationFactory
 
 
@@ -16,6 +17,7 @@ class TempFactory(NestedFactory):
 
 class UniverseFactory(NestedLocationFactory):
     default_name = "universe"
+    model = Universe
 
     def child_factories(self):
         yield from SuperclusterFactory.multiple(10, 30)
