@@ -3,11 +3,11 @@ from procgen.world_map.world import World
 from procgen.world_map.map_objects.universe import Supercluster
 from procgen.world_map.map_objects.tree import Oak
 
-from .point_factory import PointFactory
-from .road_factory import RoadFactory
-from .tile_factory import TileFactory
-from .tile_road_factory import generate_roads
-from .voronoi_factory import VoronoiFactory
+from .factories.point_factory import PointFactory
+from .factories.road_factory import RoadFactory
+from .factories.tile_factory import TileFactory
+from .factories.tile_road_factory import generate_roads
+from .factories.voronoi_factory import VoronoiFactory
 
 from .nested.universe import UniverseFactory
 from .nested.factory import SizeFactory
