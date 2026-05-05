@@ -7,7 +7,7 @@ class Tiles:
     def __init__(self, width, height, tile_size):
         self.width = width
         self.height = height
-        self.tile_size = tile_size
+        self.tile_size = tile_size, tile_size
 
         self.__tile_map = TileMap(tile_size)
         self.__tiles = [
@@ -77,22 +77,9 @@ class Tiles:
         )
 
         for pos, value in heightmap.values:
-            tile = tiles.tile_by_value(value)
-            tiles.set_tile(pos, tile)
+            tiles.set_tile_by_value(pos, value)
 
         return tiles
 
-    @classmethod
-    def tile_by_value(cls, value):
-        water_level = -0.2
-        grass_level = 0
-        rock_level = 0.2
-
-        if value < water_level:
-            return tiles.Water(value)
-        elif value < grass_level:
-            return tiles.Sand(value)
-        elif value < rock_level:
-            return tiles.Grass(value)
-        else:
-            return tiles.Rock(value)
+    def set_tile_by_value(self, pos, value):
+        pass
