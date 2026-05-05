@@ -5,6 +5,8 @@ from .road_map import RoadMap
 
 
 class Level(pygame.sprite.Sprite):
+    background_color = 0, 0, 0
+
     def __init__(
         self,
         rect,
@@ -16,7 +18,7 @@ class Level(pygame.sprite.Sprite):
         self.rect = pygame.Rect(rect)
         self.image  = pygame.Surface(self.rect.size, pygame.SRCALPHA)
 
-        self.background = Background(self.image.get_rect(), (0, 128, 0))
+        self.background = Background(self.image.get_rect(), self.background_color)
 
         self.tiles = tiles
 
