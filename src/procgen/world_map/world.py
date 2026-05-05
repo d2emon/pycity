@@ -1,10 +1,11 @@
 import random
+from .heightmap import Heightmap
 from .map_objects.road import Road
 from .map_objects.tree import Oak
 from .roads import Road as RoadData, Roads
 from .rpg import RPGMap
 from .terrain import TerrainData
-from .tiles import Tiles
+from .space import SpaceTiles
 
 
 class World:
@@ -28,8 +29,9 @@ class World:
         self.roads = []
         self.rpg = RPGMap()
 
-        self.__heightmap = None
-        self.tiles = None
+        heightmap = Heightmap(width, height)
+        self.__heightmap = heightmap
+        self.tiles = SpaceTiles.load(heightmap, tile_size)
 
     @property
     def metadata(self):
@@ -54,7 +56,7 @@ class World:
     @heightmap.setter
     def heightmap(self, value):
         self.__heightmap = value
-        self.tiles = Tiles.load(value, self.tile_size)
+        self.tiles = SpaceTiles.load(value, self.tile_size)
 
     @property
     def map_points(self):
