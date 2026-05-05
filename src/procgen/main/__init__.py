@@ -7,6 +7,7 @@ Typical usage example:
 """
 import pygame
 import config
+from procgen.world_map.world import World
 from sprites.background import Background
 from sprites.screen import ScreenGroup
 from .sprites.level import Level
@@ -23,7 +24,15 @@ class MainScreenGroup(ScreenGroup):
         return Background(self.rect, (128, 128, 128))
 
     def create_level(self):
-        world = generate_universe(config.MAP_WIDTH, config.MAP_HEIGHT, config.TILE_SIZE)
+        world = World(
+            10, # config.MAP_WIDTH,
+            10, # config.MAP_HEIGHT,
+            config.TILE_SIZE,
+            # Metadata
+            map_name="Universe Map",
+            generator="UniverseMapGenerator",
+        )
+        generate_universe(world)
         return Level.from_world(world)
 
     def create_player(self):

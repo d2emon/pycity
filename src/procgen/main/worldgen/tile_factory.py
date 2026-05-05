@@ -44,3 +44,6 @@ class TileFactory:
             for y in range(height)
         ])
         return heightmap
+
+    def generate_empty(self, width, height):
+        return Heightmap(width, height)

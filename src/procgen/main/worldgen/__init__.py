@@ -13,25 +13,17 @@ from ...world_map.map_objects.universe import Supercluster
 from ...world_map.map_objects.tree import Oak
 
 
+logger = logging.getLogger('worldgen')
+
+
 def log_model(model):
-    logging.debug("Model: %s: %s (%s)", model.object_id, model, model.factory)
-    logging.debug("Size: (%s, %s) in %s", model.width, model.height, model.pos)
-    logging.debug("Name: %s", model.name)
+    logger.debug("Name:\t%s <%s>", model.name, model.object_id)
+    logger.debug("Model:\t%s (%s)", model, model.factory)
+    logger.debug("Size:\t(%s, %s) in %s", model.width, model.height, model.pos)
 
 
-def generate_universe(width, height, tile_size):
-    world = World(
-        width,
-        height,
-        tile_size,
-        # Metadata
-        map_name="Universe Map",
-        generator="UniverseMapGenerator",
-    )
-
-    universe_size_factory = SizeFactory()
-    universe_size_factory.min_width = universe_size_factory.max_width = width
-    universe_size_factory.min_height = universe_size_factory.max_height = height
+def generate_universe(world):
+    universe_size_factory = SizeFactory.exact(world.width, world.height)
 
     universe_factory = UniverseFactory()
     universe_factory.size_factory = universe_size_factory
@@ -43,28 +35,20 @@ def generate_universe(width, height, tile_size):
         point = Supercluster(supercluster.object_id, supercluster.pos)
         world.add_point(point)
 
-    tile_factory = TileFactory()
-    world.heightmap = tile_factory.generate(width, height)
+    # tile_factory = TileFactory()
+    # world.heightmap = tile_factory.generate(world.heightmap)
+
     return world
 
 
-def generate_world(width, height, tile_size):
-    world = World(
-        width,
-        height,
-        tile_size,
-        # Metadata
-        map_name="Voronoi Map",
-        generator="VoronoiMapGenerator",
-    )
-
+def generate_world(world):
     tile_factory = TileFactory()
-    world.heightmap = tile_factory.generate(width, height)
+    world.heightmap = tile_factory.generate(world.width, world.height)
 
-    point_factory = PointFactory(width, height)
+    point_factory = PointFactory(world.width, world.height)
     centers = point_factory.generate_equally()
 
-    voronoi_factory = VoronoiFactory(width, height)
+    voronoi_factory = VoronoiFactory(world.width, world.height)
     graph = voronoi_factory.generate(centers)
 
     road_factory = RoadFactory(world.heightmap)
