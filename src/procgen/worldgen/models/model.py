@@ -1,3 +1,6 @@
+from procgen.worldgen.factory import Factory
+
+
 class Model:
     def __init__(self, object_id, name, *children, factory=None, parent=None):
         self.children_data = []

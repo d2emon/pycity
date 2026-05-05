@@ -1,5 +1,8 @@
 import logging
 from procgen.world_map.world import World
+from procgen.world_map.map_objects.universe import Supercluster
+from procgen.world_map.map_objects.tree import Oak
+
 from .point_factory import PointFactory
 from .road_factory import RoadFactory
 from .tile_factory import TileFactory
@@ -9,8 +12,6 @@ from .voronoi_factory import VoronoiFactory
 from .nested.universe import UniverseFactory
 from .nested.factory import SizeFactory
 
-from ...world_map.map_objects.universe import Supercluster
-from ...world_map.map_objects.tree import Oak
 
 
 logger = logging.getLogger('worldgen')

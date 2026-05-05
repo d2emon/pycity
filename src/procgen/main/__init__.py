@@ -12,7 +12,7 @@ from sprites.background import Background
 from sprites.screen import ScreenGroup
 from .sprites.level import Level
 from .sprites.player import Player
-from .worldgen import generate_universe
+from procgen.worldgen import generate_universe
 
 
 class MainScreenGroup(ScreenGroup):

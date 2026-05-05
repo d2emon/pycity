@@ -1,16 +1,8 @@
 import random
 import uuid
-from procgen.main.worldgen.models.model import Model
-from procgen.main.worldgen.models.location import Location
-from .model import Factory
-
-
-class NameFactory(Factory):
-    def __init__(self, value):
-        self.value = value
-
-    def __call__(self, *args, **kwargs):
-        return self.value
+from procgen.worldgen.factory import Factory, NameFactory
+from procgen.worldgen.models.model import Model
+from procgen.worldgen.models.location import Location
 
 
 class SizeFactory(Factory):

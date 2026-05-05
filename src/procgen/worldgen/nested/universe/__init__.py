@@ -1,7 +1,7 @@
 """
 universe stuff
 """
-from procgen.main.worldgen.models.universe import Universe
+from procgen.worldgen.models.universe import Universe
 from ..factory import NestedFactory, NestedLocationFactory
 
 
