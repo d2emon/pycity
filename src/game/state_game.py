@@ -4,10 +4,9 @@ import events.keys
 from . import Game, states
 
 
-game_logger = logging.getLogger('state-game')
-
-
 class StateGame(Game):
+    logger = logging.getLogger('state-game')
+
     EVENT_PLAY = 50101
     EVENT_STOP = 50102
 
