@@ -1,4 +1,4 @@
-from procgen.worldgen.factory import Factory
+from procgen.worldgen.factories.factory import Factory
 
 
 class Model:

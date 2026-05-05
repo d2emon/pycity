@@ -1,6 +1,7 @@
 import math
 import random
 from collections import deque
+from .factory import Factory
 
 
 class RoadData:
@@ -48,7 +49,7 @@ class RoadData:
         return cls(start, end)
 
 
-class RoadFactory:
+class RoadFactory(Factory):
     max_road_height = 0.2
 
     def __init__(self, heightmap):
@@ -175,3 +176,6 @@ class RoadFactory:
                 branch_prob=branch_prob,
             )
             angle += random.randint(45, 360)
+
+    def __call__(self, *args, **kwargs):
+        raise NotImplementedError()

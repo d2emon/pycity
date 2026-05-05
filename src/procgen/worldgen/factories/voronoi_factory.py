@@ -1,4 +1,5 @@
 from scipy.spatial import Voronoi
+from .factory import Factory
 
 
 class GraphMap:
@@ -13,12 +14,12 @@ class GraphMap:
         yield from self.vertices
 
 
-class VoronoiFactory:
+class VoronoiFactory(Factory):
     def __init__(self, width, height):
         self.width = width
         self.height = height
 
-    def generate(self, points):
+    def __call__(self, points, *args, **kwargs):
         graph_map = GraphMap()
         graph_map.centers = list(points)
 

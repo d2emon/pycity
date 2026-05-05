@@ -1,6 +1,6 @@
 import random
 import uuid
-from procgen.worldgen.factory import Factory, NameFactory
+from procgen.worldgen.factories.factory import Factory, NameFactory
 from procgen.worldgen.models.model import Model
 from procgen.worldgen.models.location import Location
 
