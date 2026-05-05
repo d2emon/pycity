@@ -1,14 +1,5 @@
-import logging
 import os
-
-
-logging.basicConfig(level=logging.DEBUG)
-
-game_logger = logging.getLogger('game.event')
-game_logger.setLevel(logging.WARNING)
-
-window_logger = logging.getLogger('window.event')
-window_logger.setLevel(logging.WARNING)
+from .dev import load as load_dev
 
 
 class WindowConfig:
@@ -100,3 +91,10 @@ class Universe:
 # > services.auth
 HOST_MACHINE = "DAVIDPOOTER"
 """
+
+
+def load(mode='dev'):
+    if mode == 'dev':
+        load_dev()
+    else:
+        raise ValueError(f"Invalid mode: {mode}")
