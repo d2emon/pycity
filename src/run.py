@@ -65,5 +65,7 @@ from procgen import ProcGen
 
 
 if __name__ == "__main__":
+    config.load('dev')
+
     # Game.run()
     ProcGen.run()
