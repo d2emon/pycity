@@ -25,9 +25,9 @@ class MainScreenGroup(ScreenGroup):
 
     def create_level(self):
         world = World(
-            10, # config.MAP_WIDTH,
-            10, # config.MAP_HEIGHT,
-            config.TILE_SIZE,
+            100, # config.MAP_WIDTH,
+            100, # config.MAP_HEIGHT,
+            10, # config.TILE_SIZE,
             # Metadata
             map_name="Universe Map",
             generator="UniverseMapGenerator",

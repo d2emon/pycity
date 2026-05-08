@@ -2,4 +2,4 @@ from .location import Location
 
 
 class Universe(Location):
-    pass
+    scale = 26

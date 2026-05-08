@@ -18,9 +18,13 @@ logger = logging.getLogger('worldgen')
 
 
 def log_model(model):
-    logger.debug("Name:\t%s <%s>", model.name, model.object_id)
-    logger.debug("Model:\t%s (%s)", model, model.factory)
-    logger.debug("Size:\t(%s, %s) in %s", model.width, model.height, model.pos)
+    logger.debug("Name:\t\"%s\" (%s) - %s", model.name, model.object_id, model)
+    logger.debug("    Factory:\t%s", model.factory)
+    logger.debug("    Position:\t%s", model.pos)
+
+    width = f"{model.width}*10^{model.scale}" if model.scale else model.width
+    height = f"{model.height}*10^{model.scale}" if model.scale else model.height
+    logger.debug("    Size:\t%s, %s", width, height)
 
 
 def generate_universe(world):

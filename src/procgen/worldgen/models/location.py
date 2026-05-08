@@ -2,6 +2,8 @@ from .model import Model
 
 
 class Location(Model):
+    scale = 0
+
     def __init__(self, object_id, name, *children, factory=None, parent=None):
         super().__init__(object_id, name, *children, factory=factory, parent=parent)
 
